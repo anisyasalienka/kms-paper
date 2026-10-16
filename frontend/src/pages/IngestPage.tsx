@@ -41,7 +41,7 @@ export default function IngestPage() {
       }
       history.add({
         candidate_id: res.candidate_id,
-        subject: email.sources[0]?.subject || email.project_name || res.candidate_id,
+        subject: email.subject || res.candidate_id,
         submitted_by: user.user_id,
         at: new Date().toISOString(),
       })
@@ -61,8 +61,8 @@ export default function IngestPage() {
       toast.error('JSON tidak valid: ' + (e as Error).message)
       return
     }
-    if (!Array.isArray(parsed?.sources) || !parsed.sources.length) {
-      toast.error('JSON harus memiliki array "sources" berisi minimal satu thread email.')
+    if (!parsed?.source_id || !Array.isArray(parsed.messages) || !parsed.messages.length) {
+      toast.error('JSON harus memiliki "source_id" dan array "messages" berisi minimal satu pesan.')
       return
     }
     ingest.mutate(parsed)
@@ -95,7 +95,7 @@ export default function IngestPage() {
                 <Textarea
                   value={raw}
                   onChange={(e) => setRaw(e.target.value)}
-                  placeholder='{ "project_id": "...", "project_name": "...", "sources": [ ... ] }'
+                  placeholder='{ "source_id": "...", "subject": "...", "messages": [ { "from": "...", "to": [], "cc": [], "body": "..." } ] }'
                   className="min-h-[420px] bg-card font-mono text-xs leading-relaxed"
                   spellCheck={false}
                 />
@@ -126,7 +126,7 @@ export default function IngestPage() {
                       <div>
                       <div className="text-sm font-medium">{s.label}</div>
                       <div className="mt-1 text-xs text-muted-foreground">
-                        Pengirim <span className="font-mono">{s.email.sources[0].messages[0].sender}</span>. Ekspektasi
+                        Pengirim <span className="font-mono">{s.email.messages[0].from}</span>. Ekspektasi
                         akses: {s.expected}
                       </div>
                       </div>
@@ -160,7 +160,7 @@ export default function IngestPage() {
 // ---------------------------------------------------------------------------
 // Form builder
 
-interface DraftMessage extends Omit<EmailMessage, 'message_id' | 'attachments'> {
+interface DraftMessage extends Omit<EmailMessage, 'message_id' | 'subject' | 'attachments'> {
   key: number
 }
 
@@ -176,14 +176,13 @@ function EmailForm({
   onShowJson: (email: EmailPayload) => void
 }) {
   const user = useCurrentUser()
-  const [projectName, setProjectName] = useState('')
   const [subject, setSubject] = useState('')
   const [messages, setMessages] = useState<DraftMessage[]>([
-    { key: 1, sender: user.user_id, recipients: [], cc: [], date: today(), content: '' },
+    { key: 1, from: user.user_id, to: [], cc: [], date: today(), body: '' },
   ])
 
   useEffect(() => {
-    setMessages((ms) => ms.map((m, i) => (i === 0 ? { ...m, sender: user.user_id } : m)))
+    setMessages((ms) => ms.map((m, i) => (i === 0 ? { ...m, from: user.user_id } : m)))
   }, [user.user_id])
 
   const update = (key: number, patch: Partial<DraftMessage>) =>
@@ -192,52 +191,34 @@ function EmailForm({
   const build = (): EmailPayload => {
     const stamp = Date.now().toString(36).toUpperCase()
     const sourceId = 'EMAIL-' + stamp
-    const trimmedProject = projectName.trim()
-    const projectId = trimmedProject
-      ? 'PROJECT-' + trimmedProject.toUpperCase().replace(/[^A-Z0-9]+/g, '-').slice(0, 20)
-      : ''
+    const trimmedSubject = subject.trim()
     return {
-      project_id: projectId,
-      project_name: trimmedProject,
-      sources: [
-        {
-          source_id: sourceId,
-          source_type: 'email_thread',
-          project_id: projectId,
-          subject: subject.trim(),
-          messages: messages.map((m, i) => ({
-            message_id: `${sourceId}-M${String(i + 1).padStart(2, '0')}`,
-            attachments: [],
-            date: m.date,
-            sender: m.sender,
-            recipients: m.recipients,
-            cc: m.cc,
-            content: m.content.trim(),
-          })),
-        },
-      ],
+      source_id: sourceId,
+      subject: trimmedSubject,
+      messages: messages.map((m, i) => ({
+        message_id: `${sourceId}-M${String(i + 1).padStart(2, '0')}`,
+        date: m.date,
+        from: m.from,
+        to: m.to,
+        cc: m.cc,
+        subject: i === 0 ? trimmedSubject : 'Re: ' + trimmedSubject,
+        body: m.body.trim(),
+        attachments: [],
+      })),
     }
   }
 
   const problems = [
     !subject.trim() && 'subjek',
-    messages.some((m) => !m.content.trim()) && 'isi setiap pesan',
-    messages.some((m) => !m.recipients.length) && 'minimal satu penerima per pesan',
+    messages.some((m) => !m.body.trim()) && 'isi setiap pesan',
+    messages.some((m) => !m.to.length) && 'minimal satu penerima per pesan',
   ].filter(Boolean)
 
   return (
     <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="project">
-            Nama proyek <span className="text-xs font-normal text-muted-foreground">(opsional)</span>
-          </Label>
-          <Input id="project" value={projectName} onChange={(e) => setProjectName(e.target.value)} placeholder="mis. Banner Ramadan Portal (kosongkan jika umum/non-proyek)" />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="subject">Subjek thread</Label>
-          <Input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="mis. Keputusan nama event tracking" />
-        </div>
+      <div className="space-y-1.5">
+        <Label htmlFor="subject">Subjek thread</Label>
+        <Input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="mis. Keputusan nama event tracking" />
       </div>
 
       {messages.map((m, i) => (
@@ -261,22 +242,22 @@ function EmailForm({
                   <span className="text-xs text-muted-foreground">{user.display_label} · akun login</span>
                 </span>
               ) : (
-                <SenderSelect value={m.sender} onChange={(sender) => update(m.key, { sender })} />
+                <SenderSelect value={m.from} onChange={(from) => update(m.key, { from })} />
               )}
             </HeaderRow>
             <HeaderRow label="Kepada">
-              <AddressPicker value={m.recipients} exclude={m.sender} onChange={(recipients) => update(m.key, { recipients })} />
+              <AddressPicker value={m.to} exclude={m.from} onChange={(to) => update(m.key, { to })} />
             </HeaderRow>
             <HeaderRow label="Cc">
-              <AddressPicker value={m.cc} exclude={m.sender} onChange={(cc) => update(m.key, { cc })} />
+              <AddressPicker value={m.cc} exclude={m.from} onChange={(cc) => update(m.key, { cc })} />
             </HeaderRow>
             <HeaderRow label="Tanggal">
               <Input type="date" value={m.date} onChange={(e) => update(m.key, { date: e.target.value })} className="h-7 w-auto" />
             </HeaderRow>
           </div>
           <Textarea
-            value={m.content}
-            onChange={(e) => update(m.key, { content: e.target.value })}
+            value={m.body}
+            onChange={(e) => update(m.key, { body: e.target.value })}
             className="min-h-32 rounded-none border-0 border-t bg-transparent px-4 py-3 leading-relaxed focus-visible:ring-0 dark:bg-transparent"
             placeholder="Tulis isi email..."
             aria-label={`Isi pesan ${i + 1}`}
@@ -290,7 +271,7 @@ function EmailForm({
           onClick={() =>
             setMessages((ms) => [
               ...ms,
-              { key: Date.now(), sender: ms[ms.length - 1].recipients[0] || user.user_id, recipients: [ms[ms.length - 1].sender], cc: ms[ms.length - 1].cc, date: today(), content: '' },
+              { key: Date.now(), from: ms[ms.length - 1].to[0] || user.user_id, to: [ms[ms.length - 1].from], cc: ms[ms.length - 1].cc, date: today(), body: '' },
             ])
           }
         >

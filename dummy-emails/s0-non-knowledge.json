@@ -1,25 +1,18 @@
 {
-  "project_id": "PROJECT-NONE",
-  "project_name": "Administrasi",
-  "sources": [
+  "source_id": "EMAIL-S0",
+  "subject": "Izin tidak masuk kantor",
+  "messages": [
     {
-      "source_id": "EMAIL-S0",
-      "source_type": "email_thread",
-      "project_id": "PROJECT-NONE",
+      "message_id": "EMAIL-S0-M01",
+      "date": "2026-03-06",
+      "from": "STAFF-2B",
+      "to": [
+        "SPV-B"
+      ],
+      "cc": [],
       "subject": "Izin tidak masuk kantor",
-      "messages": [
-        {
-          "message_id": "EMAIL-S0-M01",
-          "attachments": [],
-          "date": "2026-03-06",
-          "sender": "STAFF-2B",
-          "recipients": [
-            "SPV-B"
-          ],
-          "cc": [],
-          "content": "Pak, saya izin tidak masuk hari ini karena sakit. Terima kasih.\n\nSTAFF-2B"
-        }
-      ]
+      "body": "Pak, saya izin tidak masuk hari ini karena sakit. Terima kasih.\n\nSTAFF-2B",
+      "attachments": []
     }
   ]
 }

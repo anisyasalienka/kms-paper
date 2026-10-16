@@ -102,7 +102,7 @@ Data Tables otomatis menyediakan kolom `id`, `createdAt`, dan `updatedAt`.
 | :--- | :--- | :--- |
 | `candidate_id` | `string` | ID unik (misal `CAND-20261015-2H9N1V`). |
 | `source_id` | `string` | ID email sumber (misal `EMAIL-S1`), dipakai untuk deduplikasi. |
-| `project_id`, `project_name` | `string` | Proyek terkait. |
+| `project_name` | `string` | Proyek terkait, disimpulkan kurator dari isi email (input email tidak memuat project). `project_id` tidak lagi diisi. |
 | `title`, `summary` | `string` | Hasil kurasi (Bahasa Indonesia). |
 | `knowledge_type` | `string` | `PRD`, `UAT`, `Decision`, `IncidentResolution`, `Handover`, `TrackingSpec`, `Other`. |
 | `product_or_channel` | `string` | Produk/kanal terkait. |
@@ -190,7 +190,7 @@ processing ──┬──> pending_validation ──> approving ──┬──
 ### Komponen 1: Input JSON Email (Ingestion)
 
 - **Async + polling.**
-  1. Pengguna mengisi Form Builder atau menempelkan JSON di tab Raw JSON, lalu UI memanggil `POST /api/ingest-email`. Pengirim email utama otomatis terisi dari akun profil aktif pengguna yang sedang login (tanpa dropdown manual), menjaga kepatuhan aturan GR1 (owner = pengirim). Bidang `project_name` bersifat **opsional** agar email umum, SOP, atau koordinasi lintas tim tidak dipaksa mengarang nama proyek.
+  1. Pengguna mengisi Form Builder atau menempelkan JSON di tab Raw JSON, lalu UI memanggil `POST /api/ingest-email`. Pengirim email utama otomatis terisi dari akun profil aktif pengguna yang sedang login (tanpa dropdown manual), menjaga kepatuhan aturan GR1 (owner = pengirim). Input berupa satu thread email (`source_id`, `subject`, `messages[]` dengan `from`, `to`, `cc`, `subject`, `body`, `attachments`) dan **tidak memuat project**. Kurator menyimpulkan `project_name` dari isi email (FR4) dan bernilai `null` untuk email umum, SOP, atau koordinasi lintas tim. Format ini mensimulasikan email setelah dinormalisasi konektor (alamat sudah dipetakan ke ID direktori, body sudah teks biasa).
   2. n8n memvalidasi body, membaca direktori, menghitung `owner_pic`, `owner_team`, dan `access_users` (aturan 3.3), membuat row status `processing`, dan **langsung membalas (±1,5 detik)**.
   3. Pengirim yang tidak ada di direktori langsung berstatus `failed`.
   4. Pipeline AI berjalan setelah respons terkirim (rincian di bawah). Jika `inspect_email` mendeteksi kriteria eksklusi (izin cuti, obrolan santai, alert otomatis), orchestrator langsung mengembalikan `is_knowledge: false` tanpa memanggil Qdrant atau kurator, dan row staging langsung berstatus `skipped`.
@@ -202,6 +202,7 @@ processing ──┬──> pending_validation ──> approving ──┬──
   3. *Ambang Skor Kemiripan (`min_related_score: 0.65`):* Mencegah *nearest neighbor* acak. Kemiripan lemah (<0.65, misal newsletter vs Ramadan yang berjarak 0.43) dikembalikan sebagai `noMatch`.
   4. *Prompt Kurator Ketat:* Bagian `## Unrelated saved knowledge` mewajibkan kurator mengabaikan kemiripan semantik semu dan hanya menetapkan `updated_candidate` jika subjek/fitur/dokumen sama persis.
   5. *Pengaman Deterministik Canvas:* Node `Build Candidate Update` memverifikasi integritas rujukan pembaruan sebelum mencatat ke staging.
+  6. *Thread lanjutan (`message_ids`):* Setiap knowledge menyimpan `message_ids` thread sumbernya (ditulis oleh kode, bukan LLM). `saved_knowledge` hanya mengembalikan `exact_source` bila `source_id` sama **dan** semua `message_id` sudah tersimpan. Thread yang bertambah balasan setelah di-approve ditandai `thread_continuation`, lalu `Build Curator Request` meminta kurator membuat `updated_candidate` untuk knowledge tersebut. Knowledge lama tanpa `message_ids` tetap diperlakukan exact. Batasan: deteksi ini bergantung pada knowledge lama muncul di 5 hasil teratas pencarian semantik.
 - **Pipeline AI (v2.6):**
 
   ```text
@@ -315,9 +316,9 @@ Frontend memanggil `/api/<path>`; nginx meneruskan ke `n8n/webhook/<path>` denga
 | Polling `GET /webhook/candidate-status` | `kms_candidate_status` (`GhJKHDSm3ympl89h`) | ✅ Fase 1 |
 | Direktori `GET /webhook/directory` | `kms_directory` (`bpUU2HibzLVT0p3x`) | ✅ Fase 1 |
 | Validasi `POST /webhook/validate-knowledge` | `kms_validate_knowledge` (`kGreWkk0geO6v29i`) | ✅ Fase 2 (Dukung `approve_as_new`) |
-| Writer Qdrant | `knowledge_writer_upsert` (`KwrUpsert20260810A1`), node `Attach Governance Metadata` menambah `access_users`, `owner_pic`, `owner_team`, `candidate_id`, `validated_by` | ✅ Fase 2 |
+| Writer Qdrant | `knowledge_writer_upsert` (`KwrUpsert20260810A1`), node `Attach Governance Metadata` menambah `access_users`, `owner_pic`, `owner_team`, `candidate_id`, `validated_by`, `project_name`, `message_ids` | ✅ Fase 2 |
 | Reset data uji | `kms_admin_reset` (`PaKzTvasVYO37l6b`, manual): hapus kandidat, log, Qdrant; seed ulang direktori | ✅ |
-| Email dummy skenario | `dummy-emails/` (s0, s1, s2, s3a, s3b, s4 folder Drive) | ✅ |
+| Email dummy skenario | `dummy-emails/` (s0, s1, s2, s3a, s3b, s4 folder Drive, s5 thread panjang, s5b thread lanjutan), format satu thread tanpa project | ✅ |
 | Chatbot `POST /webhook/chat-rag` | `Chat with Qdrant Knowledge` (`RagChatQdrant20260811`): Header Auth, node `Request Context` menetapkan `user_id`; tool search & detail memfilter `access_users` | ✅ Fase 3 |
 | Filter akses | `saved_knowledge` (`2SHsvB58CqAthDHa`, filter `access_scope: 'user'` & `min_related_score`), `get_knowledge_detail` (`GetKnowDetail2026`, filter wajib) | ✅ Fase 3 |
 | Portal API | `kms_portal_api` (`K05IetusDReVqoiS`): `my-candidates`, `lead-summary`, `nudge` | ✅ Fase 3 |
@@ -328,6 +329,7 @@ Frontend memanggil `/api/<path>`; nginx meneruskan ke `n8n/webhook/<path>` denga
 **Catatan teknis:**
 - Writer, `kms_curator_llm`, dan node `Embedding` di `saved_knowledge` memakai credential `9router token` (diverifikasi dari ekspor workflow 16 Oktober 2026; token tidak tertulis di parameter node).
 - `knowledge_writer_upsert` (v2.6): kunci dedup `source_ids`/`email_ids` hanya diambil dari sumber yang benar-benar dibaca; sumber `reference_only` dan folder tetap tersimpan di `sources` untuk sitasi.
+- Format input email (16 Oktober 2026, malam): pembungkus `project` dan `sources[]` dihapus; field pesan menjadi `from`/`to`/`cc`/`subject`/`body`. `project_name` kini dihasilkan kurator (sebelumnya diambil dari input dan tidak pernah tersimpan di Qdrant), lalu disimpan di `kms_candidates` dan di setiap titik Qdrant bersama `message_ids`. Diuji end-to-end dengan s3a (project "Search Result Video" tersimpulkan) serta s5 → approve → s5b (hasil `updated_candidate`, bukan `already_exists`). Cadangan sebelum perubahan: `/mnt/kms-backups/2026-10-16-format/`.
 - Restrukturisasi dilakukan dengan ekspor CLI n8n, transformasi JSON oleh skrip, lalu `n8n import:workflow`, sehingga prompt, kode, dan kredensial tersalin persis (diverifikasi dengan diff parameter per node).
 - `saved_knowledge` (v2.6): body `Embedding` kini disusun dengan `JSON.stringify` dari `query_text`. Sebelumnya isi email ditempel mentah ke template JSON, sehingga baris baru atau tanda kutip membuat panggilan pertama selalu gagal ("JSON Body is not valid JSON") dan orchestrator harus mengulang (±10 detik per email).
 - Server MCP n8n tidak dapat memasang credential ke node HTTP lewat `update_workflow`; node HTTP ber-credential dibuat lewat `create_workflow_from_code` (alasan kurator berada di sub-workflow tersendiri).

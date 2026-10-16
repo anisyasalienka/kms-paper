@@ -19,29 +19,23 @@ export type CandidateStatus =
   | 'already_pending'
   | 'failed'
 
-// Email payload accepted by POST /ingest-email (same shape as dummy-emails/*.json).
+// Email payload accepted by POST /ingest-email (same shape as dummy-emails/*.json): one thread,
+// no project. The curator infers the project from the content.
 export interface EmailMessage {
   message_id: string
   date: string
-  sender: string
-  recipients: string[]
+  from: string
+  to: string[]
   cc: string[]
-  attachments: unknown[]
-  content: string
-}
-
-export interface EmailSource {
-  source_id: string
-  source_type: 'email_thread'
-  project_id: string
   subject: string
-  messages: EmailMessage[]
+  body: string
+  attachments: unknown[]
 }
 
 export interface EmailPayload {
-  project_id: string
-  project_name: string
-  sources: EmailSource[]
+  source_id: string
+  subject: string
+  messages: EmailMessage[]
 }
 
 export interface IngestResponse {

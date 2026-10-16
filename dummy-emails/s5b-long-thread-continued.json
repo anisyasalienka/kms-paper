@@ -1,0 +1,246 @@
+{
+  "source_id": "EMAIL-S5",
+  "subject": "Migrasi push notification ke FCM HTTP v1",
+  "messages": [
+    {
+      "message_id": "EMAIL-S5-M01",
+      "date": "2026-04-01",
+      "from": "STAFF-1B",
+      "to": [
+        "STAFF-2B"
+      ],
+      "cc": [
+        "SPV-B"
+      ],
+      "subject": "Migrasi push notification ke FCM HTTP v1",
+      "body": "Halo 2B,\n\nGoogle akan mematikan FCM legacy API, jadi push notification aplikasi Android dan iOS kita perlu dimigrasi ke FCM HTTP v1. Usulan saya:\n- target go-live 2026-04-20\n- service account key disimpan di Vault path secret/push/fcm-v1, tidak ditaruh di repo\n- topic yang dipakai: breaking_news dan daily_digest\n\nTolong cek kesiapan push-gateway di sisi server ya.\n\nSTAFF-1B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M02",
+      "date": "2026-04-01",
+      "from": "STAFF-2B",
+      "to": [
+        "STAFF-1B"
+      ],
+      "cc": [
+        "SPV-B"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Noted, aku cek dulu library server kita ya.\n\nSTAFF-2B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M03",
+      "date": "2026-04-03",
+      "from": "STAFF-2B",
+      "to": [
+        "STAFF-1B"
+      ],
+      "cc": [
+        "SPV-B"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Hasil pengecekan: push-gateway yang terpasang masih v2.3 dan belum mendukung FCM HTTP v1. Perlu upgrade ke push-gateway v3.0, estimasi 3 hari kerja termasuk regression test. Karena itu saya usul go-live mundur ke 2026-04-27.\n\nSTAFF-2B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M04",
+      "date": "2026-04-04",
+      "from": "SPV-B",
+      "to": [
+        "STAFF-1B",
+        "STAFF-2B"
+      ],
+      "cc": [],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Oke, go-live mundur ke 2026-04-27 saya setujui.\n\nSatu lagi: topic daily_digest diganti jadi morning_digest supaya sesuai naming tim produk. breaking_news tetap.\n\nSPV-B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M05",
+      "date": "2026-04-04",
+      "from": "STAFF-1B",
+      "to": [
+        "SPV-B"
+      ],
+      "cc": [
+        "STAFF-2B"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Siap Pak, terima kasih.\n\nSTAFF-1B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M06",
+      "date": "2026-04-08",
+      "from": "STAFF-1B",
+      "to": [
+        "STAFF-2B"
+      ],
+      "cc": [
+        "SPV-B",
+        "SPV-C"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Saya tambahkan SPV-C di cc karena UAT dikerjakan tim C. Rencana UAT terlampir (5 test case, Android dan iOS).\n\nSTAFF-1B",
+      "attachments": [
+        {
+          "attachment_id": "EMAIL-S5-M06-A1",
+          "filename": "UAT_Plan_FCM_v1.xlsx",
+          "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "content": {
+            "sheets": [
+              {
+                "name": "UAT",
+                "headers": [
+                  "test_case_id",
+                  "skenario",
+                  "platform",
+                  "expected"
+                ],
+                "rows": [
+                  [
+                    "FCM-01",
+                    "Kirim notifikasi topic breaking_news",
+                    "Android",
+                    "Notifikasi diterima < 5 detik"
+                  ],
+                  [
+                    "FCM-02",
+                    "Kirim notifikasi topic breaking_news",
+                    "iOS",
+                    "Notifikasi diterima < 5 detik"
+                  ],
+                  [
+                    "FCM-03",
+                    "Kirim notifikasi topic morning_digest jam 06:00 WIB",
+                    "Android",
+                    "Terkirim sesuai jadwal"
+                  ],
+                  [
+                    "FCM-04",
+                    "Kirim notifikasi topic morning_digest jam 06:00 WIB",
+                    "iOS",
+                    "Terkirim sesuai jadwal"
+                  ],
+                  [
+                    "FCM-05",
+                    "Matikan feature flag fcm_v1_enabled",
+                    "Server",
+                    "Pengiriman kembali ke jalur legacy"
+                  ]
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "message_id": "EMAIL-S5-M07",
+      "date": "2026-04-09",
+      "from": "SPV-C",
+      "to": [
+        "STAFF-1B"
+      ],
+      "cc": [
+        "STAFF-2B",
+        "SPV-B"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Slot UAT tim C untuk ini hanya tersedia 2026-04-22 sampai 2026-04-24. Kalau ada temuan, perbaikan butuh minimal satu hari, jadi go-live paling cepat 2026-04-28, bukan 2026-04-27.\n\nSPV-C",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M08",
+      "date": "2026-04-15",
+      "from": "STAFF-2B",
+      "to": [
+        "STAFF-1B"
+      ],
+      "cc": [
+        "SPV-B",
+        "SPV-C"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Update: push-gateway v3.0 sudah terpasang di staging per hari ini, siap untuk UAT.\n\nSTAFF-2B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M09",
+      "date": "2026-04-16",
+      "from": "SPV-B",
+      "to": [
+        "STAFF-1B",
+        "STAFF-2B"
+      ],
+      "cc": [
+        "SPV-C"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Keputusan final:\n- go-live FCM HTTP v1 tanggal 2026-04-28 jam 10:00 WIB\n- rollback: set feature flag fcm_v1_enabled ke false, pengiriman otomatis kembali ke jalur legacy\n- topic final: breaking_news dan morning_digest\n\nSPV-B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M10",
+      "date": "2026-04-16",
+      "from": "STAFF-1B",
+      "to": [
+        "SPV-B"
+      ],
+      "cc": [
+        "STAFF-2B",
+        "SPV-C"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Noted semua, terima kasih.\n\nSTAFF-1B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M11",
+      "date": "2026-04-28",
+      "from": "STAFF-2B",
+      "to": [
+        "STAFF-1B"
+      ],
+      "cc": [
+        "SPV-B",
+        "SPV-C"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Go-live FCM HTTP v1 sudah jalan jam 10:00 WIB. Delivery rate 24 jam pertama 98,7%. Ada temuan: topic morning_digest gagal terkirim ke iOS untuk aplikasi versi di bawah 5.2 karena mapping APNs lama.\n\nSTAFF-2B",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M12",
+      "date": "2026-04-29",
+      "from": "SPV-C",
+      "to": [
+        "STAFF-2B"
+      ],
+      "cc": [
+        "STAFF-1B",
+        "SPV-B"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Tim C jadwalkan UAT ulang khusus iOS tanggal 2026-04-30 setelah perbaikan.\n\nSPV-C",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S5-M13",
+      "date": "2026-04-29",
+      "from": "STAFF-1B",
+      "to": [
+        "STAFF-2B",
+        "SPV-C"
+      ],
+      "cc": [
+        "SPV-B"
+      ],
+      "subject": "Re: Migrasi push notification ke FCM HTTP v1",
+      "body": "Keputusan sementara: aplikasi iOS di bawah versi 5.2 tetap memakai jalur legacy sampai 2026-05-15. Setelah tanggal itu jalur legacy dimatikan dan pengguna diminta update aplikasi.\n\nSTAFF-1B",
+      "attachments": []
+    }
+  ]
+}

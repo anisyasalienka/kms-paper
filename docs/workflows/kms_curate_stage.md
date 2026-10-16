@@ -22,7 +22,7 @@ Mengubah hasil tool agen menjadi **satu kandidat pengetahuan** dan mengembalikan
 
 ## Output
 
-Satu objek update baris: `candidate_id`, `status`, `retryable`, `error_message`, `title`, `summary`, `knowledge_type`, `product_or_channel`, `effective_date`, `has_sensitive_data`, `sensitive_details`, `curated_payload`, `existing_knowledge_id`, `duplicate_of`.
+Satu objek update baris: `candidate_id`, `status`, `retryable`, `error_message`, `title`, `summary`, `knowledge_type`, `product_or_channel`, `project_name`, `effective_date`, `has_sensitive_data`, `sensitive_details`, `curated_payload`, `existing_knowledge_id`, `duplicate_of`.
 
 ## Alur
 
@@ -38,11 +38,11 @@ When Called by Ingest ─> Collect Evidence ─> Needs Curator? ─┬─> Curat
 | :--- | :--- |
 | `Collect Evidence` | Membaca `intermediateSteps`, mengelompokkan hasil per tool, dan merakit evidence: `current_email` (email asli tanpa isi lampiran), `email_findings`, `saved_knowledge`, `attachments`, `document_results`, `spreadsheet_results`. Juga menentukan rute (lihat di bawah). |
 | `Needs Curator?` | Rute `curate` ke kurator; rute lain langsung ke parsing. |
-| `Curator Prompt` | Node Set berisi system prompt kurator. **Sunting prompt di sini.** |
-| `Build Curator Request` | Menyusun body chat completion; konstanta `CURATOR_MODEL` (saat ini `ag/gemini-3.8-flash`). |
+| `Curator Prompt` | Node Set berisi system prompt kurator. **Sunting prompt di sini.** Kurator juga menyimpulkan `project_name` dari evidence dan memakai ulang nama project dari `saved_knowledge` bila topiknya sama, supaya pengetahuan dari thread berbeda tetap terkelompok (FR4, FR5). |
+| `Build Curator Request` | Menyusun body chat completion; konstanta `CURATOR_MODEL` (saat ini `ag/gemini-3.8-flash`). Bila `saved_knowledge` menandai `thread_continuation`, menambahkan petunjuk pesan mana yang baru dan meminta `updated_candidate` untuk knowledge tersebut. |
 | `Run Curator LLM` | Menjalankan `kms_curator_llm`. |
 | `Parse Curator Output` | Mengurai JSON kurator dan menambahkan sumber deterministik (folder, referensi saja, URL sumber). |
-| `Build Candidate Update` | Pengaman: `updated_candidate` tanpa `existing_knowledge_id` dijadikan `candidate`; status tak dikenal → `failed` + `retryable`. Memetakan hasil ke kolom tabel. |
+| `Build Candidate Update` | Menyimpan `message_ids` thread ke `curated_payload` (dipakai writer untuk deteksi thread lanjutan). Pengaman: `updated_candidate` tanpa `existing_knowledge_id` dijadikan `candidate`; status tak dikenal → `failed` + `retryable`. Memetakan hasil ke kolom tabel. |
 | `Stage Failed` | Error kurator/parsing → update `failed` (tidak di-retry, karena `kms_curator_llm` sudah retry sekali). |
 
 ## Rute dari `Collect Evidence`

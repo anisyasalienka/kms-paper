@@ -32,11 +32,12 @@ When Executed by Another Workflow ─> Validate and Prepare ─> Attach Governan
 | Node | Fungsi |
 | :--- | :--- |
 | `Validate and Prepare` | Validasi status/judul/ringkasan; untuk pembaruan, menggabungkan `structured_details` lama dan baru (array digabung, `raw_structured_evidence` di-merge); membuat `knowledge_id` baru bila perlu; memecah konten menjadi chunk per bagian (`overview`, `facts`, `conditions`, `conflicts`, dan setiap kategori `structured_details`), maks. 6.000 karakter per chunk. |
-| `Attach Governance Metadata` | Menambahkan `access_users`, `owner_pic`, `owner_team`, `candidate_id`, `validated_by`, `validated_at` ke master dan setiap chunk. Tanpa `access_users` → error. |
+| `Attach Governance Metadata` | Menambahkan `access_users`, `owner_pic`, `owner_team`, `candidate_id`, `validated_by`, `validated_at`, `knowledge_type`, `product_or_channel`, `project_name`, dan `message_ids` ke master dan setiap chunk. Tanpa `access_users` → error. |
 | `Delete Existing Chunks` | Pada pembaruan, menghapus semua chunk lama `knowledge_id` yang sama sebelum menulis versi gabungan. |
 
 ## Aturan
 
 - **ID titik deterministik** (hash dari `knowledge_id#bagian#urutan`), sehingga upsert berulang tidak menggandakan data.
 - **Kunci dedup (`source_ids`, `email_ids`) hanya dari sumber yang benar-benar dibaca.** Sumber `reference_only` dan folder Drive tetap tercantum di `sources` (untuk sitasi) tetapi tidak menjadi kunci dedup, agar email berikutnya yang membagikan folder sama dengan dokumen baru tidak dianggap duplikat (perbaikan 16 Oktober 2026).
+- **`message_ids` disimpan bersama `source_ids`.** Dipakai `saved_knowledge` untuk membedakan duplikat persis dari thread yang bertambah balasan (thread lanjutan menjadi pembaruan, bukan `already_exists`).
 - `raw_structured_evidence` hanya disimpan di `knowledge_store`, tidak di-chunk.

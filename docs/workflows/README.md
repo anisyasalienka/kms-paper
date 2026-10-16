@@ -75,6 +75,6 @@ Frontend ──/api──> nginx ──> n8n webhooks
 
 ## Pengujian
 
-Skenario uji ada di `../../dummy-emails/` (s0–s4, lihat README di sana). Sebelum satu putaran evaluasi, jalankan `kms_admin_reset`. Untuk satu email, kirim `POST /api/ingest-email` lalu polling `GET /api/candidate-status?id=<candidate_id>` hingga status bukan `processing`.
+Skenario uji ada di `../../dummy-emails/` (s0–s5b, lihat README di sana; s5b dikirim setelah s5 di-approve). Sebelum satu putaran evaluasi, jalankan `kms_admin_reset`. Untuk satu email, kirim `POST /api/ingest-email` lalu polling `GET /api/candidate-status?id=<candidate_id>` hingga status bukan `processing`.
 
 Cadangan seluruh workflow sebelum restrukturisasi 16 Oktober 2026: `/home/cendi/n8n/backups/workflows-2026-10-16-before-restructure/`.

@@ -17,16 +17,16 @@ Pencarian semantik di koleksi Qdrant `knowledge`, dipakai untuk dua keperluan: d
 ```json
 {
   "query": { "subject": "...", "body": "...", "project_name": null, "topics": [] },
-  "source_context": { "email_id": "EMAIL-S1", "source_ids": ["gdoc:..."] },
+  "source_context": { "email_id": "EMAIL-S1", "source_ids": ["gdoc:..."], "message_ids": ["EMAIL-S1-M01"] },
   "access_scope": "user", "user_id": "STAFF-1A", "min_related_score": 0.65
 }
 ```
 
-`query` dipakai untuk embedding; `source_context` hanya untuk pencocokan sumber persis.
+`query` dipakai untuk embedding; `source_context` hanya untuk pencocokan sumber persis. `message_ids` diisi otomatis oleh `kms_evidence_agent` dari email (bukan oleh LLM).
 
 ## Output
 
-`match_type` (`exact_source` / `related_existing_knowledge` / `no_match`), `same_source`, `score`, `knowledge_id`, `content`, `source_ids`, `existing_knowledge` (payload lengkap kecocokan teratas), `related_chunks[]`, `reason`.
+`match_type` (`exact_source` / `related_existing_knowledge` / `no_match`), `same_source`, `score`, `thread_continuation`, `new_message_ids`, `knowledge_id`, `content`, `source_ids`, `existing_knowledge` (payload lengkap kecocokan teratas), `related_chunks[]`, `reason`.
 
 ## Alur
 
@@ -37,7 +37,8 @@ When Executed by Another Workflow ─> Prepare Embedding ─> Embedding (text-em
 ## Aturan
 
 - `access_scope: 'user'` → filter Qdrant `access_users` berisi `user_id`. User tanpa akses tidak melihat apa pun (deny by default).
-- `exact_source`: salah satu `source_id`/`email_id` saat ini sudah ada di `source_ids`/`email_ids` titik Qdrant.
+- `exact_source`: salah satu `source_id`/`email_id` saat ini sudah ada di `source_ids`/`email_ids` titik Qdrant, **dan** semua `message_ids` saat ini sudah tersimpan. Knowledge lama yang belum punya `message_ids` tetap dianggap exact.
+- Thread lanjutan: `source_id` sama tetapi ada `message_id` yang belum tersimpan. Hasilnya `related_existing_knowledge` dengan `thread_continuation: true` dan `new_message_ids`, lalu kurator membuat `updated_candidate` (lihat `kms_curate_stage`, node `Build Curator Request`).
 - `min_related_score` (ingest: 0,65): tetangga semantik yang lemah dikembalikan sebagai `no_match`, sehingga tidak dianggap pembaruan knowledge lain.
 
 ## Catatan

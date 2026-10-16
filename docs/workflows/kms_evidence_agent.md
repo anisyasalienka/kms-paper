@@ -17,7 +17,7 @@ Agen orchestrator yang **mengumpulkan evidence** untuk satu email. Agen hanya me
 | Field | Isi |
 | :--- | :--- |
 | `email` | JSON email lengkap (sama seperti body ingest). |
-| `candidate` | `candidate_id`, `source_id`, `owner_pic`, `owner_team`, `subject`, `project_id`, `project_name`. |
+| `candidate` | `candidate_id`, `source_id`, `owner_pic`, `owner_team`, `subject`. Tidak ada project: orchestrator menyimpulkan `project_name` dari subjek dan isi email untuk query `saved_knowledge` dan panggilan extractor. |
 
 ## Output
 
@@ -43,7 +43,7 @@ When Called by Ingest ─> Candidate Context ─> Current Email ─> Evidence Ag
 | `Current Email` | Set | JSON email yang dibaca setiap tool sebagai input otoritatif. |
 | `Evidence Agent` | AI Agent v3.1 | Orchestrator (`Model: orchestrator`, `ag/gemini-3.8-flash-high`), `returnIntermediateSteps: true`, maks. 25 iterasi. |
 | `inspect_email` | Agent tool (`Model: inspect_email`, `ollama/gpt-oss:120b`) | Mengklasifikasi email (kriteria inklusi/eksklusi) dan mendeteksi `linked_sources`: `gdoc:`, `gsheet:`, `gfolder:`, `gpdf:`. |
-| `saved_knowledge` | Tool workflow | Pencarian Qdrant: `exact_source`, `related_existing_knowledge` (skor ≥ 0,65), atau `no_match`. |
+| `saved_knowledge` | Tool workflow | Pencarian Qdrant: `exact_source`, `related_existing_knowledge` (skor ≥ 0,65, atau `thread_continuation` bila thread yang sama punya pesan baru), atau `no_match`. Ekspresi input menambahkan `source_context.message_ids` dari email secara deterministik; model hanya mengisi query. |
 | `list_attachments` | Agent tool (`ollama/gpt-oss:120b`) | Inventaris lampiran yang tertanam di JSON email. |
 | `document_extractor` | Agent tool (`ag/gemini-3.8-flash`) | Satu dokumen per panggilan: lampiran PDF/dokumen, tautan Google Docs (via `gdocs_reader`), atau PDF di Drive (via `gdrive_pdf_reader`). |
 | `spreadsheet_extractor` | Agent tool (`ag/gemini-3.8-flash`) | Satu spreadsheet per panggilan: lampiran XLS/XLSX atau tautan Google Sheets (via `gsheets_reader`). |

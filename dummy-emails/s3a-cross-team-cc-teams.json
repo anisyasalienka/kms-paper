@@ -1,28 +1,21 @@
 {
-  "project_id": "PROJECT-SRC",
-  "project_name": "Search Result Video",
-  "sources": [
+  "source_id": "EMAIL-S3A",
+  "subject": "Reschedule rilis Search Result Video",
+  "messages": [
     {
-      "source_id": "EMAIL-S3A",
-      "source_type": "email_thread",
-      "project_id": "PROJECT-SRC",
+      "message_id": "EMAIL-S3A-M01",
+      "date": "2026-03-04",
+      "from": "STAFF-2A",
+      "to": [
+        "STAFF-1C"
+      ],
+      "cc": [
+        "TEAM-A",
+        "TEAM-C"
+      ],
       "subject": "Reschedule rilis Search Result Video",
-      "messages": [
-        {
-          "message_id": "EMAIL-S3A-M01",
-          "attachments": [],
-          "date": "2026-03-04",
-          "sender": "STAFF-2A",
-          "recipients": [
-            "STAFF-1C"
-          ],
-          "cc": [
-            "TEAM-A",
-            "TEAM-C"
-          ],
-          "content": "Halo 1C,\n\nKonfirmasi hasil meeting: rilis Search Result Video diundur dari 2026-03-08 ke 2026-03-15 karena menunggu hasil UAT mobile. Code freeze tetap 2026-03-12.\n\nSalam,\nSTAFF-2A"
-        }
-      ]
+      "body": "Halo 1C,\n\nKonfirmasi hasil meeting: rilis Search Result Video diundur dari 2026-03-08 ke 2026-03-15 karena menunggu hasil UAT mobile. Code freeze tetap 2026-03-12.\n\nSalam,\nSTAFF-2A",
+      "attachments": []
     }
   ]
 }

@@ -15,10 +15,10 @@ Pintu masuk ingest email. Workflow ini memvalidasi permintaan, menghitung pemili
 ## Input
 
 ```json
-{ "user_id": "STAFF-1A", "email": { "project_id": "...", "project_name": "...", "sources": [ { "source_id": "EMAIL-S1", "messages": [ { "message_id": "...", "sender": "STAFF-1A", "recipients": [], "cc": [], "date": "2026-03-02", "content": "...", "attachments": [] } ] } ] } }
+{ "user_id": "STAFF-1A", "email": { "source_id": "EMAIL-S1", "subject": "...", "messages": [ { "message_id": "EMAIL-S1-M01", "date": "2026-03-02", "from": "STAFF-1A", "to": ["STAFF-2A"], "cc": ["SPV-A"], "subject": "...", "body": "...", "attachments": [] } ] } }
 ```
 
-`email.sources[0].source_id` wajib ada. `project_name` opsional.
+`email` adalah satu thread email. `source_id`, `messages` (minimal satu), dan `from` di setiap pesan wajib ada. Input **tidak** memuat project: kurator menyimpulkan `project_name` dari isi email (FR4), lalu `Update Candidate Row` menuliskannya. Body berupa teks biasa; decode MIME/base64 dan pemetaan alamat email ke ID staf adalah tugas konektor email, di luar prototipe ini.
 
 ## Output
 
@@ -39,15 +39,15 @@ Ingest Webhook ─> Prepare Ingest ─> Is Valid Request? ─┬─> Get Directo
 
 | Tahap (sticky note) | Node | Fungsi |
 | :--- | :--- | :--- |
-| 1. Intake dan akses | `Prepare Ingest` | Menormalkan body, membuat `candidate_id` (`CAND-YYYYMMDD-XXXXXX`), mengumpulkan semua ID dari header (pengirim, to, cc, bcc). |
-| | `Get Directory`, `Resolve Access` | Menentukan `owner_pic` (pengirim pesan pertama), `owner_team`, dan `access_users` dengan aturan 3.3 plan doc: orang yang disebut, seluruh anggota tim untuk alamat `TEAM-x`, dan SPV setiap tim yang terlibat. |
+| 1. Intake dan akses | `Prepare Ingest` | Memvalidasi body, membuat `candidate_id` (`CAND-YYYYMMDD-XXXXXX`), mengumpulkan semua ID dari header setiap pesan (`from`, `to`, `cc`, `bcc`). |
+| | `Get Directory`, `Resolve Access` | Menentukan `owner_pic` (`from` pesan pertama), `owner_team`, dan `access_users` dengan aturan 3.3 plan doc: orang yang disebut, seluruh anggota tim untuk alamat `TEAM-x`, dan SPV setiap tim yang terlibat. |
 | | `Find Active Duplicate`, `Check Duplicate` | `source_id` yang sama sedang `processing`/`pending_validation`/`approving` → `already_pending`. Pengirim di luar direktori → `failed`. |
 | 2. Staging dan balasan cepat | `Insert Candidate Row`, `Respond Accepted` | Membuat baris dengan status awal, lalu membalas 202. |
 | | `Should Process?` | Hanya status `processing` yang lanjut ke tahap AI. |
 | 3. Tahap AI | `Run Evidence Agent` | Menjalankan `kms_evidence_agent` dengan input `email` dan `candidate`. |
 | | `Run Curation` | Menjalankan `kms_curate_stage` dengan `agent_result`, `email`, `candidate`; mengembalikan update baris. |
 | | `Retry Agent?` | Bila hasil `retryable` (agen berhenti tanpa `evidence_ready` atau output kurator tidak terbaca), ulangi agen. Maksimal 2 kali (`$runIndex < 2`). |
-| 4. Hasil | `Update Candidate Row` | Menulis status akhir (`pending_validation`, `skipped`, `already_exists`, atau `failed`) beserta hasil kurasi. |
+| 4. Hasil | `Update Candidate Row` | Menulis status akhir (`pending_validation`, `skipped`, `already_exists`, atau `failed`) beserta hasil kurasi, termasuk `project_name` hasil inferensi kurator. |
 | | `Mark Failed` | Menangkap error dari sub-workflow dan menulis `failed` + pesan error. |
 
 ## Aturan penting
