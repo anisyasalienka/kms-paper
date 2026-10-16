@@ -1,0 +1,25 @@
+{
+  "project_id": "PROJECT-NONE",
+  "project_name": "Administrasi",
+  "sources": [
+    {
+      "source_id": "EMAIL-S0",
+      "source_type": "email_thread",
+      "project_id": "PROJECT-NONE",
+      "subject": "Izin tidak masuk kantor",
+      "messages": [
+        {
+          "message_id": "EMAIL-S0-M01",
+          "attachments": [],
+          "date": "2026-03-06",
+          "sender": "STAFF-2B",
+          "recipients": [
+            "SPV-B"
+          ],
+          "cc": [],
+          "content": "Pak, saya izin tidak masuk hari ini karena sakit. Terima kasih.\n\nSTAFF-2B"
+        }
+      ]
+    }
+  ]
+}

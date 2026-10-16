@@ -1,0 +1,27 @@
+{
+  "project_id": "PROJECT-VPN",
+  "project_name": "Akses Staging",
+  "sources": [
+    {
+      "source_id": "EMAIL-S3B",
+      "source_type": "email_thread",
+      "project_id": "PROJECT-VPN",
+      "subject": "Konfigurasi akses VPN server staging",
+      "messages": [
+        {
+          "message_id": "EMAIL-S3B-M01",
+          "attachments": [],
+          "date": "2026-03-05",
+          "sender": "STAFF-3A",
+          "recipients": [
+            "STAFF-2C"
+          ],
+          "cc": [
+            "STAFF-1A"
+          ],
+          "content": "Halo 2C,\n\nUntuk akses server staging, gunakan profil VPN 'staging-jkt' dengan host vpn-staging.internal port 1194. Username akun bersama: stg-ops, password sementara: Vpn#Stg2026. Akses ini berlaku sampai 2026-03-31.\n\nSTAFF-3A"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "project_id": "PROJECT-RMD",
+  "project_name": "Banner Ramadan Portal",
+  "sources": [
+    {
+      "source_id": "EMAIL-S1",
+      "source_type": "email_thread",
+      "project_id": "PROJECT-RMD",
+      "subject": "Keputusan nama event tracking banner Ramadan",
+      "messages": [
+        {
+          "message_id": "EMAIL-S1-M01",
+          "attachments": [],
+          "date": "2026-03-02",
+          "sender": "STAFF-1A",
+          "recipients": [
+            "STAFF-2A"
+          ],
+          "cc": [
+            "SPV-A"
+          ],
+          "content": "Halo 2A,\n\nSesuai diskusi tadi, kita sepakat event tracking klik banner Ramadan memakai nama event 'ramadan_banner_click' dengan parameter 'banner_position' (top/middle/bottom). Tracking mulai aktif saat deploy tanggal 2026-03-05.\n\nTerima kasih,\nSTAFF-1A"
+        }
+      ]
+    }
+  ]
+}

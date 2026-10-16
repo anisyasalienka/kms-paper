@@ -1,0 +1,27 @@
+{
+  "project_id": "PROJECT-QRIS",
+  "project_name": "Dynamic QRIS",
+  "sources": [
+    {
+      "source_id": "EMAIL-S4",
+      "source_type": "email_thread",
+      "project_id": "PROJECT-QRIS",
+      "subject": "Dokumen spesifikasi Dynamic QRIS v1.2",
+      "messages": [
+        {
+          "message_id": "EMAIL-S4-M01",
+          "attachments": [],
+          "date": "2026-10-16",
+          "sender": "STAFF-1A",
+          "recipients": [
+            "STAFF-2A"
+          ],
+          "cc": [
+            "SPV-A"
+          ],
+          "content": "Halo 2A,\n\nSpesifikasi Dynamic QRIS versi 1.2 sudah final. Semua dokumen terkait ada di folder berikut:\nhttps://drive.google.com/drive/folders/1Nf-pno3OnRvYr6QMaeZhBjse6nQHwwLx?usp=sharing\n\nTolong dijadikan acuan untuk implementasi sprint depan.\n\nTerima kasih,\nSTAFF-1A"
+        }
+      ]
+    }
+  ]
+}

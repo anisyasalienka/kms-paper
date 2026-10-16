@@ -1,0 +1,27 @@
+{
+  "project_id": "PROJECT-UAT",
+  "project_name": "Standarisasi UAT Tim A",
+  "sources": [
+    {
+      "source_id": "EMAIL-S2",
+      "source_type": "email_thread",
+      "project_id": "PROJECT-UAT",
+      "subject": "SOP baru: template laporan UAT v2",
+      "messages": [
+        {
+          "message_id": "EMAIL-S2-M01",
+          "attachments": [],
+          "date": "2026-03-03",
+          "sender": "SPV-A",
+          "recipients": [
+            "STAFF-3A"
+          ],
+          "cc": [
+            "TEAM-A"
+          ],
+          "content": "Tim,\n\nMulai 2026-03-10 semua laporan UAT wajib memakai template v2. Perubahan utama: kolom 'device' dan 'browser' wajib diisi, dan status hanya boleh Passed, Failed, atau Blocked. Template lama tidak dipakai lagi.\n\nSPV-A"
+        }
+      ]
+    }
+  ]
+}
