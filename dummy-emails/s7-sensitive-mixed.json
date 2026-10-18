@@ -1,0 +1,19 @@
+{
+  "source_id": "EMAIL-S7",
+  "subject": "Rekap teknis integrasi program reward Ramadan",
+  "messages": [
+    {
+      "message_id": "EMAIL-S7-M01",
+      "date": "2026-03-18",
+      "from": "SPV-B",
+      "to": [
+        "STAFF-2B",
+        "STAFF-3B"
+      ],
+      "cc": [],
+      "subject": "Rekap teknis integrasi program reward Ramadan",
+      "body": "Halo 2B dan 3B,\n\nRekap teknis integrasi program reward Ramadan, untuk dipakai tim yang melanjutkan:\n\n1. Data pemenang batch 1 sudah masuk ke sheet internal. Contoh baris untuk cek format:\n   - Nama: Rina Wulandari, NIK 3174055203950002, HP 0813-2233-4455, email rina.wulan@gmail.com\n   - Hadiah dikirim ke rekening BCA 5270123456 a.n. Rina Wulandari\n2. Endpoint klaim hadiah memakai API key: rwd_live_Q7m#Lp29xZ (header X-API-KEY).\n3. Koneksi database laporan: postgres://reward_app:Rw#2026db@reward-db.internal:5432/reward\n4. Token webhook ke vendor: Bearer 8f3kQ2mZp9Lx7Vb1Nc4R\n5. Batas klaim 1 hadiah per NIK per periode. Klaim ditutup 2026-04-10 pukul 23.59 WIB.\n\nJangan sebar data pemenang di luar tim ini.\n\nSPV-B",
+      "attachments": []
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "source_id": "EMAIL-S6B",
+  "subject": "Reset password akun CMS",
+  "messages": [
+    {
+      "message_id": "EMAIL-S6B-M01",
+      "date": "2026-03-11",
+      "from": "STAFF-2C",
+      "to": [
+        "SPV-C"
+      ],
+      "cc": [],
+      "subject": "Reset password akun CMS",
+      "body": "Halo IT, saya tidak bisa login ke CMS sejak pagi, mohon dibantu reset password. Terima kasih.\n\nSTAFF-2C",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S6B-M02",
+      "date": "2026-03-11",
+      "from": "SPV-C",
+      "to": [
+        "STAFF-2C"
+      ],
+      "cc": [],
+      "subject": "Re: Reset password akun CMS",
+      "body": "Halo,\n\nTiket #IT-48213 sudah kami proses. Password sementara sudah dikirim ke email Anda, silakan login dan ganti password.\n\nSalam,\nIT Support (diteruskan oleh SPV-C)",
+      "attachments": []
+    }
+  ]
+}

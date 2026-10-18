@@ -204,6 +204,53 @@ Delapan bagian draft perlu disesuaikan agar desain benar-benar turun dari temuan
 
 Kuesioner evaluasi (III-D) sebaiknya juga punya item untuk GR2 dan GR6, karena keduanya requirement baru.
 
+## Status implementasi prototipe
+
+Keputusan 18 Oktober 2026 setelah pengecekan prototipe terhadap requirement. Bagian yang belum dibangun pada FR5, FR7, GR2, GR3, GR6, NFR1, dan NFR2 tidak dilanjutkan, karena implementasi sekarang dianggap cukup untuk paper. GR5 dan NFR3 di-drop. FR1 sudah dilengkapi. NFR4 ditangani dengan redaksi berbasis kode sebelum model dipanggil (opsi A), dengan batasan yang dicatat di bawah.
+
+| ID | Status | Yang sudah ada | Yang tidak dibangun |
+| --- | --- | --- | --- |
+| FR1 | Terpenuhi | Laporan rutin, notifikasi deploy, balasan IT support, undangan kalender, info HR, dan izin pribadi dikecualikan. Email rutin yang mencatat perbaikan isu atau perubahan jadwal tetap diproses. Diuji dengan s6a–s6e (18 Okt) | |
+| FR2 | Terpenuhi | MOM, PRD, UAT, tracking plan, handover, perubahan jadwal, dan resolusi isu diklasifikasi sebagai knowledge | |
+| FR3 | Terpenuhi | Isi email, lampiran, Google Docs, Google Sheets, folder Drive, dan PDF di Drive. Pembaca dipilih sesuai jenis sumber | PDF Drive baru diuji terpisah, belum di pipeline penuh |
+| FR4 | Terpenuhi | Project (disimpulkan AI), produk/kanal, tipe knowledge, owner, tim, tanggal efektif | |
+| FR5 | Sebagian, cukup | Pembaruan dalam thread yang sama terdeteksi andal. Lintas thread digabung bila kemiripan ≥ 0,65 | Skenario Ramadan lintas kanal dan isu berulang tidak diuji |
+| FR6 | Terpenuhi | Satu versi aktif di Qdrant, versi lama berstatus `superseded` dan isinya tetap tersimpan | |
+| FR7 | Sebagian, cukup | Pencarian berdasarkan makna | Filter per project, tipe, dan periode |
+| FR8 | Terpenuhi | Jawaban chatbot menyebut judul, ID sumber, tanggal efektif, dan validator | |
+| GR1 | Terpenuhi | Owner = pengirim pertama. PIC lain lewat handover | |
+| GR2 | Sebagian, cukup | Dashboard SPV (KPI, draf menggantung ≥ 3 hari, tunggakan per owner) dan nudge | Ringkasan berkala yang dikirim otomatis |
+| GR3 | Sebagian, cukup | Sumber email dan dokumen, penulis asli | Asal eksternal email yang di-forward |
+| GR4 | Terpenuhi | Akses = penerima. Alamat tim memberi akses ke seluruh anggota tim, dan SPV tim yang terlibat selalu ikut | |
+| GR5 | Di-drop | | Penyempitan akses oleh validator. Alasan: menambah keputusan kedua di setiap review (bertentangan dengan NFR2) dan menyulitkan audit akses |
+| GR6 | Sebagian, cukup | Owner bisa menyerahkan kepemilikan, owner lama langsung kehilangan hak validasi | Hak akses penerus, persetujuan lead |
+| GR7 | Terpenuhi | Kredensial, data pribadi, dan data komersial ditandai untuk validator dan disamarkan sebelum disimpan (uji s3b, s4) | |
+| NFR1 | Sebagian, cukup | Seluruh pipeline setelah email masuk berjalan otomatis | Konektor email. Input disimulasikan sebagai JSON thread yang sudah dinormalisasi |
+| NFR2 | Sebagian, cukup | Review satu tindakan dengan ringkasan di halaman "Kandidat Saya" | Notifikasi ke owner |
+| NFR3 | Di-drop | | Halaman jelajah knowledge per kategori |
+| NFR4 | Sebagian | n8n, staging, dan Qdrant self-hosted. Kredensial dan data pribadi terstruktur disamarkan dengan kode sebelum teks dikirim ke model cloud (18 Okt). Uji kebocoran: 0 dari 10 nilai | Model tetap berbasis cloud. Data komersial, nama, alamat, dan rahasia yang ditulis bebas masih bisa sampai ke model. Lihat di bawah |
+
+### NFR4: redaksi sebelum LLM
+
+**Masalah awal.** Isi email mentah (termasuk password dan data pribadi) dikirim ke model cloud lewat 9router di setiap langkah AI: agen orchestrator, klasifikasi (`inspect_email`), daftar lampiran, ekstraksi dokumen, dan kurasi. Penyamaran GR7 baru terjadi di keluaran kurator, jadi data sensitif sudah sampai ke penyedia model sebelum disamarkan. I2 khawatir soal kebocoran ke pihak eksternal.
+
+**Keputusan (18 Oktober 2026).** Dari empat opsi yang dibahas (A redaksi sebelum LLM, B model lokal penuh, C hibrida, D hanya batasan), dipilih **opsi A dengan aturan berbasis kode (regex), tanpa model NER**. Hal yang sulit dideteksi dijadikan batasan.
+
+**Implementasi.** Workflow `redact_sensitive_data`, dipanggil dari `kms_ingest` (sebelum email diserahkan ke agen dan kurator) dan dari ketiga reader Google (sebelum isi dokumen dikembalikan ke extractor). Aturannya ada di satu tempat. Nilai sensitif diganti label yang membawa bentuk tersamarnya, misalnya `[KREDENSIAL: Vpn#****]`. Di akhir, `kms_curate_stage` mengubah label menjadi teks tersamar dan mencatatnya di `sensitive_audit`, sehingga validator tetap melihat peringatan GR7. Rincian aturan: `docs/workflows/redact_sensitive_data.md`.
+
+| Terdeteksi | Tidak terdeteksi (batasan) |
+| --- | --- |
+| Password, PIN, OTP, secret, API key, token, dan berbagai jenis *key* yang diikuti nilainya | Data komersial (harga, kontrak, revenue): sengaja tidak disamarkan sebelum model karena sering menjadi isi knowledge; tetap disamarkan kurator sebelum disimpan |
+| Password di dalam URL, format token yang dikenal (JWT, `sk-`, `AKIA`, `ghp_`, Bearer, private key) | Nama orang dan alamat rumah |
+| String acak yang memuat simbol | Rahasia yang ditulis bebas, token alfanumerik tanpa kata kunci, rahasia di gambar atau PDF hasil scan |
+| NIK (divalidasi), nomor HP, NPWP, nomor kartu (Luhn), nomor rekening, email pribadi | |
+
+**Hasil uji.** 36 uji unit lulus (22 harus disamarkan, 14 tidak boleh tersentuh). Uji pipeline s0–s7 tidak mengubah status skenario mana pun. Pada cek kebocoran, 10 nilai mentah dari s3b, s4, dan s7 dicari di data eksekusi n8n yang berisi semua input ke model. Putaran pertama menemukan 1 kebocoran (`Merchant Key` di Google Doc s4, karena kata kuncinya belum dikenal). Setelah aturan diperbaiki, putaran kedua: **0 dari 10**.
+
+**Draf paragraf Limitation (bahasa Inggris):**
+
+> The workflow calls hosted language models, so message content leaves the organisation during extraction and curation. To limit exposure (NFR4), a rule-based redaction step masks credentials and structured personal data before any model call, covering both the email and the content of linked Google documents. In our leak test, none of ten planted values reached a model after one rule was added for "merchant key", which the first run had missed. Rules cannot recognise every secret: names, home addresses, free-text hints, alphanumeric tokens without a recognisable label, and text inside images still reach the model. Commercial figures are deliberately left unmasked at this stage because they are often the knowledge itself; the curator masks them before storage. A locally hosted model would remove the residual exposure at the cost of hardware and re-evaluation.
+
 ## Batasan lingkup
 
 Lima hal muncul di wawancara tetapi berada di luar jangkauan artefak; sebutkan di Limitation agar penguji tidak menganggapnya terlewat.

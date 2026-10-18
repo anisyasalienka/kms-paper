@@ -22,9 +22,13 @@ Membaca **satu Google Sheet** dari tautannya: semua tab, nilai, dan formula.
 ## Alur
 
 ```text
-When Called by Agent ─> Parse Sheet Link ─> Is Valid Sheets Link? ─┬─> Fetch Spreadsheet (Sheets API) ─> Build Spreadsheet JSON
-                                                                    └──────────────────────────────────> Build Spreadsheet JSON
+When Called by Agent ─> Parse Sheet Link ─> Is Valid Sheets Link? ─┬─> Fetch Spreadsheet (Sheets API) ─> Build Spreadsheet JSON ─> Redact Sensitive Data
+                                                                    └──────────────────────────────────> Build Spreadsheet JSON ─> Redact Sensitive Data
 ```
+
+## Redaksi (NFR4)
+
+Node terakhir, `Redact Sensitive Data`, memanggil workflow `redact_sensitive_data` untuk menyamarkan kredensial dan data pribadi di seluruh hasil (teks, judul, sel, formula) sebelum dikembalikan ke model extractor. Hasil diberi field `redactions[]` (`category`, `type`, `masked_value`). Tautan dan `source_id` tidak diubah. Aturan: [redact_sensitive_data.md](redact_sensitive_data.md).
 
 ## Batas
 

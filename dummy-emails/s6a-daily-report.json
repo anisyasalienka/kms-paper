@@ -1,0 +1,18 @@
+{
+  "source_id": "EMAIL-S6A",
+  "subject": "[Daily Report] Traffic Kanal Food 2026-03-09",
+  "messages": [
+    {
+      "message_id": "EMAIL-S6A-M01",
+      "date": "2026-03-10",
+      "from": "STAFF-3B",
+      "to": [
+        "TEAM-B"
+      ],
+      "cc": [],
+      "subject": "[Daily Report] Traffic Kanal Food 2026-03-09",
+      "body": "Halo tim,\n\nBerikut daily report traffic kanal Food tanggal 9 Maret 2026:\n- Pageviews: 1.284.500 (+3,2% dari kemarin)\n- Users: 412.880 (+1,8%)\n- Avg. time on page: 1m 52s\n- Top artikel: \"Resep Kolak Pisang Anti Gagal\" (48.210 PV)\n\nDashboard lengkap ada di Looker seperti biasa.\n\nTerima kasih,\nSTAFF-3B",
+      "attachments": []
+    }
+  ]
+}

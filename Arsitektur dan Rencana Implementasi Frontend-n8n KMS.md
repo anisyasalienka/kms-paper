@@ -1,8 +1,8 @@
 # Arsitektur & Rencana Implementasi Frontend–n8n KMS
 *Email-to-Knowledge Management System dengan Human-in-the-Loop Validation & Lead Monitoring*
 
-**Versi:** 2.6 (Sumber Google Drive: folder & PDF; restrukturisasi pipeline ingest: kurator dipisah dari agen, evidence dikumpulkan deterministik; model kurator flash; hasil uji regresi s0–s4)  
-**Tanggal:** 16 Oktober 2026  
+**Versi:** 2.7 (redaksi data sensitif sebelum LLM untuk NFR4, uji kebocoran s3b/s4/s7). Versi 2.6.1: kriteria eksklusi FR1 dilengkapi (laporan rutin, notifikasi deploy, balasan IT support, plus pengecualian; uji s6a–s6e), keputusan lingkup requirement. Versi 2.6: sumber Google Drive (folder & PDF); restrukturisasi pipeline ingest: kurator dipisah dari agen, evidence dikumpulkan deterministik; model kurator flash; hasil uji regresi s0–s4  
+**Tanggal:** 18 Oktober 2026  
 **Lokasi Dokumen:** `/home/cendi/kms-paper-nisya/Arsitektur dan Rencana Implementasi Frontend-n8n KMS.md`  
 **Referensi Riset:** `Analisis Tematik & Requirement Workflow KMS.md` (FR1–FR8, GR1–GR7, NFR1–NFR4)  
 **Versi sebelumnya:** `...v2.0.bak.md`, `...v2.1.bak.md`, `...v2.5.bak.md` (cadangan v2.2–v2.4 tidak tersimpan)
@@ -24,9 +24,10 @@ Prinsip desain v2.6:
 7. **Integritas validasi.** Lock status `approving` mencegah double-approve, suntingan validator di-patch ke payload sebelum embedding, semua aksi tercatat di audit log.
 8. **Siklus status lengkap**, termasuk `skipped`, `failed`, dan `superseded`, sehingga tidak ada entri menggantung dan KPI dashboard akurat.
 9. **5-Layer Dedup & Ingest Guard.** Mencegah *false update* (email baru menimpa knowledge lama yang tak terkait akibat kemiripan semantik lemah): batasan akses pencarian dedup, ambang batas skor minimum (≥0.65), prompt kurator ketat, pengaman deterministik canvas, serta opsi validasi `approve_as_new`.
-10. **Klasifikasi Cerdas & Auto-Skip Non-Knowledge (FR1/FR2).** Email yang bukan pengetahuan organisasi (izin cuti pribadi, obrolan santai, notifikasi server otomatis, undangan kalender) langsung disaring oleh `inspect_email` di langkah pertama tanpa memanggil Qdrant, ekstraktor, atau kurator, dan otomatis berstatus `skipped` dalam <15 detik. `project_name` bersifat opsional agar email operasional/SOP umum tidak dipaksa mengarang nama proyek.
+10. **Klasifikasi Cerdas & Auto-Skip Non-Knowledge (FR1/FR2).** Email yang bukan pengetahuan organisasi (izin cuti pribadi, obrolan santai, laporan rutin harian/mingguan/bulanan, notifikasi deploy, balasan IT support, notifikasi server otomatis, undangan kalender, pengumuman HR rutin) langsung disaring oleh `inspect_email` di langkah pertama tanpa memanggil Qdrant, ekstraktor, atau kurator, dan otomatis berstatus `skipped` dalam <15 detik. Email yang tampak rutin tetap diproses bila mencatat isu dan perbaikannya, keputusan, perubahan jadwal, atau prosedur yang bisa dipakai ulang (pengecualian dari temuan T2). Kriteria lengkap ada di `docs/workflows/kms_evidence_agent.md`. `project_name` bersifat opsional agar email operasional/SOP umum tidak dipaksa mengarang nama proyek.
 11. **LLM merutekan, kode merakit evidence.** Agen orchestrator hanya memanggil tool dan berhenti dengan `evidence_ready`. Node kode `Collect Evidence` merakit evidence kurator langsung dari hasil tool yang asli, lalu kurator dipanggil sekali di luar agen. Tidak ada evidence yang diketik ulang oleh LLM, sehingga nilai teknis tidak berubah di tengah jalan dan latensi turun.
 12. **Sumber Google Drive.** Tautan folder Drive dan PDF di Drive dibaca seperti tautan Google Docs/Sheets. Folder hanya didaftar (bukan dibaca); setiap file diteruskan ke reader yang sesuai. File yang tidak dibaca atau tidak relevan tetap disitasi sebagai referensi, tetapi tidak menjadi fakta.
+13. **Model tidak pernah menerima data sensitif mentah (NFR4).** Workflow `redact_sensitive_data` (satu-satunya tempat aturan redaksi), dipanggil dari `kms_ingest` dan ketiga reader Google, menyamarkan kredensial dan data pribadi terstruktur sebelum teks diserahkan ke model cloud. Label seperti `[KREDENSIAL: Vpn#****]` dibawa sampai kurator, lalu diubah menjadi teks tersamar dan dicatat di `sensitive_audit` untuk validator (GR7). Aturan dan batasannya ada di `docs/workflows/redact_sensitive_data.md`.
 
 ---
 
@@ -193,7 +194,7 @@ processing ──┬──> pending_validation ──> approving ──┬──
   1. Pengguna mengisi Form Builder atau menempelkan JSON di tab Raw JSON, lalu UI memanggil `POST /api/ingest-email`. Pengirim email utama otomatis terisi dari akun profil aktif pengguna yang sedang login (tanpa dropdown manual), menjaga kepatuhan aturan GR1 (owner = pengirim). Input berupa satu thread email (`source_id`, `subject`, `messages[]` dengan `from`, `to`, `cc`, `subject`, `body`, `attachments`) dan **tidak memuat project**. Kurator menyimpulkan `project_name` dari isi email (FR4) dan bernilai `null` untuk email umum, SOP, atau koordinasi lintas tim. Format ini mensimulasikan email setelah dinormalisasi konektor (alamat sudah dipetakan ke ID direktori, body sudah teks biasa).
   2. n8n memvalidasi body, membaca direktori, menghitung `owner_pic`, `owner_team`, dan `access_users` (aturan 3.3), membuat row status `processing`, dan **langsung membalas (±1,5 detik)**.
   3. Pengirim yang tidak ada di direktori langsung berstatus `failed`.
-  4. Pipeline AI berjalan setelah respons terkirim (rincian di bawah). Jika `inspect_email` mendeteksi kriteria eksklusi (izin cuti, obrolan santai, alert otomatis), orchestrator langsung mengembalikan `is_knowledge: false` tanpa memanggil Qdrant atau kurator, dan row staging langsung berstatus `skipped`.
+  4. Pipeline AI berjalan setelah respons terkirim (rincian di bawah). Jika `inspect_email` mendeteksi kriteria eksklusi (misalnya izin cuti, laporan rutin, notifikasi deploy, balasan IT support), orchestrator langsung mengembalikan `is_knowledge: false` tanpa memanggil Qdrant atau kurator, dan row staging langsung berstatus `skipped`.
   5. UI polling `GET /api/candidate-status?id=...` setiap 4 detik hingga status bukan `processing`. Kartu menampilkan menit berjalan; setelah 8 menit polling berhenti dan UI menampilkan "Masih diproses lebih lama dari biasanya". Di backend, row `processing` lebih dari 10 menit otomatis dilaporkan `failed`.
   6. Tampilan hasil: `pending_validation` (kartu ringkasan), `skipped` (bukan pengetahuan + alasan jelas), `already_exists` / `already_pending` (info duplikat), `failed` (pesan error + coba lagi).
 - **Deduplikasi 2-arah & 5-Layer Ingest Guard:**
@@ -371,6 +372,20 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
 - *Temuan selama pengembangan:* versi pertama `Collect Evidence` tidak menyertakan email asli, hanya klasifikasi inspector. Akibatnya fakta s3b menjadi umum dan password tidak terdeteksi. Diperbaiki dengan field `current_email`; tabel di atas sudah memakai versi perbaikan.
 - *Variasi waktu:* durasi orchestrator bervariasi antar-putaran (misal s3a 68 vs 83 detik) karena latensi model; angka di atas adalah satu putaran per skenario, bukan rata-rata.
 
+**Hasil uji kriteria FR1 (18 Oktober 2026):** daftar eksklusi `inspect_email` sebelumnya belum memuat laporan rutin dan balasan IT support, dan notifikasi deploy hanya tercakup sebagian. Setelah prompt dilengkapi (termasuk bagian pengecualian), satu putaran uji tanpa reset:
+
+| Skenario | Ekspektasi | Hasil |
+| :--- | :--- | :--- |
+| s6a laporan harian | `skipped` | `skipped`, 16 detik |
+| s6b balasan IT support | `skipped` | `skipped`, 16 detik |
+| s6c notifikasi deploy | `skipped` | `skipped`, 16 detik |
+| s6d laporan mingguan berisi perbaikan bug | knowledge | `pending_validation`, 37 detik. Judul "Resolusi Isu Tracking Event video_play pada Template AMP Kanal Health" |
+| s6e balasan yang memundurkan rilis | knowledge, tanggal final 27 Maret | `pending_validation`, 48 detik. `effective_date` 2026-03-27, ringkasan menyebut jadwal lama dan alasannya |
+| s0 izin sakit (regresi) | `skipped` | `skipped`, 16 detik |
+| s1 keputusan tracking (regresi) | knowledge | `pending_validation`, 37 detik |
+
+**Hasil uji redaksi NFR4 (18 Oktober 2026):** `Redact Sensitive Data` dipasang di `kms_ingest` dan ketiga reader Google. Uji unit 36 kasus lulus. Pipeline s0–s7 dijalankan ulang dengan ID baru: semua status sesuai ekspektasi (s3a dan s5 `already_exists` karena isinya sama dengan knowledge yang sudah approved). Cek kebocoran mencari 10 nilai mentah dari s3b, s4 (Google Doc), dan s7 di data eksekusi n8n semua workflow yang memanggil model. Putaran pertama: 1 bocor (`Merchant Key` di Google Doc s4, kata kunci belum dikenal). Setelah aturan ditambah: **0 dari 10**. Rincian di `docs/workflows/redact_sensitive_data.md`.
+
 ---
 
 ## 9. Roadmap
@@ -399,5 +414,10 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
   ├── Uji ulang setelah pemecahan: s0–s4, duplikat (already_pending), approve s4, chatbot akses ✅
   ├── Dokumentasi per workflow (docs/workflows/) ✅
   └── Uji PDF Drive di pipeline penuh (butuh PDF terkait proyek di folder uji) ⏳
+[ KEPUTUSAN LINGKUP 18 Okt 2026 ] ───────────────────────────────────
+  ├── FR1 dilengkapi (laporan rutin, notifikasi deploy, balasan IT support) ✅
+  ├── Kekurangan FR5, FR7, GR2, GR3, GR6, NFR1, NFR2 tidak dilanjutkan; implementasi sekarang cukup
+  ├── GR5 dan NFR3 di-drop
+  └── NFR4: opsi A (redaksi berbasis kode sebelum LLM) dipilih dan dipasang; uji kebocoran 0 dari 10 ✅
 [ FASE 5: Evaluasi Skenario Wawancara & Laporan ] ──────────────────
 ```

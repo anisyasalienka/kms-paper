@@ -5,8 +5,8 @@
 | **ID** | `BiDjvbh6ZdCRDlB6` |
 | **Pemicu** | `POST /webhook/ingest-email` (Header Auth `X-KMS-API-KEY`) |
 | **Dipanggil oleh** | Frontend, Komponen 1 (Ingest) |
-| **Memanggil** | `kms_evidence_agent`, `kms_curate_stage` |
-| **Requirement** | GR1 (owner = pengirim), GR4 (akses dari header), FR1–FR3 dan GR7 lewat sub-workflow |
+| **Memanggil** | `redact_sensitive_data`, `kms_evidence_agent`, `kms_curate_stage` |
+| **Requirement** | GR1 (owner = pengirim), GR4 (akses dari header), NFR4 (redaksi sebelum LLM), FR1–FR3 dan GR7 lewat sub-workflow |
 
 ## Tujuan
 
@@ -31,7 +31,7 @@ Hasil akhir ditulis ke baris `kms_candidates` dan dibaca frontend lewat `kms_can
 ```text
 Ingest Webhook ─> Prepare Ingest ─> Is Valid Request? ─┬─> Get Directory ─> Resolve Access ─> Find Active Duplicate ─> Check Duplicate
                                                         └─> Respond Invalid (400)
-─> Insert Candidate Row ─> Respond Accepted (202) ─> Should Process?
+─> Insert Candidate Row ─> Respond Accepted (202) ─> Should Process? ─> Redact Sensitive Data
 ─> Run Evidence Agent ─> Run Curation ─> Retry Agent? ─┬─> Update Candidate Row
           │                  │                          └─> (kembali ke Run Evidence Agent, maks. 2×)
           └──────────────────┴─> Mark Failed (bila sub-workflow error)
@@ -44,8 +44,9 @@ Ingest Webhook ─> Prepare Ingest ─> Is Valid Request? ─┬─> Get Directo
 | | `Find Active Duplicate`, `Check Duplicate` | `source_id` yang sama sedang `processing`/`pending_validation`/`approving` → `already_pending`. Pengirim di luar direktori → `failed`. |
 | 2. Staging dan balasan cepat | `Insert Candidate Row`, `Respond Accepted` | Membuat baris dengan status awal, lalu membalas 202. |
 | | `Should Process?` | Hanya status `processing` yang lanjut ke tahap AI. |
-| 3. Tahap AI | `Run Evidence Agent` | Menjalankan `kms_evidence_agent` dengan input `email` dan `candidate`. |
-| | `Run Curation` | Menjalankan `kms_curate_stage` dengan `agent_result`, `email`, `candidate`; mengembalikan update baris. |
+| 3. Tahap AI | `Redact Sensitive Data` | Memanggil workflow `redact_sensitive_data` untuk menyamarkan kredensial dan data pribadi di email sebelum diserahkan ke model mana pun (NFR4). Aturannya di [redact_sensitive_data.md](redact_sensitive_data.md). Email asli tidak keluar dari workflow ini. |
+| | `Run Evidence Agent` | Menjalankan `kms_evidence_agent` dengan input `email` (versi tersamar) dan `candidate`. |
+| | `Run Curation` | Menjalankan `kms_curate_stage` dengan `agent_result`, `email` (versi tersamar), `candidate`; mengembalikan update baris. |
 | | `Retry Agent?` | Bila hasil `retryable` (agen berhenti tanpa `evidence_ready` atau output kurator tidak terbaca), ulangi agen. Maksimal 2 kali (`$runIndex < 2`). |
 | 4. Hasil | `Update Candidate Row` | Menulis status akhir (`pending_validation`, `skipped`, `already_exists`, atau `failed`) beserta hasil kurasi, termasuk `project_name` hasil inferensi kurator. |
 | | `Mark Failed` | Menangkap error dari sub-workflow dan menulis `failed` + pesan error. |
@@ -54,6 +55,7 @@ Ingest Webhook ─> Prepare Ingest ─> Is Valid Request? ─┬─> Get Directo
 
 - **Akses tidak pernah ditentukan LLM.** `access_users` dihitung di `Resolve Access` dan dibekukan di baris kandidat. Validator tidak dapat mengubahnya.
 - **Pengirim = owner.** Hanya `owner_pic` yang kelak boleh memvalidasi (ditegakkan di `kms_validate_knowledge`).
+- **Model tidak pernah menerima email asli.** Kedua sub-workflow mengambil email dari `Redact Sensitive Data`, termasuk saat agen diulang.
 - Baris yang macet di `processing` lebih dari 10 menit dilaporkan `failed` oleh `kms_candidate_status`.
 
 ## Cara menguji

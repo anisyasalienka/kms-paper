@@ -6,7 +6,7 @@
 | **Pemicu** | Sub-workflow (`When Called by Ingest`) |
 | **Dipanggil oleh** | `kms_ingest` (node `Run Curation`) |
 | **Memanggil** | `kms_curator_llm` |
-| **Requirement** | GR7 (masking data sensitif), FR8 (sitasi sumber), dedup dan pengaman pembaruan |
+| **Requirement** | GR7 (masking data sensitif), NFR4 (label redaksi), FR8 (sitasi sumber), dedup dan pengaman pembaruan |
 
 ## Tujuan
 
@@ -38,11 +38,11 @@ When Called by Ingest ─> Collect Evidence ─> Needs Curator? ─┬─> Curat
 | :--- | :--- |
 | `Collect Evidence` | Membaca `intermediateSteps`, mengelompokkan hasil per tool, dan merakit evidence: `current_email` (email asli tanpa isi lampiran), `email_findings`, `saved_knowledge`, `attachments`, `document_results`, `spreadsheet_results`. Juga menentukan rute (lihat di bawah). |
 | `Needs Curator?` | Rute `curate` ke kurator; rute lain langsung ke parsing. |
-| `Curator Prompt` | Node Set berisi system prompt kurator. **Sunting prompt di sini.** Kurator juga menyimpulkan `project_name` dari evidence dan memakai ulang nama project dari `saved_knowledge` bila topiknya sama, supaya pengetahuan dari thread berbeda tetap terkelompok (FR4, FR5). |
+| `Curator Prompt` | Node Set berisi system prompt kurator. **Sunting prompt di sini.** Kurator juga menyimpulkan `project_name` dari evidence dan memakai ulang nama project dari `saved_knowledge` bila topiknya sama, supaya pengetahuan dari thread berbeda tetap terkelompok (FR4, FR5). Prompt juga meminta label `[KREDENSIAL: …]`/`[DATA_PRIBADI: …]` disalin apa adanya dan tidak ditebak isi aslinya. |
 | `Build Curator Request` | Menyusun body chat completion; konstanta `CURATOR_MODEL` (saat ini `ag/gemini-3.8-flash`). Bila `saved_knowledge` menandai `thread_continuation`, menambahkan petunjuk pesan mana yang baru dan meminta `updated_candidate` untuk knowledge tersebut. |
 | `Run Curator LLM` | Menjalankan `kms_curator_llm`. |
 | `Parse Curator Output` | Mengurai JSON kurator dan menambahkan sumber deterministik (folder, referensi saja, URL sumber). |
-| `Build Candidate Update` | Menyimpan `message_ids` thread ke `curated_payload` (dipakai writer untuk deteksi thread lanjutan). Pengaman: `updated_candidate` tanpa `existing_knowledge_id` dijadikan `candidate`; status tak dikenal → `failed` + `retryable`. Memetakan hasil ke kolom tabel. |
+| `Build Candidate Update` | Mengubah label redaksi (lihat [redact_sensitive_data.md](redact_sensitive_data.md)) di hasil kurator menjadi teks tersamar biasa (`[KREDENSIAL: Vpn#****]` → `Vpn#****`), lalu menambahkan setiap label yang ada di evidence atau hasil kurator ke `sensitive_audit` dengan lokasi "Disamarkan otomatis sebelum diproses AI", sehingga banner GR7 tetap muncul walaupun model tidak pernah melihat nilainya. Menyimpan `message_ids` thread ke `curated_payload` (dipakai writer untuk deteksi thread lanjutan). Pengaman: `updated_candidate` tanpa `existing_knowledge_id` dijadikan `candidate`; status tak dikenal → `failed` + `retryable`. Memetakan hasil ke kolom tabel. |
 | `Stage Failed` | Error kurator/parsing → update `failed` (tidak di-retry, karena `kms_curator_llm` sudah retry sekali). |
 
 ## Rute dari `Collect Evidence`

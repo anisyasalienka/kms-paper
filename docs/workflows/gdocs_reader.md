@@ -22,9 +22,13 @@ Membaca **seluruh isi satu Google Doc** dari tautannya, termasuk semua tab, dan 
 ## Alur
 
 ```text
-When Called by Agent ─> Parse Doc Link ─> Is Valid Docs Link? ─┬─> Fetch Google Doc (Docs API, includeTabsContent=true) ─> Build Document JSON
-                                                                └─────────────────────────────────────────────────────────> Build Document JSON
+When Called by Agent ─> Parse Doc Link ─> Is Valid Docs Link? ─┬─> Fetch Google Doc (Docs API, includeTabsContent=true) ─> Build Document JSON ─> Redact Sensitive Data
+                                                                └─────────────────────────────────────────────────────────> Build Document JSON ─> Redact Sensitive Data
 ```
+
+## Redaksi (NFR4)
+
+Node terakhir, `Redact Sensitive Data`, memanggil workflow `redact_sensitive_data` untuk menyamarkan kredensial dan data pribadi di seluruh hasil (teks, judul, sel, formula) sebelum dikembalikan ke model extractor. Hasil diberi field `redactions[]` (`category`, `type`, `masked_value`). Tautan dan `source_id` tidak diubah. Aturan: [redact_sensitive_data.md](redact_sensitive_data.md).
 
 ## Kode error
 
