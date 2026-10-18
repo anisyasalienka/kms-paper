@@ -386,6 +386,8 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
 
 **Hasil uji redaksi NFR4 (18 Oktober 2026):** `Redact Sensitive Data` dipasang di `kms_ingest` dan ketiga reader Google. Uji unit 36 kasus lulus. Pipeline s0–s7 dijalankan ulang dengan ID baru: semua status sesuai ekspektasi (s3a dan s5 `already_exists` karena isinya sama dengan knowledge yang sudah approved). Cek kebocoran mencari 10 nilai mentah dari s3b, s4 (Google Doc), dan s7 di data eksekusi n8n semua workflow yang memanggil model. Putaran pertama: 1 bocor (`Merchant Key` di Google Doc s4, kata kunci belum dikenal). Setelah aturan ditambah: **0 dari 10**. Rincian di `docs/workflows/redact_sensitive_data.md`.
 
+**Evaluasi end-to-end setelah reset (19 Oktober 2026):** seluruh skenario s0–s7 dan s5b dijalankan dari email masuk sampai chatbot. Status ingest 13/13 sesuai ekspektasi, daftar akses 7/7 skenario sesuai, duplikat saat diproses `already_pending`, approve 10/10, s5b menjadi pembaruan dan s5 `superseded`, s1 dikirim ulang setelah approved `already_exists`. Chatbot: 11/11 penanya tanpa akses mendapat "tidak ditemukan", 11/12 penanya berhak mendapat jawaban benar. Nilai rahasia mentah: 0 di jawaban chatbot, 0 di Qdrant, 0 di data yang dikirim ke model. Temuan: kredensial tersamar s4 hanya ditaruh kurator di `raw_structured_evidence` (tidak dijadikan chunk), sehingga chatbot menjawab "tidak ditemukan" untuk pertanyaan client secret/merchant key. Rincian, waktu per email, dan jawaban lengkap: `docs/evaluation/2026-10-19/`.
+
 ---
 
 ## 9. Roadmap
@@ -420,4 +422,6 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
   ├── GR5 dan NFR3 di-drop
   └── NFR4: opsi A (redaksi berbasis kode sebelum LLM) dipilih dan dipasang; uji kebocoran 0 dari 10 ✅
 [ FASE 5: Evaluasi Skenario Wawancara & Laporan ] ──────────────────
+  ├── Evaluasi end-to-end s0–s7 + s5b setelah reset (19 Okt), hasil di docs/evaluation/2026-10-19/ ✅
+  └── Temuan: kredensial tersamar s4 tidak terjangkau chatbot (penempatan oleh kurator) ⏳
 ```

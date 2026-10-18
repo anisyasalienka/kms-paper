@@ -1,0 +1,553 @@
+{
+ "started_at": "2026-10-18T17:18:55",
+ "ingest": [
+  {
+   "email": "s0-non-knowledge",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261018-XF2UZD",
+   "status": "skipped",
+   "seconds": 13,
+   "title": "Izin tidak masuk kantor",
+   "owner": "STAFF-2B",
+   "has_sensitive": false,
+   "access": [
+    "SPV-B",
+    "STAFF-2B"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s1-personal-cc-spv",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-WJ9UF4",
+   "duplicate_while_pending": "already_pending",
+   "status": "pending_validation",
+   "seconds": 54,
+   "title": "Keputusan Penamaan Event Tracking Banner Ramadan",
+   "owner": "STAFF-1A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s2-spv-cc-team",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-ED744K",
+   "status": "pending_validation",
+   "seconds": 34,
+   "title": "SOP Baru Template Laporan UAT v2",
+   "owner": "SPV-A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A",
+    "STAFF-3A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s3a-cross-team-cc-teams",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-J7RJWY",
+   "status": "pending_validation",
+   "seconds": 38,
+   "title": "Reschedule Rilis Search Result Video",
+   "owner": "STAFF-2A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "SPV-C",
+    "STAFF-1A",
+    "STAFF-1C",
+    "STAFF-2A",
+    "STAFF-2C",
+    "STAFF-3A",
+    "STAFF-3C"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s3b-cross-team-cc-persons",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-CFL9HU",
+   "status": "pending_validation",
+   "seconds": 38,
+   "title": "Konfigurasi Akses VPN Server Staging",
+   "owner": "STAFF-3A",
+   "has_sensitive": true,
+   "access": [
+    "SPV-A",
+    "SPV-C",
+    "STAFF-1A",
+    "STAFF-2C",
+    "STAFF-3A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s4-drive-folder",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-XDU3SP",
+   "status": "pending_validation",
+   "seconds": 88,
+   "title": "Spesifikasi Teknis Dynamic QRIS v1.2",
+   "owner": "STAFF-1A",
+   "has_sensitive": true,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s5-long-thread",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-1FCUJQ",
+   "status": "pending_validation",
+   "seconds": 152,
+   "title": "Migrasi Push Notification ke FCM HTTP v1",
+   "owner": "STAFF-1B",
+   "has_sensitive": false,
+   "access": [
+    "SPV-B",
+    "SPV-C",
+    "STAFF-1B",
+    "STAFF-2B"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s6a-daily-report",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261018-WF6VBX",
+   "status": "skipped",
+   "seconds": 13,
+   "title": "[Daily Report] Traffic Kanal Food 2026-03-09",
+   "owner": "STAFF-3B",
+   "has_sensitive": false,
+   "access": [
+    "SPV-B",
+    "STAFF-1B",
+    "STAFF-2B",
+    "STAFF-3B"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6b-it-support-reply",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261018-FVPFCZ",
+   "status": "skipped",
+   "seconds": 17,
+   "title": "Reset password akun CMS",
+   "owner": "STAFF-2C",
+   "has_sensitive": false,
+   "access": [
+    "SPV-C",
+    "STAFF-2C"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6c-deploy-notice",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261018-0AJIX8",
+   "status": "skipped",
+   "seconds": 13,
+   "title": "[Deploy] detik-web v4.18.2 ke production selesai",
+   "owner": "SPV-A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A",
+    "STAFF-3A"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6d-weekly-report-with-fix",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-B7CCJB",
+   "status": "pending_validation",
+   "seconds": 33,
+   "title": "Resolusi Isu Tracking Event video_play pada Template AMP Kanal Health",
+   "owner": "STAFF-1A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A",
+    "STAFF-3A"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6e-release-reschedule",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-N1X7S4",
+   "status": "pending_validation",
+   "seconds": 108,
+   "title": "Penundaan Jadwal Rilis Fitur Simpan Artikel ke Production",
+   "owner": "STAFF-2A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s7-sensitive-mixed",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261018-4V941L",
+   "status": "pending_validation",
+   "seconds": 46,
+   "title": "Rekap Teknis Integrasi Program Reward Ramadan",
+   "owner": "SPV-B",
+   "has_sensitive": true,
+   "access": [
+    "SPV-B",
+    "STAFF-2B",
+    "STAFF-3B"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s5b-long-thread-continued",
+   "expected": "pending_validation (update of s5)",
+   "candidate_id": "CAND-20261018-P90OVZ",
+   "status": "pending_validation",
+   "seconds": 54,
+   "is_update": true,
+   "title": "Update Go-Live dan Penanganan Isu Migrasi Push Notification ke FCM HTTP v1",
+   "ok": true,
+   "note": "is_update dicek ulang di antrean owner STAFF-1B (skrip memeriksa STAFF-2B); s5 menjadi superseded"
+  }
+ ],
+ "approve": [
+  {
+   "candidate_id": "CAND-20261018-WJ9UF4",
+   "owner": "STAFF-1A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-ED744K",
+   "owner": "SPV-A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-J7RJWY",
+   "owner": "STAFF-2A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-CFL9HU",
+   "owner": "STAFF-3A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-XDU3SP",
+   "owner": "STAFF-1A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 6,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-1FCUJQ",
+   "owner": "STAFF-1B",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-B7CCJB",
+   "owner": "STAFF-1A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-N1X7S4",
+   "owner": "STAFF-2A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-4V941L",
+   "owner": "SPV-B",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261018-P90OVZ",
+   "owner": "STAFF-1B",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": [
+    "CAND-20261018-1FCUJQ"
+   ]
+  }
+ ],
+ "chat": [
+  {
+   "scenario": "s1",
+   "user": "STAFF-1A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Nama event tracking untuk klik banner Ramadan adalah **`ramadan_banner_click`**.\n\nDetail spesifikasi tracking:\n- **Event Name**: `ramadan_banner_click`\n- **Parameter**: `banner_position` (dengan opsi nilai: `top/middle/bottom`)\n- **Mulai Aktif**: Saat deployment pada tanggal 2026-03-05\n\nSumber:\n- **Keputusan Penamaan Event Tracking Banner Ramadan**\n  - Source IDs: `EMAIL-S1`\n  - Tanggal Efektif: 2026-03-05\n  - Divalidasi oleh: `STAFF-1A`"
+  },
+  {
+   "scenario": "s1",
+   "user": "STAFF-2A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Nama event tracking untuk klik banner Ramadan adalah **`ramadan_banner_click`**.\n\nEvent ini menggunakan parameter `banner_position` (dengan opsi nilai: `top/middle/bottom`) dan mulai aktif saat deployment pada tanggal 2026-03-05.\n\nSumber:\n- Title: Keputusan Penamaan Event Tracking Banner Ramadan\n- Source IDs: EMAIL-S1\n- Effective Date: 2026-03-05\n- Validated By: STAFF-1A"
+  },
+  {
+   "scenario": "s1",
+   "user": "SPV-A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Nama event tracking untuk klik banner Ramadan adalah **`ramadan_banner_click`**.\n\nDetail spesifikasi:\n- **Parameter**: `banner_position` (dengan nilai opsi: `top`/`middle`/`bottom`)\n- **Tanggal Mulai Aktif**: 2026-03-05 (saat deployment)\n\nSumber:\n- **Title**: Keputusan Penamaan Event Tracking Banner Ramadan\n- **Source IDs**: EMAIL-S1\n- **Effective Date**: 2026-03-05\n- **Validator**: STAFF-1A"
+  },
+  {
+   "scenario": "s1",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s1",
+   "user": "SPV-B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai nama event tracking untuk klik banner Ramadan tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s2",
+   "user": "STAFF-3A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan informasi yang ditemukan, aturan terkait template laporan UAT v2 adalah sebagai berikut:\n\n1. **Kewajiban Penggunaan:** Mulai tanggal 2026-03-10, semua laporan UAT wajib menggunakan template v2. Template laporan UAT lama resmi tidak digunakan lagi.\n2. **Kolom Wajib:** Kolom `device` dan `browser` wajib diisi pada template v2.\n3. **Pilihan Status Pengujian:** Nilai atau pilihan status pengujian dibatasi dan hanya boleh diisi dengan **Passed**, **Failed**, atau **Blocked**.\n\n---\n**Sumber:**\n* **Judul:** SOP Baru Template Laporan UAT v2\n* **Source IDs:** EMAIL-S2\n* **Effective Date:** 2026-03-10\n* **Validated By:** SPV-A"
+  },
+  {
+   "scenario": "s2",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s3a",
+   "user": "STAFF-3C",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Jadwal rilis baru untuk **Search Result Video** adalah **2026-03-15** (diundur dari jadwal sebelumnya yaitu 2026-03-08 karena menunggu hasil UAT mobile). Sementara itu, jadwal *code freeze* tetap pada 2026-03-12.\n\nSumber:\n- **Judul**: Reschedule Rilis Search Result Video\n- **Source IDs**: EMAIL-S3A\n- **Tanggal Efektif**: 2026-03-15\n- **Validator**: STAFF-2A"
+  },
+  {
+   "scenario": "s3a",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s3b",
+   "user": "SPV-C",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan basis pengetahuan yang tersedia, berikut adalah detail konfigurasi akses VPN server staging:\n\n- **Host:** `vpn-staging.internal`\n- **Port:** `1194`\n- **Password:** `Vpn#****` (password sementara)\n\n*(Catatan tambahan: Profil VPN yang digunakan adalah `staging-jkt` dengan username akun bersama `stg-ops`).*\n\n---\n**Sumber:**\n- **Judul:** Konfigurasi Akses VPN Server Staging\n- **Source IDs:** EMAIL-S3B\n- **Tanggal Efektif:** 2026-03-05\n- **Divalidasi oleh:** STAFF-3A"
+  },
+  {
+   "scenario": "s3b",
+   "user": "STAFF-2A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai host, port VPN staging, dan password tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s3b",
+   "user": "STAFF-3C",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai host, port, dan password VPN staging tidak ditemukan di basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s4",
+   "user": "STAFF-2A",
+   "should_answer": true,
+   "answered": false,
+   "leaked": [],
+   "ok": false,
+   "answer": "Informasi mengenai **client secret** dan **merchant key** sandbox Dynamic QRIS tidak ditemukan dalam basis pengetahuan yang dapat saya akses.\n\nBasis pengetahuan hanya memuat informasi terkait autentikasi Dynamic QRIS v1.2 sebagai berikut:\n- Header `X-Partner-ID`: `PT-ORGANISASI-ID`\n- Header `X-Signature`: `HMAC-SHA256(merchant_id + amount + timestamp)`\n- Base URL Staging: `https://api-stg.payment.internal/v1/qris`\n- Port internal tunneling: `8443`\n\nNilai rahasia (*secret*) maupun kunci spesifik untuk sandbox/staging tidak tercantum di dalam dokumen tersebut.\n\n---\n**Sumber:**\n- **Judul:** Spesifikasi Teknis Dynamic QRIS v1.2\n- **ID Sumber:** EMAIL-S4, gdoc:1_FI1G9mEFA8M0w4lW9u6efN7-4HPDHP0PiD"
+  },
+  {
+   "scenario": "s4",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai client secret dan merchant key sandbox Dynamic QRIS tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s5b",
+   "user": "STAFF-2B",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berikut adalah hasil go-live FCM HTTP v1 dan temuan terkait iOS:\n\n### **Hasil Go-Live FCM HTTP v1**\n* **Waktu Pelaksanaan:** Go-live telah dilaksanakan pada **28 April 2026 pukul 10:00 WIB**.\n* **Performa Delivery:** *Delivery rate* pada 24 jam pertama mencapai **98,7%**.\n* **Mekanisme Rollback:** Prosedur *rollback* keseluruhan tetap tersedia melalui *feature flag* `fcm_v1_enabled`.\n\n---\n\n### **Temuan & Tindak Lanjut pada iOS**\n* **Temuan Masalah:** Notifikasi dengan topik `morning_digest` gagal terkirim pada aplikasi iOS versi di bawah 5.2 akibat adanya masalah pemetaan (*mapping*) APNs lama.\n* **Keputusan Sementara:** Aplikasi iOS dengan versi di bawah 5.2 dialihkan sementara dan diizinka"
+  },
+  {
+   "scenario": "s5b",
+   "user": "SPV-C",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berikut adalah ringkasan hasil *go-live* FCM HTTP v1 serta temuan terkait iOS:\n\n### 1. Hasil Go-Live FCM HTTP v1\n* **Waktu Pelaksanaan:** 28 April 2026 pukul 10:00 WIB.\n* **Performa/Delivery Rate:** Mencapai **98,7%** dalam kurun waktu 24 jam pertama.\n\n---\n\n### 2. Temuan dan Kendala pada iOS\n* **Masalah Mapping APNs:** Terjadi kegagalan pengiriman push notification topik `morning_digest` khusus pada aplikasi iOS dengan versi di bawah 5.2 akibat kendala *mapping* APNs lama.\n\n---\n\n### 3. Keputusan dan Tindak Lanjut\n* **Pemanfaatan Jalur Legacy Sementara:** Aplikasi iOS versi di bawah 5.2 diizinkan sementara tetap menggunakan jalur *legacy* hingga batas waktu **15 Mei 2026**, sebelum jalur *leg"
+  },
+  {
+   "scenario": "s5b",
+   "user": "STAFF-3B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai hasil go-live FCM HTTP v1 dan temuan iOS tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s6d",
+   "user": "STAFF-3A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Event `video_play` di halaman AMP kanal Health sempat tidak terkirim sejak 4 Maret 2026 karena parameter `content_id` kosong. Hal ini disebabkan oleh template AMP yang masih menggunakan variabel lama `{{article.id}}`.\n\nKendala tersebut telah diselesaikan pada 6 Maret 2026 dengan memperbarui variabel menjadi `{{content.id}}` pada template `amp-analytics`, dan aliran data metrik tracking kembali normal per 7 Maret 2026.\n\nSumber:\n- Title: Resolusi Isu Tracking Event video_play pada Template AMP Kanal Health\n  Source IDs: EMAIL-S6D\n  Effective Date: 2026-03-06\n  Validator: STAFF-1A"
+  },
+  {
+   "scenario": "s6d",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai alasan event `video_play` di halaman AMP kanal Health sempat tidak terkirim tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s6e",
+   "user": "STAFF-1A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Jadwal rilis fitur **Simpan Artikel** ke *production* adalah pada **27 Maret 2026 pukul 10.00 WIB**. \n\nJadwal ini dimundurkan dari rencana semula (20 Maret 2026 pukul 10.00 WIB) dikarenakan hasil UAT pada platform iOS belum lolos, sehingga tim QA menambahkan satu putaran pengujian regresi sebelum pelaksanaan rilis.\n\nSumber:\n- **Judul**: Penundaan Jadwal Rilis Fitur Simpan Artikel ke Production\n- **Source IDs**: EMAIL-S6E\n- **Effective Date**: 2026-03-27\n- **Validated By**: STAFF-2A"
+  },
+  {
+   "scenario": "s6e",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai jadwal rilis fitur Simpan Artikel tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s7",
+   "user": "STAFF-2B",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan dokumen teknis yang tersimpan dalam basis pengetahuan organisasi:\n\n* **API Key endpoint klaim hadiah:** `rwd_****` (dikirimkan melalui header `X-API-KEY`)\n* **NIK pemenang:** `3174************` (tersimpan dalam format termasking/tersensor pada sheet internal)\n\n---\n**Sumber:**\n* **Judul:** Rekap Teknis Integrasi Program Reward Ramadan\n* **Source IDs:** EMAIL-S7\n* **Tanggal Efektif:** -\n* **Divalidasi oleh:** SPV-B"
+  },
+  {
+   "scenario": "s7",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai API key endpoint klaim hadiah program reward Ramadan dan NIK pemenangnya tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  }
+ ],
+ "s5b_superseded_s5": true,
+ "resend_after_approve": {
+  "status": "already_exists",
+  "seconds": 25
+ },
+ "qdrant_raw_secrets": [],
+ "finished_at": "2026-10-18T17:37:47",
+ "leak_check": {
+  "raw_values_checked": 10,
+  "found_in_model_facing_execution_data": 0,
+  "executions_checked": {
+   "kms_evidence_agent": 17,
+   "kms_curate_stage": 17,
+   "kms_curator_llm": 12,
+   "gdocs_reader": 1,
+   "gsheets_reader": 1
+  }
+ }
+}
