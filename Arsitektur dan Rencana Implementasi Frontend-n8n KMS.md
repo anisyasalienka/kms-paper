@@ -1,8 +1,8 @@
 # Arsitektur & Rencana Implementasi Frontend–n8n KMS
 *Email-to-Knowledge Management System dengan Human-in-the-Loop Validation & Lead Monitoring*
 
-**Versi:** 2.7 (redaksi data sensitif sebelum LLM untuk NFR4, uji kebocoran s3b/s4/s7). Versi 2.6.1: kriteria eksklusi FR1 dilengkapi (laporan rutin, notifikasi deploy, balasan IT support, plus pengecualian; uji s6a–s6e), keputusan lingkup requirement. Versi 2.6: sumber Google Drive (folder & PDF); restrukturisasi pipeline ingest: kurator dipisah dari agen, evidence dikumpulkan deterministik; model kurator flash; hasil uji regresi s0–s4  
-**Tanggal:** 18 Oktober 2026  
+**Versi:** 2.7.1 (nilai tersamar tetap bisa dicari chatbot: aturan "Masked values" di extractor dan pengaman fakta di kurasi). Versi 2.7: redaksi data sensitif sebelum LLM untuk NFR4, uji kebocoran s3b/s4/s7. Versi 2.6.1: kriteria eksklusi FR1 dilengkapi (laporan rutin, notifikasi deploy, balasan IT support, plus pengecualian; uji s6a–s6e), keputusan lingkup requirement. Versi 2.6: sumber Google Drive (folder & PDF); restrukturisasi pipeline ingest: kurator dipisah dari agen, evidence dikumpulkan deterministik; model kurator flash; hasil uji regresi s0–s4  
+**Tanggal:** 19 Oktober 2026  
 **Lokasi Dokumen:** `/home/cendi/kms-paper-nisya/Arsitektur dan Rencana Implementasi Frontend-n8n KMS.md`  
 **Referensi Riset:** `Analisis Tematik & Requirement Workflow KMS.md` (FR1–FR8, GR1–GR7, NFR1–NFR4)  
 **Versi sebelumnya:** `...v2.0.bak.md`, `...v2.1.bak.md`, `...v2.5.bak.md` (cadangan v2.2–v2.4 tidak tersimpan)
@@ -427,3 +427,27 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
   ├── Evaluasi end-to-end s0–s7 + s5b setelah reset (19 Okt), hasil di docs/evaluation/2026-10-19/ ✅
   └── Temuan: kredensial tersamar s4 tidak terjangkau chatbot → aturan "Masked values" di extractor + pengaman fakta di kurasi, s4 diuji ulang ✅
 ```
+
+---
+
+## 10. Riwayat Iterasi
+
+Bahan untuk bagian paper yang menjelaskan bagaimana artefak dibangun dan diperbaiki. Setiap iterasi dicatat dengan pemicunya (temuan uji atau keputusan), perubahan, dan bukti uji. Pemicu yang tidak tercatat ditulis apa adanya. Riwayat git dimulai 16 Oktober 2026; sebelum itu sumbernya adalah cadangan dokumen ini (`.bak.md`) dan catatan uji di bagian 8.
+
+| # | Versi | Tanggal | Pemicu | Perubahan | Bukti uji |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 0 | 2.0 | 15 Okt | Rancangan awal dicocokkan dengan n8n yang terpasang (v2.27.3 tanpa node SQLite) | Staging di n8n Data Tables, ingest asinkron + polling, n8n sebagai API headless | – |
+| 1 | 2.1 | 15 Okt | Tidak tercatat | Identitas pseudonim, model dua role (staff dan SPV), keamanan proxy API key, penanganan status | – |
+| 2–4 | 2.2–2.4 | 15–16 Okt | Tidak tercatat (cadangan tidak tersimpan) | Sampai v2.4 sudah ada: akses dihitung dari header email, 5-layer ingest guard, auto-skip non-knowledge (FR1). Pembagian per versi tidak dapat dipastikan | – |
+| 5 | 2.5 | 16 Okt | Uji E2E frontend: email jadwal newsletter tim B dianggap pembaruan knowledge banner Ramadan tim A (*false update*); email cuti lolos ke kurator | Model akses per tim; pencarian dedup dibatasi akses pengirim dan skor minimum 0,65; opsi `approve_as_new`; kriteria eksklusi FR1 eksplisit; sitasi IEEE di layar review | Uji akses Fase 3 (skenario 1, 2, 3a, 3b); E2E ingest → nudge → validasi → chat |
+| 6 | 2.6 | 16–17 Okt | s4 (folder Drive) butuh 6 m 44 d dengan HTTP 524; folder tidak tersitasi; sheet template menjadi fakta; panggilan `saved_knowledge` pertama selalu gagal JSON; `project_name` dari input tidak pernah tersimpan | Tool folder Drive dan PDF; kurator dipisah dari agen (`Collect Evidence` deterministik, `kms_curator_llm` di jaringan internal); relevansi sumber; body JSON diperbaiki; input email datar dan `project_name` disimpulkan kurator; deteksi thread lanjutan dari `message_ids`; A/B model kurator | s4 6 m 44 d → 115 d; regresi s0–s4; s5/s5b menjadi pembaruan; `-high` vs flash setara mutu, flash dipilih |
+| 7 | 2.6.1 | 18 Okt | Pemeriksaan kesesuaian dengan requirement: daftar eksklusi `inspect_email` belum memuat laporan rutin, notifikasi deploy, dan balasan IT support (FR1) | Kriteria eksklusi dilengkapi beserta pengecualian (laporan rutin yang mencatat perbaikan atau perubahan jadwal tetap knowledge); keputusan lingkup bersama pemilik paper: GR5 dan NFR3 di-drop, kekurangan lain dianggap cukup | s6a–s6c `skipped`, s6d–s6e tetap knowledge |
+| 8 | 2.7 | 18–19 Okt | Isi email mentah (password, data pribadi) terkirim ke model cloud di setiap langkah AI; kekhawatiran I2 soal kebocoran (NFR4) | Redaksi berbasis aturan sebelum LLM (opsi A), di email dan isi dokumen Google; label `[KREDENSIAL: …]` dicatat ke `sensitive_audit`. Hari berikutnya empat salinan kode disatukan menjadi sub-workflow `redact_sensitive_data` | 36 uji unit; cek kebocoran 1/10 bocor (`Merchant Key`) → aturan ditambah → 0/10; setelah penyatuan 0/10; evaluasi E2E setelah reset: 13/13 status, 22/23 chatbot, 0 nilai mentah di model, jawaban, dan Qdrant |
+| 9 | 2.7.1 | 19 Okt | Evaluasi E2E: chatbot menjawab "tidak ditemukan" untuk kredensial tersamar s4 | Aturan "Masked values" di prompt `document_extractor` dan `spreadsheet_extractor`; pengaman di `Build Candidate Update` yang menambahkan fakta bila nilai tersamar hanya ada di `raw_structured_evidence` | Uji terkontrol extractor: nilai tersamar masuk fakta 0/5 → 5/5 dengan aturan (nilai mentah 5/5); s4 diuji ulang: STAFF-2A mendapat `MK_S****`/`Qris****`, STAFF-3A ditolak |
+
+**Pola yang muncul untuk diskusi paper:**
+
+- **Temuan uji menggerakkan sebagian besar iterasi.** Iterasi 5, 6, 8 (putaran kedua), dan 9 dipicu kegagalan yang terlihat saat skenario dummy dijalankan, bukan dari rancangan awal.
+- **Keputusan deterministik menggantikan keputusan model.** Akses, dedup, pengumpulan evidence, redaksi, dan pengaman fakta dipindah dari model ke kode secara bertahap (iterasi 5, 6, 8, 9), karena perilaku model tidak konsisten antar-run.
+- **Satu perbaikan dapat menimbulkan efek samping baru.** Redaksi (iterasi 8) menutup kebocoran ke model, tetapi membuat model melewati nilai yang disamarkan (iterasi 9).
+- **Lingkup diputuskan bersama pemilik penelitian** (iterasi 7): requirement yang tidak dibangun tetap tercantum dan dijelaskan sebagai batasan.
