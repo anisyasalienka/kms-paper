@@ -14,9 +14,11 @@ Direktori: TEAM-A, TEAM-B, TEAM-C. Setiap tim punya STAFF-1x, STAFF-2x, STAFF-3x
 | s5b-long-thread-continued.json | s5 + 3 balasan baru (hasil go-live, temuan iOS). Kirim setelah s5 di-approve | STAFF-1B | `updated_candidate` atas knowledge s5, bukan `already_exists` |
 | s6a-daily-report.json | FR1: laporan harian berisi angka saja | STAFF-3B | `skipped` |
 | s6b-it-support-reply.json | FR1: balasan IT support (reset password) | STAFF-2C | `skipped` |
-| s6c-deploy-notice.json | FR1: notifikasi deploy otomatis | SPV-A | `skipped` |
+| s6c-deploy-notice.json | FR1: notifikasi deploy otomatis tanpa nama fitur, tidak terkait knowledge mana pun | SPV-A | `skipped` |
 | s6d-weekly-report-with-fix.json | FR1 pengecualian: laporan mingguan yang mencatat bug tracking AMP dan perbaikannya | STAFF-1A | Tetap knowledge (`pending_validation`), seluruh tim A |
 | s6e-release-reschedule.json | FR2: balasan yang memundurkan jadwal rilis | STAFF-2A | Tetap knowledge, tanggal rilis final 27 Maret 2026 |
+| s6f-deploy-reply-in-thread.json | FR1 notifikasi deploy: thread s6e ditambah balasan "deploy selesai 10.21 WIB, v4.19.0". Kirim setelah s6e di-approve | STAFF-2A | Pembaruan atas s6e (`pending_validation`, `is_update`) |
+| s6g-deploy-notice-linked.json | FR1 notifikasi deploy: notifikasi otomatis di thread baru yang menyebut "Fitur Simpan Artikel". Kirim setelah s6e di-approve | STAFF-2A | Diharapkan pembaruan atas s6e. Hasil uji 19 Okt: `skipped` (kemiripan 0,62 < 0,65), lihat batasan |
 | s7-sensitive-mixed.json | NFR4/GR7: data pemenang reward (NIK, HP, email pribadi, rekening), API key, password di URL database, Bearer token | SPV-B | `pending_validation`. Ketujuh nilai disamarkan sebelum masuk model dan tercatat di `sensitive_audit`. Nama pemenang tidak tersamar (batasan) |
 
 s3b juga menguji GR7: berisi password. Sejak 18 Oktober 2026 password itu sudah disamarkan oleh `Redact Sensitive Data` sebelum masuk model (NFR4), dan tetap tampil tersamar di hasil kurasi.

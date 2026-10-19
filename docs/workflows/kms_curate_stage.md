@@ -51,8 +51,16 @@ When Called by Ingest ─> Collect Evidence ─> Needs Curator? ─┬─> Curat
 | :--- | :--- | :--- |
 | `direct` | `inspect_email` menyatakan bukan pengetahuan | `skipped` |
 | `direct` | `saved_knowledge` mengembalikan `exact_source` (ditegakkan dari hasil tool, bukan dari jawaban agen) | `already_exists` |
+| `direct` | `inspect_email` menandai `deployment_notice: true` dan `saved_knowledge` tidak mengembalikan `related_existing_knowledge` (thread sama atau skor ≥ 0,65) | `skipped`, alasan "Notifikasi deploy yang tidak dapat dikaitkan dengan knowledge yang sudah ada" |
 | `incomplete` | Agen berhenti tanpa `evidence_ready` | `failed` + `retryable` → `kms_ingest` mengulang agen |
 | `curate` | Selain itu | Kurator dipanggil |
+
+**Notifikasi deploy (FR1, revisi 19 Oktober 2026).** Notifikasi hasil deploy hanya disimpan sebagai pembaruan knowledge project yang sudah ada. Tiga lapis menegakkannya:
+1. Rute di atas men-skip notifikasi yang tidak dikaitkan `saved_knowledge`.
+2. Bagian *Deployment notices* di `Curator Prompt` meminta `updated_candidate` yang mempertahankan isi lama dan menambahkan hasil deploy (fitur, versi, environment, status, waktu selesai).
+3. `Build Candidate Update` mengubah hasil `candidate` dari notifikasi deploy menjadi `skipped`.
+
+Uji: `docs/evaluation/2026-10-19/deployment-notice/`.
 
 ## Pemangkasan evidence
 

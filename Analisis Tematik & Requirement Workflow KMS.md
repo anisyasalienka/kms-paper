@@ -147,7 +147,7 @@ Sembilan belas requirement diturunkan dari tema, digabung dengan requirement lit
 
 | ID | Requirement (siap masuk paper) | Dasar | Tahap |
 | --- | --- | --- | --- |
-| FR1 | The workflow shall classify each email and attachment as knowledge or non-knowledge, excluding routine reports, deployment notices, calendar invitations, IT-support replies, HR announcements, and personal leave notices. | T2 · I1–I4 · \[6\] | Identification |
+| FR1 | The workflow shall classify each email and attachment as knowledge or non-knowledge, excluding routine reports, calendar invitations, IT-support replies, HR announcements, and personal leave notices. A deployment notice shall be kept only as an update to the existing entry it can be linked to, and excluded otherwise. | T2 · I1–I4 · \[6\] | Identification |
 | FR2 | The workflow shall treat project artefacts and decisions as knowledge, including meeting minutes, PRDs, UAT documents, tracking plans, handovers, schedule changes, and issue resolutions. | T1, T2 · I1, I2, I4 | Identification |
 | FR3 | The workflow shall extract knowledge from the email body, attached files, and linked Google Drive documents, selecting the extraction tool by file or link type. | T1 · I1, I2, I4 | Extraction |
 | FR4 | Each entry shall carry structured metadata: project, product or channel, knowledge type, owner (PIC), division, and effective date. | T3, T4 · I1, I2, I4 | Extraction |
@@ -198,7 +198,7 @@ Delapan bagian draft perlu disesuaikan agar desain benar-benar turun dari temuan
 | III-B, keputusan agen (i) | Memilih alat ekstraksi per tipe file lampiran | Substansi sering di tautan Google Drive (I1, I4) | Perluas ke tautan Drive; agen juga mengecek izin akses dokumen sebelum membaca (FR3) |
 | III-B, governance | Empat mekanisme: validasi, provenance, akses, versi | Kredensial, data pribadi, dan data komersial muncul di email (I1, I3, I4) | Tambahkan mekanisme kelima, deteksi dan masking konten sensitif (GR7) |
 | III-B, implementasi | Model LLM berbasis API cloud | I2 khawatir kebocoran ke pihak eksternal | Letakkan masking sebelum pemanggilan LLM, atau sebutkan sebagai batasan |
-| III-B, kriteria pengetahuan | Undangan rapat, konfirmasi, laporan metrik dikecualikan | Ditambah notifikasi deploy, balasan IT support, info HR, izin pribadi; tapi balasan yang mengubah jadwal adalah pengetahuan (I2, I4) | Perbarui daftar pengecualian; nyatakan bahwa balasan yang mengubah keputusan memicu pembaruan entri (FR1, FR6) |
+| III-B, kriteria pengetahuan | Undangan rapat, konfirmasi, laporan metrik dikecualikan | Ditambah undangan kalender deployment, balasan IT support, info HR, izin pribadi; tapi balasan yang mengubah jadwal adalah pengetahuan (I2, I4), dan notifikasi deploy memperbarui entri project yang sudah ada (I4) | Perbarui daftar pengecualian; nyatakan bahwa balasan yang mengubah keputusan memicu pembaruan entri (FR1, FR6) |
 | III-C, dataset sintetis | Email pengetahuan, non-pengetahuan, lintas thread, pembaruan | Kasus nyata tersedia dari wawancara | Tambahkan skenario: topik Ramadan lintas kanal dan PIC, reschedule hanya di reply, isu berulang, email milis berisi harga tools, email kredensial VPN, email klien yang diteruskan, email berisi tautan Drive saja |
 | III-A, Table III | I4: 3 tahun; durasi wawancara "\[xx\]" | I4 di perusahaan sejak 2017, peran sekarang sejak 2025; I3 di Research Ops dan I4 di Commerce | Samakan definisi masa kerja; isi durasi; cek klaim bahwa keempat informan berasal dari direktorat yang sama |
 
@@ -210,7 +210,7 @@ Keputusan 18 Oktober 2026 setelah pengecekan prototipe terhadap requirement. Bag
 
 | ID | Status | Yang sudah ada | Yang tidak dibangun |
 | --- | --- | --- | --- |
-| FR1 | Terpenuhi | Laporan rutin, notifikasi deploy, balasan IT support, undangan kalender, info HR, dan izin pribadi dikecualikan. Email rutin yang mencatat perbaikan isu atau perubahan jadwal tetap diproses. Diuji dengan s6a–s6e (18 Okt) | |
+| FR1 | Terpenuhi | Laporan rutin, balasan IT support, undangan kalender, info HR, dan izin pribadi dikecualikan. Email rutin yang mencatat perbaikan isu atau perubahan jadwal tetap diproses. Notifikasi deploy disimpan hanya sebagai pembaruan knowledge yang terkait (revisi 19 Okt). Diuji dengan s6a–s6g | Notifikasi di thread baru dengan kemiripan di bawah 0,65 ikut di-skip (s6g) |
 | FR2 | Terpenuhi | MOM, PRD, UAT, tracking plan, handover, perubahan jadwal, dan resolusi isu diklasifikasi sebagai knowledge | |
 | FR3 | Terpenuhi | Isi email, lampiran, Google Docs, Google Sheets, folder Drive, dan PDF di Drive. Pembaca dipilih sesuai jenis sumber | PDF Drive baru diuji terpisah, belum di pipeline penuh |
 | FR4 | Terpenuhi | Project (disimpulkan AI), produk/kanal, tipe knowledge, owner, tim, tanggal efektif | |
@@ -254,6 +254,31 @@ Keputusan 18 Oktober 2026 setelah pengecekan prototipe terhadap requirement. Bag
 **Draf paragraf Limitation (bahasa Inggris):**
 
 > The workflow calls hosted language models, so message content leaves the organisation during extraction and curation. To limit exposure (NFR4), a rule-based redaction step masks credentials and structured personal data before any model call, covering both the email and the content of linked Google documents. In our leak test, none of ten planted values reached a model after one rule was added for "merchant key", which the first run had missed. Rules cannot recognise every secret: names, home addresses, free-text hints, alphanumeric tokens without a recognisable label, and text inside images still reach the model. Commercial figures are deliberately left unmasked at this stage because they are often the knowledge itself; the curator masks them before storage. Masking also changes model behaviour: in a controlled test the extraction model omitted masked credentials from its facts in all five runs, so the chatbot could not tell users that the values existed. An explicit prompt rule restored them in all five runs, and a deterministic check after curation now adds a fact for any masked value left out. A locally hosted model would remove the residual exposure at the cost of hardware and re-evaluation.
+
+### FR1: notifikasi deploy (revisi 19 Oktober 2026)
+
+**Pertanyaan.** Apakah notifikasi "deploy selesai" untuk project yang PRD/UAT-nya sudah tersimpan juga knowledge? Sebelumnya semua notifikasi deploy di-skip.
+
+**Dasar revisi.** I4 menggambarkan siklus project yang lengkap di email ("setiap stage dari email": MOM, kickoff, handover, timeline rilis, hasil UAT) dan mengeluhkan dokumen yang tidak diperbarui, sehingga orang harus "ngetes ulang lagi sistemnya" untuk tahu kondisi terakhir. Notifikasi deploy adalah tahap terakhir siklus itu. Kutipan I2 yang menjadi dasar pengecualian ternyata tentang *undangan kalender* deployment, bukan hasil deploy. Notifikasi yang berdiri sendiri tetap tidak bernilai dan bisa membanjiri antrean validasi.
+
+**Keputusan (disetujui pemilik paper).** Notifikasi hasil deploy disimpan hanya sebagai **pembaruan** entri yang sudah ada, bila bisa dikaitkan lewat thread yang sama atau kemiripan isi ≥ 0,65 dengan entri yang dapat diakses pengirim. Selain itu di-skip. Notifikasi deploy tidak pernah menjadi entri baru. Teks FR1 di atas sudah disesuaikan.
+
+**Implementasi.** `inspect_email` memberi tanda `deployment_notice`. `Collect Evidence` (kode) men-skip notifikasi yang tidak dikaitkan `saved_knowledge`. Kurator hanya boleh membuat `updated_candidate` dan menambahkan hasil deploy (fitur, versi, environment, status, waktu selesai). `Build Candidate Update` mengubah kandidat baru dari notifikasi deploy menjadi `skipped`.
+
+**Hasil uji.**
+
+| Email | Isi | Hasil |
+| --- | --- | --- |
+| s6c | Notifikasi otomatis `detik-web v4.18.2`, tanpa nama fitur | `skipped` (tidak terkait) |
+| s6f | Notifikasi sebagai balasan di thread jadwal rilis s6e | Pembaruan s6e, di-approve. Chatbot menjawab "27 Maret 2026 pukul 10.21 WIB, detik-web v4.19.0" kepada STAFF-1A dan SPV-A; STAFF-3A ditolak |
+| s6g | Notifikasi otomatis di thread baru, menyebut "Fitur Simpan Artikel" | `skipped`: kemiripan dengan s6e 0,62, di bawah ambang 0,65 |
+| s0, s6a, s6b | Izin sakit, laporan harian, balasan IT support | Tetap `skipped` |
+
+**Batasan.** Notifikasi yang terkait tetapi dikirim di thread baru dan singkat bisa tidak lolos ambang kemiripan (s6g). Ambang 0,65 dipasang untuk mencegah *false update*, jadi sistem memilih melewatkan pembaruan daripada menimpa entri yang salah.
+
+**Draf kalimat untuk paper (bahasa Inggris):**
+
+> Deployment notices are not knowledge on their own, but a notice for a project that is already stored closes its lifecycle. Following I4, the workflow keeps such a notice only as an update to the entry it can be linked to, either through the same thread or through a similarity of at least 0.65 with an entry the sender can access, and discards it otherwise. In our test, a notice sent as a reply in the release thread updated the entry and the chatbot then reported the go-live date and version. A notice sent in a new thread scored 0.62 and was discarded: the threshold that prevents false updates also drops some genuine ones.
 
 ## Batasan lingkup
 

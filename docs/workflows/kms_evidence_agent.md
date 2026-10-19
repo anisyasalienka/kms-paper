@@ -65,10 +65,13 @@ Prompt ada di node `inspect_email` → *System Message*.
 | Kelompok | Isi |
 | :--- | :--- |
 | **Knowledge** | MOM, PRD, UAT, tracking plan, keputusan arsitektur; SOP, jadwal deploy/rilis yang disepakati, instruksi konfigurasi, handover; resolusi isu, post-mortem, perubahan kebijakan; balasan yang mengubah jadwal atau keputusan sebelumnya (reschedule). |
-| **Bukan knowledge** | Izin cuti/sakit; obrolan santai; **laporan rutin** harian/mingguan/bulanan yang hanya berisi angka; **notifikasi deploy** (mulai, selesai, masuk kalender); **balasan IT support** (konfirmasi tiket, reset password, "sudah kami proses"); notifikasi sistem otomatis dan alert CI/CD; undangan kalender dan pengingat; pengumuman HR rutin. |
+| **Bukan knowledge** | Izin cuti/sakit; obrolan santai; **laporan rutin** harian/mingguan/bulanan yang hanya berisi angka; **undangan kalender deployment**; **balasan IT support** (konfirmasi tiket, reset password, "sudah kami proses"); notifikasi sistem otomatis dan alert build/test CI/CD; undangan kalender dan pengingat; pengumuman HR rutin. |
+| **Notifikasi deploy** | Notifikasi hasil deploy (mulai, selesai, gagal, rollback) diberi `is_knowledge: true` dan `deployment_notice: true`. Workflow menyimpannya hanya sebagai pembaruan knowledge yang bisa dikaitkan; selain itu `skipped` (lihat `kms_curate_stage`). Bila notifikasi juga memuat hal di bagian Pengecualian, ia diperlakukan sebagai knowledge biasa (`deployment_notice: false`). |
 | **Pengecualian** | Email yang tampak rutin tetap knowledge bila mencatat hal yang nanti dijadikan rujukan: isu beserta penyebab atau perbaikannya, keputusan, perubahan jadwal, atau prosedur yang bisa dipakai ulang. Contoh: laporan mingguan yang mencatat bug tracking dan cara memperbaikinya. |
 
 Laporan rutin, notifikasi deploy, balasan IT support, dan bagian pengecualian ditambahkan 18 Oktober 2026 agar daftar eksklusi sama dengan FR1. Pengecualian berasal dari temuan T2 (I4: laporan isu dan jadwal tetap jadi patokan). Uji: `dummy-emails/s6a`–`s6e`.
+
+Pada 19 Oktober 2026 notifikasi deploy dipindah dari daftar eksklusi ke aturan tersendiri (FR1 direvisi bersama pemilik paper): notifikasi yang menutup siklus project yang sudah tersimpan menjadi pembaruan, sesuai I4 ("setiap stage dari email"). Undangan kalender deployment tetap dikecualikan (I2). Uji: `s6c`, `s6f`, `s6g`.
 
 ## Aturan extractor
 

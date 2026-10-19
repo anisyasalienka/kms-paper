@@ -1,0 +1,18 @@
+{
+  "source_id": "EMAIL-S6G",
+  "subject": "[Deploy] Fitur Simpan Artikel (detik-web v4.19.0) ke production selesai",
+  "messages": [
+    {
+      "message_id": "EMAIL-S6G-M01",
+      "date": "2026-03-27",
+      "from": "STAFF-2A",
+      "to": [
+        "TEAM-A"
+      ],
+      "cc": [],
+      "subject": "[Deploy] Fitur Simpan Artikel (detik-web v4.19.0) ke production selesai",
+      "body": "Deployment notification\n\nService: detik-web\nRelease: Fitur Simpan Artikel\nVersion: v4.19.0\nEnvironment: production\nStatus: SUCCESS\nStarted: 2026-03-27 10:00 WIB\nFinished: 2026-03-27 10:21 WIB\n\nPesan ini dikirim otomatis oleh pipeline CI/CD.",
+      "attachments": []
+    }
+  ]
+}

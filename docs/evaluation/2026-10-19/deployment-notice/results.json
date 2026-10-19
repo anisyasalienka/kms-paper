@@ -1,0 +1,105 @@
+{
+ "ingest": [
+  {
+   "email": "s0-non-knowledge",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-2643VE",
+   "status": "skipped",
+   "seconds": 17,
+   "is_update": false,
+   "title": "Izin tidak masuk kantor",
+   "summary": "Email merupakan permohonan izin tidak masuk kantor karena sakit, bukan pengetahuan organisasi.",
+   "deploy_facts": []
+  },
+  {
+   "email": "s6a-daily-report",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-RGLN8V",
+   "status": "skipped",
+   "seconds": 13,
+   "is_update": false,
+   "title": "[Daily Report] Traffic Kanal Food 2026-03-09",
+   "summary": "Email merupakan laporan harian traffic yang hanya menyajikan metrik rutin, tidak mencakup keputusan, prosedur, atau pengetahuan yang dapat dipakai kembali.",
+   "deploy_facts": []
+  },
+  {
+   "email": "s6b-it-support-reply",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-EGVF5Q",
+   "status": "skipped",
+   "seconds": 17,
+   "is_update": false,
+   "title": "Reset password akun CMS",
+   "summary": "Email merupakan permintaan reset password akun CMS dan balasan IT yang hanya menginformasikan bahwa password sementara sudah dikirim, bukan pengetahuan organisasi.",
+   "deploy_facts": []
+  },
+  {
+   "email": "s6c-deploy-notice",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-VCOGFC",
+   "status": "skipped",
+   "seconds": 25,
+   "is_update": false,
+   "title": "[Deploy] detik-web v4.18.2 ke production selesai",
+   "summary": "Notifikasi deploy yang tidak dapat dikaitkan dengan knowledge yang sudah ada, jadi tidak disimpan.",
+   "deploy_facts": []
+  },
+  {
+   "email": "s6g-deploy-notice-linked",
+   "expected": "pending_validation (update s6e)",
+   "candidate_id": "CAND-20261019-SDRY94",
+   "status": "skipped",
+   "seconds": 21,
+   "is_update": false,
+   "title": "[Deploy] Fitur Simpan Artikel (detik-web v4.19.0) ke production selesai",
+   "summary": "Notifikasi deploy yang tidak dapat dikaitkan dengan knowledge yang sudah ada, jadi tidak disimpan.",
+   "deploy_facts": []
+  },
+  {
+   "email": "s6f-deploy-reply-in-thread",
+   "expected": "pending_validation (update s6e)",
+   "candidate_id": "CAND-20261019-EK9DAW",
+   "status": "pending_validation",
+   "seconds": 50,
+   "is_update": true,
+   "title": "Jadwal Rilis dan Penyelesaian Deployment Fitur Simpan Artikel ke Production",
+   "summary": "Fitur Simpan Artikel yang awalnya dijadwalkan rilis pada 20 Maret 2026 pukul 10.00 WIB dimundurkan ke 27 Maret 2026 pukul 10.00 WIB karena hasil UAT iOS belum lolos dan perlunya satu putaran pengujian regresi tambahan oleh Tim QA. Pada 27 Maret 2026 pukul 10.21 WIB, proses deploy ke production telah selesai dilaksanakan untuk versi detik-web v4.19.0 dengan status SUCCESS.",
+   "deploy_facts": [
+    "Deploy fitur Simpan Artikel ke production selesai pada tanggal 27 Maret 2026 pukul 10.21 WIB dengan versi detik-web v4.19.0 dan status SUCCESS."
+   ]
+  }
+ ],
+ "approve": [
+  {
+   "candidate_id": "CAND-20261019-EK9DAW",
+   "http": 200,
+   "new_status": "approved",
+   "superseded": [
+    "CAND-20261018-N1X7S4"
+   ]
+  }
+ ],
+ "chat": [
+  {
+   "user": "STAFF-1A",
+   "should_answer": true,
+   "answered": true,
+   "ok": true,
+   "answer": "Fitur **Simpan Artikel** selesai di-deploy dan live di production pada:\n\n* **Waktu Live:** 27 Maret 2026 pukul 10.21 WIB *(sebelumnya sempat dijadwalkan pada 20 Maret 2026 pukul 10.00 WIB, namun dimundurkan karena hasil UAT iOS belum lolos serta adanya tambahan satu putaran uji regresi)*\n* **Versi:** `detik-web v4.19.0` (status SUCCESS)\n\n---\n**Sumber:**\n* **Judul:** Jadwal Rilis dan Penyelesaian Deployment Fitur Simpan Artikel ke Production\n* **Source IDs:** EMAIL-S6E\n* **Effective Date:** 2026-03-27\n* **Validated By:** STAFF-2A"
+  },
+  {
+   "user": "SPV-A",
+   "should_answer": true,
+   "answered": true,
+   "ok": true,
+   "answer": "Fitur **Simpan Artikel** resmi selesai di-deploy (*live*) ke production pada:\n- **Waktu/Tanggal:** 27 Maret 2026 pukul 10.21 WIB\n- **Versi:** detik-web v4.19.0 (dengan status *SUCCESS*)\n\n---\n**Sumber:**\n- **Judul:** Jadwal Rilis dan Penyelesaian Deployment Fitur Simpan Artikel ke Production\n- **Source IDs:** EMAIL-S6E\n- **Effective Date:** 2026-03-27\n- **Validated By:** STAFF-2A"
+  },
+  {
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "ok": true,
+   "answer": "Informasi mengenai kapan fitur Simpan Artikel live di production dan versi berapa tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  }
+ ]
+}
