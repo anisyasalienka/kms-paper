@@ -31,7 +31,7 @@ Hasil akhir ditulis ke baris `kms_candidates` dan dibaca frontend lewat `kms_can
 ```text
 Ingest Webhook ─> Prepare Ingest ─> Is Valid Request? ─┬─> Get Directory ─> Resolve Access ─> Find Active Duplicate ─> Check Duplicate
                                                         └─> Respond Invalid (400)
-─> Insert Candidate Row ─> Respond Accepted (202) ─> Should Process? ─> Redact Sensitive Data
+─> Insert Candidate Row ─> Respond Accepted (202) ─> Should Process? ─> Redact Sensitive Data ─> Save Source Email
 ─> Run Evidence Agent ─> Run Curation ─> Retry Agent? ─┬─> Update Candidate Row
           │                  │                          └─> (kembali ke Run Evidence Agent, maks. 2×)
           └──────────────────┴─> Mark Failed (bila sub-workflow error)
@@ -45,6 +45,7 @@ Ingest Webhook ─> Prepare Ingest ─> Is Valid Request? ─┬─> Get Directo
 | 2. Staging dan balasan cepat | `Insert Candidate Row`, `Respond Accepted` | Membuat baris dengan status awal, lalu membalas 202. |
 | | `Should Process?` | Hanya status `processing` yang lanjut ke tahap AI. |
 | 3. Tahap AI | `Redact Sensitive Data` | Memanggil workflow `redact_sensitive_data` untuk menyamarkan kredensial dan data pribadi di email sebelum diserahkan ke model mana pun (NFR4). Aturannya di [redact_sensitive_data.md](redact_sensitive_data.md). Email asli tidak keluar dari workflow ini. |
+| | `Save Source Email` | Menyimpan email versi tersamar ke kolom `source_email` (isi lampiran dibuang, `attachment_id`/`filename`/`mime_type` tetap) agar validator dapat membacanya di "Kandidat Saya". Diatur `alwaysOutputData` + `continueRegularOutput`, jadi kegagalan menyimpan tidak menghentikan kurasi. |
 | | `Run Evidence Agent` | Menjalankan `kms_evidence_agent` dengan input `email` (versi tersamar) dan `candidate`. |
 | | `Run Curation` | Menjalankan `kms_curate_stage` dengan `agent_result`, `email` (versi tersamar), `candidate`; mengembalikan update baris. |
 | | `Retry Agent?` | Bila hasil `retryable` (agen berhenti tanpa `evidence_ready` atau output kurator tidak terbaca), ulangi agen. Maksimal 2 kali (`$runIndex < 2`). |

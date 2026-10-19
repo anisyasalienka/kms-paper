@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { AlertTriangle, BellRing, Check, ExternalLink, GitMerge, Loader2, ShieldAlert } from 'lucide-react'
+import { AlertTriangle, BellRing, Check, ExternalLink, GitMerge, Loader2, Mail, ShieldAlert } from 'lucide-react'
 import { toast } from 'sonner'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { Callout, EmptyState, Eyebrow, Field, NativeSelect, PageHeader, StatusBadge, Tag, UserChips } from '@/components/common'
+import { SourceEmailDialog } from '@/components/SourceEmailDialog'
 import { api, ApiError } from '@/lib/api'
 import { formatDate, formatDateTime } from '@/lib/format'
 import { useCurrentUser, useProfile } from '@/lib/profile'
@@ -114,10 +115,26 @@ export default function CandidatesPage() {
           )}
         </div>
 
-        <div className="min-w-0">{selected && <CandidateDetail key={selected.candidate_id} candidate={selected} />}</div>
+        <div className="min-w-0">
+          {selected && (
+            <CandidateDetail key={selected.candidate_id} candidate={selected} newMessageIds={newThreadMessages(selected, all)} />
+          )}
+        </div>
       </div>
     </>
   )
+}
+
+// Messages in this candidate's thread that the previous candidate from the same thread did not have
+// (thread continuation, e.g. s5 -> s5b). Undefined when there is no earlier version to compare with.
+function newThreadMessages(c: MyCandidate, all: MyCandidate[]): Set<string> | undefined {
+  if (!c.source_email) return undefined
+  const previous = all
+    .filter((o) => o.source_id === c.source_id && o.candidate_id !== c.candidate_id && o.source_email && o.created_at < c.created_at)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))[0]
+  if (!previous?.source_email) return undefined
+  const seen = new Set(previous.source_email.messages.map((m) => m.message_id))
+  return new Set(c.source_email.messages.map((m) => m.message_id).filter((id) => !seen.has(id)))
 }
 
 // ---------------------------------------------------------------------------
@@ -217,10 +234,11 @@ function resolveCandidateSources(c: MyCandidate): {
   return { sourceMap: map, references: list }
 }
 
-function CandidateDetail({ candidate: c }: { candidate: MyCandidate }) {
+function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandidate; newMessageIds?: Set<string> }) {
   const user = useCurrentUser()
   const queryClient = useQueryClient()
   const [dialog, setDialog] = useState<ValidateAction | null>(null)
+  const [emailOpen, setEmailOpen] = useState(false)
   const pending = c.status === 'pending_validation'
 
   const validate = useMutation({
@@ -281,9 +299,14 @@ function CandidateDetail({ candidate: c }: { candidate: MyCandidate }) {
         <h2 className="mt-3 font-serif text-2xl leading-snug font-semibold tracking-[-0.005em] text-balance">
           {c.title || '(tanpa judul)'}
         </h2>
-        <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
-          {c.candidate_id} · sumber {c.source_id}
-        </p>
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <p className="font-mono text-[11px] text-muted-foreground">
+            {c.candidate_id} · sumber {c.source_id}
+          </p>
+          <Button variant="outline" size="xs" onClick={() => setEmailOpen(true)}>
+            <Mail /> Lihat email asli
+          </Button>
+        </div>
       </header>
 
       <div className="space-y-7 px-6 pb-7 sm:px-8">
@@ -440,6 +463,11 @@ function CandidateDetail({ candidate: c }: { candidate: MyCandidate }) {
                       </span>
                       <div className="mt-0.5 flex flex-wrap items-center gap-x-3 font-mono text-[11px] text-muted-foreground">
                         <span className="break-all">{ref.id}</span>
+                        {ref.id === c.source_id && (
+                          <button type="button" onClick={() => setEmailOpen(true)} className="inline-flex items-center gap-1 text-primary hover:underline">
+                            lihat email <Mail className="size-3" />
+                          </button>
+                        )}
                         {ref.url && (
                           <a href={ref.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
                             buka <ExternalLink className="size-3" />
@@ -502,6 +530,13 @@ function CandidateDetail({ candidate: c }: { candidate: MyCandidate }) {
         busy={validate.isPending}
         onClose={() => setDialog(null)}
         onSubmit={(handover_to, notes) => validate.mutate({ action: 'handover', handover_to, notes })}
+      />
+      <SourceEmailDialog
+        open={emailOpen}
+        onClose={() => setEmailOpen(false)}
+        sourceId={c.source_id}
+        email={c.source_email}
+        newMessageIds={newMessageIds}
       />
     </article>
   )

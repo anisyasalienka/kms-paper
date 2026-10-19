@@ -119,6 +119,8 @@ export interface MyCandidate {
   structured_details: Record<string, unknown>
   confidence: number | null
   error_message: string | null
+  // Redacted thread saved at ingest (attachment contents removed); null for candidates created before 2026-10-19.
+  source_email?: EmailPayload | null
   created_at: string
   nudges: Nudge[]
 }

@@ -13,7 +13,7 @@
 GET my-candidates ─> Get My Candidates ─> Get Nudges ─> Shape My Candidates ─> Respond My Candidates
 ```
 
-Antrean "Kandidat Saya": semua kandidat dengan `owner_pic` = user aktif (pending di atas), lengkap dengan data review (fakta, sumber, detail teknis, item sensitif, `access_users`) dan nudge dari SPV.
+Antrean "Kandidat Saya": semua kandidat dengan `owner_pic` = user aktif (pending di atas), lengkap dengan data review (fakta, sumber, detail teknis, item sensitif, `access_users`), email sumber versi tersamar (`source_email`, `null` untuk kandidat lama), dan nudge dari SPV. Email hanya ikut di endpoint ini, sehingga yang dapat membacanya hanya owner kandidat.
 
 ## 2. `GET /lead-summary?user_id=`
 

@@ -1,0 +1,33 @@
+[
+ {
+  "candidate_id": "CAND-20261019-F08V5Q",
+  "source_id": "EMAIL-SE5",
+  "status": "already_exists",
+  "messages": 13,
+  "redaction_tags": 0,
+  "attachment_content_stored": false,
+  "redactions_key_stored": false
+ },
+ {
+  "candidate_id": "CAND-20261019-IQXZLU",
+  "source_id": "EMAIL-SE5",
+  "status": "already_exists",
+  "messages": 10,
+  "redaction_tags": 0,
+  "attachment_content_stored": false,
+  "redactions_key_stored": false
+ },
+ {
+  "candidate_id": "CAND-20261019-NZEQIF",
+  "source_id": "EMAIL-SE7",
+  "status": "pending_validation",
+  "messages": 1,
+  "redaction_tags": 7,
+  "attachment_content_stored": false,
+  "redactions_key_stored": false
+ },
+ {
+  "raw_s7_values_checked": 6,
+  "raw_s7_values_leaked": 0
+ }
+]
