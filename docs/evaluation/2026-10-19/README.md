@@ -2,7 +2,7 @@
 
 ## Intinya
 
-Setelah data uji direset (`kms_admin_reset`), seluruh skenario email dummy dijalankan dari awal sampai akhir: email masuk, dirangkum AI, disetujui owner, lalu ditanyakan ke chatbot oleh orang yang berhak dan yang tidak berhak. Semua status, aturan akses, deteksi duplikat, dan pembaruan versi berjalan sesuai harapan. Tidak ada nilai rahasia mentah yang sampai ke model, ke jawaban chatbot, maupun ke Qdrant. Satu temuan: chatbot menjawab "tidak ditemukan" untuk kredensial s4 padahal kredensial tersamarnya tersimpan (lihat Temuan).
+Setelah data uji direset (`kms_admin_reset`), seluruh skenario email dummy dijalankan dari awal sampai akhir: email masuk, dirangkum AI, disetujui owner, lalu ditanyakan ke chatbot oleh orang yang berhak dan yang tidak berhak. Semua status, aturan akses, deteksi duplikat, dan pembaruan versi berjalan sesuai harapan. Tidak ada nilai rahasia mentah yang sampai ke model, ke jawaban chatbot, maupun ke Qdrant. Satu temuan: chatbot menjawab "tidak ditemukan" untuk kredensial s4 padahal kredensial tersamarnya tersimpan. Penyebabnya ditelusuri dan diperbaiki pada hari yang sama (lihat Temuan dan `masked-values/`).
 
 Versi sistem: kms v2.7 (FR1 dengan pengecualian, redaksi `redact_sensitive_data`). Waktu: 00.19–00.38 WIB.
 
@@ -17,7 +17,7 @@ Versi sistem: kms v2.7 (FR1 dengan pengecualian, redaksi `redact_sensitive_data`
 | s5b (thread s5 bertambah 3 balasan) | `pending_validation` sebagai pembaruan, s5 menjadi `superseded` setelah approve |
 | s1 dikirim ulang setelah approved | `already_exists` |
 | Chatbot: penanya tanpa akses mendapat "tidak ditemukan" | 11 dari 11 |
-| Chatbot: penanya berhak mendapat jawaban yang benar | 11 dari 12 (lihat Temuan) |
+| Chatbot: penanya berhak mendapat jawaban yang benar | 11 dari 12 (lihat Temuan; s4 benar setelah perbaikan) |
 | Nilai rahasia mentah di jawaban chatbot | 0 |
 | Nilai rahasia mentah di Qdrant (`knowledge`, `knowledge_store`) | 0 dari 10 |
 | Nilai rahasia mentah di data yang dikirim ke model | 0 dari 10 (17 eksekusi agen, 17 kurasi, 12 panggilan kurator, 2 reader) |
@@ -61,7 +61,9 @@ Jawaban lengkap tiap pertanyaan ada di `eval_results.json`.
 
 ## Temuan
 
-**Kredensial s4 tersimpan tetapi tidak bisa ditemukan chatbot.** STAFF-2A mendapat jawaban yang benar soal base URL staging, header, dan port, tetapi chatbot menyatakan client secret dan merchant key "tidak ditemukan". Kedua nilai itu sebenarnya tersimpan tersamar (`Qris****`, `MK_S****`), tetapi kurator menaruhnya hanya di `raw_structured_evidence`. Bagian itu sengaja tidak dijadikan chunk pencarian oleh `knowledge_writer_upsert`, sehingga chatbot tidak pernah melihatnya. Pada uji sebelum redaksi (16 Oktober), kurator menaruh kredensial tersamar di `facts` dan chatbot menjawab `Qris#****`. Penempatan oleh kurator tidak deterministik, jadi belum bisa dipastikan apakah perubahan ini disebabkan label redaksi. Bukan kebocoran dan bukan kesalahan akses, tetapi jawaban "tidak ditemukan" menyesatkan. Kemungkinan perbaikan: prompt kurator mewajibkan satu fakta yang menyebut kredensial apa saja yang ada beserta bentuk tersamarnya.
+**Kredensial s4 tersimpan tetapi tidak bisa ditemukan chatbot.** STAFF-2A mendapat jawaban yang benar soal base URL staging, header, dan port, tetapi chatbot menyatakan client secret dan merchant key "tidak ditemukan". Kedua nilai itu sebenarnya tersimpan tersamar (`Qris****`, `MK_S****`), tetapi kurator menaruhnya hanya di `raw_structured_evidence`. Bagian itu sengaja tidak dijadikan chunk pencarian oleh `knowledge_writer_upsert`, sehingga chatbot tidak pernah melihatnya. Pada uji sebelum redaksi (16 Oktober), kurator menaruh kredensial tersamar di `facts` dan chatbot menjawab `Qris#****`. Penempatan oleh kurator tidak deterministik, jadi belum bisa dipastikan apakah perubahan ini disebabkan label redaksi. Bukan kebocoran dan bukan kesalahan akses, tetapi jawaban "tidak ditemukan" menyesatkan.
+
+*Tindak lanjut (19 Oktober 2026).* Penelusuran dan uji terkontrol menunjukkan penyebabnya redaksi itu sendiri: model melewati nilai yang sudah disamarkan saat menulis fakta, pertama di `document_extractor` (0/5 dengan nilai tersamar, 5/5 dengan nilai mentah), lalu di kurator. Kredensial di body email tidak terdampak. Perbaikan: aturan "Masked values" di prompt `document_extractor` dan `spreadsheet_extractor` (5/5 pada uji), dan pengaman di `Build Candidate Update` yang menambahkan fakta bila nilai tersamar hanya ada di `raw_structured_evidence`. Setelah s4 dikirim ulang dan di-approve, STAFF-2A mendapat `MK_S****` dan `Qris****`, STAFF-3A tetap ditolak. Rincian di `masked-values/README.md`.
 
 **Catatan skrip.** Pada putaran ini skrip memeriksa penanda `is_update` s5b di antrean STAFF-2B, padahal owner thread s5 adalah STAFF-1B. Penanda dicek ulang secara manual (`is_update: true`) dan skrip sudah diperbaiki.
 

@@ -32,8 +32,10 @@ Yang **tidak** diubah: tautan (supaya agen tetap bisa membuka dokumen, kecuali p
 ## Alur label sampai ke validator
 
 1. `redact_sensitive_data` mengganti nilai dengan label. `kms_ingest` membuang field `redactions` sebelum email diteruskan ke agen dan kurator. Reader mengembalikannya bersama isi dokumen.
-2. Agen, extractor, dan kurator hanya melihat label. Prompt kurator meminta label disalin apa adanya dan tidak ditebak isinya.
-3. `Build Candidate Update` di `kms_curate_stage` mengubah label menjadi teks tersamar biasa (`Vpn#****`) dan menambahkan setiap label ke `sensitive_audit` dengan lokasi "Disamarkan otomatis sebelum diproses AI". Banner data sensitif di layar validator tetap muncul.
+2. Agen, extractor, dan kurator hanya melihat label. Prompt kurator, `document_extractor`, dan `spreadsheet_extractor` meminta label disalin apa adanya sebagai fakta dan tidak ditebak isinya.
+3. `Build Candidate Update` di `kms_curate_stage` mengubah label menjadi teks tersamar biasa (`Vpn#****`) dan menambahkan setiap label ke `sensitive_audit` dengan lokasi "Disamarkan otomatis sebelum diproses AI". Banner data sensitif di layar validator tetap muncul. Bila nilai tersamar hanya tertinggal di `raw_structured_evidence` (tidak dijadikan chunk), kode yang sama menambahkan satu fakta yang menyebutnya, supaya chatbot tetap bisa menjawab bahwa nilainya ada.
+
+**Efek samping yang perlu dijaga.** Model cenderung melewati nilai yang sudah disamarkan saat menulis fakta, karena menganggapnya bukan informasi. Pada uji terkontrol 19 Oktober 2026, extractor menulis kredensial s4 sebagai fakta 0 dari 5 kali saat nilainya tersamar, dan 5 dari 5 kali setelah prompt diberi aturan "Masked values". Rincian di `docs/evaluation/2026-10-19/masked-values/`.
 
 ## Batasan
 

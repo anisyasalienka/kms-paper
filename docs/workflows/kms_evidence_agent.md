@@ -75,6 +75,7 @@ Laporan rutin, notifikasi deploy, balasan IT support, dan bagian pengecualian di
 - Permintaan tanpa `attachment_id`/`source_id` ditolak (`missing_source`) tanpa memanggil reader.
 - Tautan folder tidak pernah diteruskan ke reader.
 - Setiap hasil memuat `relevant_to_email` dan `relevance_reason`; `kms_curate_stage` memakai flag ini untuk memisahkan sumber referensi saja.
+- Bagian *Masked values* (ditambahkan 19 Oktober 2026, `document_extractor` dan `spreadsheet_extractor`): label `[KREDENSIAL: …]`/`[DATA_PRIBADI: …]` dari `redact_sensitive_data` adalah nilai asli yang disamarkan. Label disalin apa adanya ke `text`, `structured_details`, dan `extracted_facts`, termasuk satu fakta yang menyebut kredensial atau data pribadi apa saja yang ada di dokumen; tidak boleh dibuang atau ditebak. Tanpa aturan ini extractor melewati nilai tersamar (0/5 pada uji s4; 5/5 dengan aturan). Lihat `docs/evaluation/2026-10-19/masked-values/`.
 
 ## Mengubah perilaku
 

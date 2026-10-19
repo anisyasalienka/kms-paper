@@ -388,6 +388,8 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
 
 **Evaluasi end-to-end setelah reset (19 Oktober 2026):** seluruh skenario s0–s7 dan s5b dijalankan dari email masuk sampai chatbot. Status ingest 13/13 sesuai ekspektasi, daftar akses 7/7 skenario sesuai, duplikat saat diproses `already_pending`, approve 10/10, s5b menjadi pembaruan dan s5 `superseded`, s1 dikirim ulang setelah approved `already_exists`. Chatbot: 11/11 penanya tanpa akses mendapat "tidak ditemukan", 11/12 penanya berhak mendapat jawaban benar. Nilai rahasia mentah: 0 di jawaban chatbot, 0 di Qdrant, 0 di data yang dikirim ke model. Temuan: kredensial tersamar s4 hanya ditaruh kurator di `raw_structured_evidence` (tidak dijadikan chunk), sehingga chatbot menjawab "tidak ditemukan" untuk pertanyaan client secret/merchant key. Rincian, waktu per email, dan jawaban lengkap: `docs/evaluation/2026-10-19/`.
 
+**Perbaikan nilai tersamar (19 Oktober 2026):** uji terkontrol menunjukkan `document_extractor` melewati kredensial yang sudah disamarkan (0/5; nilai mentah 5/5), dan kurator berperilaku sama. Ditambahkan aturan "Masked values" di prompt `document_extractor` dan `spreadsheet_extractor` (5/5 pada uji) serta pengaman di `Build Candidate Update` yang menambahkan fakta bila nilai tersamar hanya tertinggal di `raw_structured_evidence`. s4 diuji ulang: chatbot menjawab `MK_S****` dan `Qris****` kepada STAFF-2A, STAFF-3A tetap ditolak. Rincian: `docs/evaluation/2026-10-19/masked-values/`.
+
 ---
 
 ## 9. Roadmap
@@ -423,5 +425,5 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
   └── NFR4: opsi A (redaksi berbasis kode sebelum LLM) dipilih dan dipasang; uji kebocoran 0 dari 10 ✅
 [ FASE 5: Evaluasi Skenario Wawancara & Laporan ] ──────────────────
   ├── Evaluasi end-to-end s0–s7 + s5b setelah reset (19 Okt), hasil di docs/evaluation/2026-10-19/ ✅
-  └── Temuan: kredensial tersamar s4 tidak terjangkau chatbot (penempatan oleh kurator) ⏳
+  └── Temuan: kredensial tersamar s4 tidak terjangkau chatbot → aturan "Masked values" di extractor + pengaman fakta di kurasi, s4 diuji ulang ✅
 ```
