@@ -16,6 +16,7 @@ Semua workflow berjalan di n8n 2.27.3 (`https://n8n.cencendi.my.id`). Frontend m
 | Tool baca sumber | `gsheets_reader` | `tYUmV5RKkwsiw6C8` | Tool agen | [gsheets_reader.md](gsheets_reader.md) |
 | Tool baca sumber | `gdrive_folder_lister` | `JITewMLouD0Lz1dT` | Tool agen | [gdrive_folder_lister.md](gdrive_folder_lister.md) |
 | Tool baca sumber | `gdrive_pdf_reader` | `ElNyCOiUqBdJJli0` | Tool agen | [gdrive_pdf_reader.md](gdrive_pdf_reader.md) |
+| Keamanan | `redact_sensitive_data` | `KmsRedaction2026` | Sub-workflow | [redact_sensitive_data.md](redact_sensitive_data.md) |
 | Pengetahuan | `saved_knowledge` | `2SHsvB58CqAthDHa` | Tool (ingest & chatbot) | [saved_knowledge.md](saved_knowledge.md) |
 | Pengetahuan | `get_knowledge_detail` | `GetKnowDetail2026` | Tool chatbot | [get_knowledge_detail.md](get_knowledge_detail.md) |
 | Pengetahuan | `knowledge_writer_upsert` | `KwrUpsert20260810A1` | Sub-workflow | [knowledge_writer_upsert.md](knowledge_writer_upsert.md) |
@@ -31,7 +32,7 @@ Semua workflow berjalan di n8n 2.27.3 (`https://n8n.cencendi.my.id`). Frontend m
 ```text
 Frontend ──/api──> nginx ──> n8n webhooks
                                │
-  ingest-email ───────────────>│ kms_ingest
+  ingest-email ───────────────>│ kms_ingest ─> redact_sensitive_data (email disamarkan dulu)
                                │   ├─> kms_evidence_agent
                                │   │     ├─ inspect_email, list_attachments      (agent tool + model sendiri)
                                │   │     ├─ saved_knowledge ─────────────────────> Qdrant knowledge
@@ -72,6 +73,7 @@ Frontend ──/api──> nginx ──> n8n webhooks
 - **Sticky note** (Bahasa Indonesia) ada di setiap kanvas KMS, satu per tahap, berisi fungsi tahap dan requirement yang dicakup (FR, GR). Nama node tetap berbahasa Inggris.
 - **Tool tidak pernah melempar error.** Tool baca sumber selalu mengembalikan `extraction_status` (`success`, `empty`, `failed`) dan `errors[]`, sehingga agen dapat melanjutkan.
 - **Aturan akses dan dedup ditegakkan oleh kode**, bukan oleh LLM.
+- **Model tidak pernah menerima data sensitif mentah.** Workflow `redact_sensitive_data`, dipanggil dari `kms_ingest` dan ketiga reader Google, menyamarkan kredensial dan data pribadi sebelum teks diserahkan ke model (NFR4). Lihat [redact_sensitive_data.md](redact_sensitive_data.md).
 
 ## Pengujian
 

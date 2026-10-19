@@ -58,6 +58,18 @@ When Called by Ingest ─> Candidate Context ─> Current Email ─> Evidence Ag
 4. Satu extractor per sumber relevan (lampiran, tautan, file folder). Maksimal 5 file per folder; file yang jelas tidak terkait dilewati.
 5. Kembalikan `{"status": "evidence_ready"}`.
 
+## Kriteria klasifikasi `inspect_email` (FR1, FR2)
+
+Prompt ada di node `inspect_email` → *System Message*.
+
+| Kelompok | Isi |
+| :--- | :--- |
+| **Knowledge** | MOM, PRD, UAT, tracking plan, keputusan arsitektur; SOP, jadwal deploy/rilis yang disepakati, instruksi konfigurasi, handover; resolusi isu, post-mortem, perubahan kebijakan; balasan yang mengubah jadwal atau keputusan sebelumnya (reschedule). |
+| **Bukan knowledge** | Izin cuti/sakit; obrolan santai; **laporan rutin** harian/mingguan/bulanan yang hanya berisi angka; **notifikasi deploy** (mulai, selesai, masuk kalender); **balasan IT support** (konfirmasi tiket, reset password, "sudah kami proses"); notifikasi sistem otomatis dan alert CI/CD; undangan kalender dan pengingat; pengumuman HR rutin. |
+| **Pengecualian** | Email yang tampak rutin tetap knowledge bila mencatat hal yang nanti dijadikan rujukan: isu beserta penyebab atau perbaikannya, keputusan, perubahan jadwal, atau prosedur yang bisa dipakai ulang. Contoh: laporan mingguan yang mencatat bug tracking dan cara memperbaikinya. |
+
+Laporan rutin, notifikasi deploy, balasan IT support, dan bagian pengecualian ditambahkan 18 Oktober 2026 agar daftar eksklusi sama dengan FR1. Pengecualian berasal dari temuan T2 (I4: laporan isu dan jadwal tetap jadi patokan). Uji: `dummy-emails/s6a`–`s6e`.
+
 ## Aturan extractor
 
 - Permintaan tanpa `attachment_id`/`source_id` ditolak (`missing_source`) tanpa memanggil reader.

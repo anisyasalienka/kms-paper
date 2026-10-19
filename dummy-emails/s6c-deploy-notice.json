@@ -1,0 +1,18 @@
+{
+  "source_id": "EMAIL-S6C",
+  "subject": "[Deploy] detik-web v4.18.2 ke production selesai",
+  "messages": [
+    {
+      "message_id": "EMAIL-S6C-M01",
+      "date": "2026-03-12",
+      "from": "SPV-A",
+      "to": [
+        "TEAM-A"
+      ],
+      "cc": [],
+      "subject": "[Deploy] detik-web v4.18.2 ke production selesai",
+      "body": "Deployment notification\n\nService: detik-web\nVersion: v4.18.2\nEnvironment: production\nStatus: SUCCESS\nStarted: 2026-03-12 22:00 WIB\nFinished: 2026-03-12 22:14 WIB\n\nPesan ini dikirim otomatis oleh pipeline CI/CD.",
+      "attachments": []
+    }
+  ]
+}

@@ -14,8 +14,9 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss()],
     resolve: { alias: { '@': path.resolve(__dirname, './src') } },
     server: {
-      host: true,
-      allowedHosts: true,
+      // Loopback only: the cloudflared quick tunnel (tmux "kms") is the sole public entry.
+      host: '127.0.0.1',
+      allowedHosts: ['localhost', '.trycloudflare.com'],
       // dummy-emails/ lives one level above the app and is bundled as scenario samples.
       fs: { allow: ['..'] },
       proxy: {

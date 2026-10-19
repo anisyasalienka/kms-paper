@@ -22,15 +22,19 @@ Membaca teks **satu PDF yang disimpan di Google Drive**, tanpa LLM.
 ## Alur
 
 ```text
-When Called by Agent ─> Parse PDF Link ─> Is Valid PDF Link? ─┬─> Get File Metadata ─> Check PDF Metadata ─> Is Readable PDF? ─┬─> Download PDF ─> Extract PDF Text ─> Build PDF JSON
-                                                               │                                                               └──────────────────────────────────────> Build PDF JSON
-                                                               └──────────────────────────────────────────────────────────────────────────────────────────────────────> Build PDF JSON
+When Called by Agent ─> Parse PDF Link ─> Is Valid PDF Link? ─┬─> Get File Metadata ─> Check PDF Metadata ─> Is Readable PDF? ─┬─> Download PDF ─> Extract PDF Text ─> Build PDF JSON ─> Redact Sensitive Data
+                                                               │                                                               └──────────────────────────────────────> Build PDF JSON ─> Redact Sensitive Data
+                                                               └──────────────────────────────────────────────────────────────────────────────────────────────────────> Build PDF JSON ─> Redact Sensitive Data
 ```
 
 1. Metadata dicek dulu: harus `application/pdf` dan ≤ 20 MB.
 2. File diunduh lewat Drive API (`alt=media`).
 3. Node *Extract from File* (operasi PDF) membaca lapisan teks secara lokal.
 4. Teks dibersihkan dan dipotong pada 100.000 karakter.
+
+## Redaksi (NFR4)
+
+Node terakhir, `Redact Sensitive Data`, memanggil workflow `redact_sensitive_data` untuk menyamarkan kredensial dan data pribadi di seluruh hasil (teks, judul, sel, formula) sebelum dikembalikan ke model extractor. Hasil diberi field `redactions[]` (`category`, `type`, `masked_value`). Tautan dan `source_id` tidak diubah. Aturan: [redact_sensitive_data.md](redact_sensitive_data.md).
 
 ## Kode error
 

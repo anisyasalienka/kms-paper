@@ -1,0 +1,33 @@
+{
+  "source_id": "EMAIL-S6E",
+  "subject": "Jadwal rilis fitur Simpan Artikel",
+  "messages": [
+    {
+      "message_id": "EMAIL-S6E-M01",
+      "date": "2026-03-14",
+      "from": "STAFF-2A",
+      "to": [
+        "STAFF-1A"
+      ],
+      "cc": [
+        "SPV-A"
+      ],
+      "subject": "Jadwal rilis fitur Simpan Artikel",
+      "body": "Halo 1A, sesuai kickoff kemarin, fitur Simpan Artikel rilis ke production tanggal 20 Maret 2026 pukul 10.00 WIB.\n\nSTAFF-2A",
+      "attachments": []
+    },
+    {
+      "message_id": "EMAIL-S6E-M02",
+      "date": "2026-03-16",
+      "from": "SPV-A",
+      "to": [
+        "STAFF-2A",
+        "STAFF-1A"
+      ],
+      "cc": [],
+      "subject": "Re: Jadwal rilis fitur Simpan Artikel",
+      "body": "Rilis Simpan Artikel kita mundurkan ke 27 Maret 2026 pukul 10.00 WIB karena hasil UAT iOS belum lolos. Tim QA tambah satu putaran regresi.\n\nSPV-A",
+      "attachments": []
+    }
+  ]
+}

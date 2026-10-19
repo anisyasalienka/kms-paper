@@ -1,0 +1,18 @@
+{
+  "source_id": "EMAIL-S6D",
+  "subject": "[Weekly Report] Tracking Kanal Health minggu ke-2 Maret",
+  "messages": [
+    {
+      "message_id": "EMAIL-S6D-M01",
+      "date": "2026-03-13",
+      "from": "STAFF-1A",
+      "to": [
+        "TEAM-A"
+      ],
+      "cc": [],
+      "subject": "[Weekly Report] Tracking Kanal Health minggu ke-2 Maret",
+      "body": "Halo tim,\n\nRingkasan mingguan tracking kanal Health (2 sampai 8 Maret 2026):\n- Event article_read: 3,1 juta (+4%)\n- Event share_click: 41.200 (-2%)\n\nCatatan isu: event video_play sempat tidak terkirim sejak 4 Maret di halaman AMP. Penyebabnya parameter content_id kosong karena template AMP masih memakai variabel lama {{article.id}}. Sudah diperbaiki 6 Maret dengan mengganti ke {{content.id}} di template amp-analytics, dan data kembali normal sejak 7 Maret. Kalau ada event AMP lain yang hilang, cek variabel ini dulu.\n\nSTAFF-1A",
+      "attachments": []
+    }
+  ]
+}
