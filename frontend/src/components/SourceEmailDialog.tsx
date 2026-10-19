@@ -43,7 +43,8 @@ export function SourceEmailDialog({
   email: EmailPayload | null | undefined
   newMessageIds?: Set<string>
 }) {
-  const messages = email?.messages ?? []
+  // Stored oldest first (thread order); shown newest first, like a mail client.
+  const messages = [...(email?.messages ?? [])].reverse()
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
