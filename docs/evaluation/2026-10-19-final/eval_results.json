@@ -1,0 +1,804 @@
+{
+ "started_at": "2026-10-19T12:59:43",
+ "ingest": [
+  {
+   "email": "s0-non-knowledge",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-3P9T5S",
+   "status": "skipped",
+   "seconds": 18,
+   "title": "Izin tidak masuk kantor",
+   "owner": "STAFF-2B",
+   "has_sensitive": false,
+   "access": [
+    "SPV-B",
+    "STAFF-2B"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s1-personal-cc-spv",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-UPKIOY",
+   "duplicate_while_pending": "already_pending",
+   "status": "pending_validation",
+   "seconds": 56,
+   "title": "Keputusan Nama Event Tracking Klik Banner Ramadan",
+   "owner": "STAFF-1A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s2-spv-cc-team",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-0BXGS2",
+   "status": "pending_validation",
+   "seconds": 54,
+   "title": "SOP Baru: Template Laporan UAT v2",
+   "owner": "SPV-A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A",
+    "STAFF-3A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s3a-cross-team-cc-teams",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-GKCP0J",
+   "status": "pending_validation",
+   "seconds": 53,
+   "title": "Perubahan Jadwal Rilis Search Result Video",
+   "owner": "STAFF-2A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "SPV-C",
+    "STAFF-1A",
+    "STAFF-1C",
+    "STAFF-2A",
+    "STAFF-2C",
+    "STAFF-3A",
+    "STAFF-3C"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s3b-cross-team-cc-persons",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-UPIN9B",
+   "status": "pending_validation",
+   "seconds": 48,
+   "title": "Konfigurasi Akses VPN Server Staging",
+   "owner": "STAFF-3A",
+   "has_sensitive": true,
+   "access": [
+    "SPV-A",
+    "SPV-C",
+    "STAFF-1A",
+    "STAFF-2C",
+    "STAFF-3A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s4-drive-folder",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-DVM32L",
+   "status": "pending_validation",
+   "seconds": 143,
+   "title": "Spesifikasi Teknis Dynamic QRIS Versi 1.2",
+   "owner": "STAFF-1A",
+   "has_sensitive": true,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s5-long-thread",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-0MP7QI",
+   "status": "pending_validation",
+   "seconds": 86,
+   "title": "Migrasi Push Notification ke FCM HTTP v1",
+   "owner": "STAFF-1B",
+   "has_sensitive": false,
+   "access": [
+    "SPV-B",
+    "SPV-C",
+    "STAFF-1B",
+    "STAFF-2B"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s6a-daily-report",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-YQOJJ2",
+   "status": "skipped",
+   "seconds": 13,
+   "title": "[Daily Report] Traffic Kanal Food 2026-03-09",
+   "owner": "STAFF-3B",
+   "has_sensitive": false,
+   "access": [
+    "SPV-B",
+    "STAFF-1B",
+    "STAFF-2B",
+    "STAFF-3B"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6b-it-support-reply",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-F4WIMD",
+   "status": "skipped",
+   "seconds": 17,
+   "title": "Reset password akun CMS",
+   "owner": "STAFF-2C",
+   "has_sensitive": false,
+   "access": [
+    "SPV-C",
+    "STAFF-2C"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6c-deploy-notice",
+   "expected": "skipped",
+   "candidate_id": "CAND-20261019-JV994Y",
+   "status": "skipped",
+   "seconds": 38,
+   "title": "[Deploy] detik-web v4.18.2 ke production selesai",
+   "owner": "SPV-A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A",
+    "STAFF-3A"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6d-weekly-report-with-fix",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-FIB6MO",
+   "status": "pending_validation",
+   "seconds": 50,
+   "title": "Resolusi Isu Tracking Event video_play pada Halaman AMP Kanal Health",
+   "owner": "STAFF-1A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A",
+    "STAFF-3A"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s6e-release-reschedule",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-94ZQ7R",
+   "status": "pending_validation",
+   "seconds": 54,
+   "title": "Perubahan Jadwal Rilis Fitur Simpan Artikel ke Production",
+   "owner": "STAFF-2A",
+   "has_sensitive": false,
+   "access": [
+    "SPV-A",
+    "STAFF-1A",
+    "STAFF-2A"
+   ],
+   "ok": true
+  },
+  {
+   "email": "s7-sensitive-mixed",
+   "expected": "pending_validation",
+   "candidate_id": "CAND-20261019-PLQLWG",
+   "status": "pending_validation",
+   "seconds": 54,
+   "title": "Rekap Teknis Integrasi Program Reward Ramadan",
+   "owner": "SPV-B",
+   "has_sensitive": true,
+   "access": [
+    "SPV-B",
+    "STAFF-2B",
+    "STAFF-3B"
+   ],
+   "access_ok": true,
+   "ok": true
+  },
+  {
+   "email": "s5b-long-thread-continued",
+   "expected": "pending_validation (update of s5)",
+   "candidate_id": "CAND-20261019-MX63ZI",
+   "status": "pending_validation",
+   "seconds": 87,
+   "is_update": true,
+   "title": "Migrasi Push Notification ke FCM HTTP v1",
+   "ok": true
+  },
+  {
+   "email": "s6g-deploy-notice-linked",
+   "expected": "pending_validation (update of s6e)",
+   "candidate_id": "CAND-20261019-G4YEZB",
+   "status": "skipped",
+   "seconds": 25,
+   "is_update": false,
+   "title": "[Deploy] Fitur Simpan Artikel (detik-web v4.19.0) ke production selesai",
+   "ok": false
+  },
+  {
+   "email": "s6f-deploy-reply-in-thread",
+   "expected": "pending_validation (update of s6e)",
+   "candidate_id": "CAND-20261019-4B7OPW",
+   "status": "pending_validation",
+   "seconds": 92,
+   "is_update": true,
+   "title": "Jadwal dan Hasil Rilis Fitur Simpan Artikel ke Production",
+   "ok": true
+  }
+ ],
+ "approve": [
+  {
+   "candidate_id": "CAND-20261019-UPKIOY",
+   "owner": "STAFF-1A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-0BXGS2",
+   "owner": "SPV-A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-GKCP0J",
+   "owner": "STAFF-2A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-UPIN9B",
+   "owner": "STAFF-3A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-DVM32L",
+   "owner": "STAFF-1A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 6,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-0MP7QI",
+   "owner": "STAFF-1B",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-FIB6MO",
+   "owner": "STAFF-1A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-94ZQ7R",
+   "owner": "STAFF-2A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-PLQLWG",
+   "owner": "SPV-B",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 4,
+   "superseded": []
+  },
+  {
+   "candidate_id": "CAND-20261019-MX63ZI",
+   "owner": "STAFF-1B",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 5,
+   "superseded": [
+    "CAND-20261019-0MP7QI"
+   ]
+  },
+  {
+   "candidate_id": "CAND-20261019-4B7OPW",
+   "owner": "STAFF-2A",
+   "http": 200,
+   "new_status": "approved",
+   "chunks": 3,
+   "superseded": [
+    "CAND-20261019-94ZQ7R"
+   ]
+  }
+ ],
+ "chat": [
+  {
+   "scenario": "s1",
+   "user": "STAFF-1A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Nama event tracking untuk klik banner Ramadan adalah **`ramadan_banner_click`**.\n\nEvent ini menggunakan parameter:\n* **`banner_position`** dengan nilai: `top`, `middle`, atau `bottom`.\n\nEvent tracking ini mulai aktif saat deployment pada tanggal 5 Maret 2026 (2026-03-05).\n\nSumber:\n* **Keputusan Nama Event Tracking Klik Banner Ramadan** (Source ID: EMAIL-S1, Effective Date: 2026-03-05, Validated By: STAFF-1A)"
+  },
+  {
+   "scenario": "s1",
+   "user": "STAFF-2A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Nama event tracking untuk klik banner Ramadan adalah **`ramadan_banner_click`**.\n\nInformasi terkait spesifikasi event tersebut:\n- **Parameter:** `banner_position` (dengan nilai: `top`, `middle`, atau `bottom`)\n- **Mulai aktif:** Saat deployment pada tanggal 2026-03-05\n\n---\n**Sumber:**\n- **Judul:** Keputusan Nama Event Tracking Klik Banner Ramadan\n- **ID Sumber:** EMAIL-S1\n- **Tanggal Efektif:** 2026-03-05\n- **Divalidasi Oleh:** STAFF-1A"
+  },
+  {
+   "scenario": "s1",
+   "user": "SPV-A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Nama event tracking untuk klik banner Ramadan adalah **`ramadan_banner_click`**.\n\nDetail spesifikasi tracking terkait:\n- **Nama Event:** `ramadan_banner_click`\n- **Parameter:** `banner_position` (dengan nilai: `top`, `middle`, `bottom`)\n- **Mulai Aktif:** Saat deployment pada tanggal 5 Maret 2026 (2026-03-05)\n\n---\n### Sumber:\n- **Judul:** Keputusan Nama Event Tracking Klik Banner Ramadan\n- **ID Sumber (Source IDs):** EMAIL-S1\n- **Tanggal Efektif:** 2026-03-05\n- **Divalidasi oleh:** STAFF-1A"
+  },
+  {
+   "scenario": "s1",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai nama event tracking untuk klik banner Ramadan tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s1",
+   "user": "SPV-B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s2",
+   "user": "STAFF-3A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan SOP yang berlaku, berikut adalah aturan terkait template laporan UAT v2:\n\n1. **Kewajiban Penggunaan:** Semua laporan UAT wajib menggunakan template v2 mulai tanggal **2026-03-10**.\n2. **Penghentian Template Lama:** Template lama sudah tidak boleh digunakan lagi.\n3. **Kolom Wajib:** Kolom `device` dan `browser` wajib diisi.\n4. **Ketentuan Status:** Kolom status hanya boleh diisi dengan salah satu nilai berikut:\n   - `Passed`\n   - `Failed`\n   - `Blocked`\n\n---\n**Sumber:**\n- **Judul:** SOP Baru: Template Laporan UAT v2\n- **Source IDs:** EMAIL-S2\n- **Effective Date:** 2026-03-10\n- **Validator:** SPV-A"
+  },
+  {
+   "scenario": "s2",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s3a",
+   "user": "STAFF-3C",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan konfirmasi hasil meeting pada 2026-03-04, rilis **Search Result Video** diundur dari tanggal 2026-03-08 menjadi **2026-03-15** karena menunggu hasil UAT mobile (dengan jadwal code freeze tetap pada 2026-03-12).\n\n---\n**Sumber:**\n- **Judul:** Perubahan Jadwal Rilis Search Result Video\n- **Source IDs:** EMAIL-S3A\n- **Tanggal Efektif:** 2026-03-04\n- **Divalidasi oleh:** STAFF-2A"
+  },
+  {
+   "scenario": "s3a",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s3b",
+   "user": "SPV-C",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan informasi konfigurasi akses VPN server staging yang tercatat di basis pengetahuan:\n\n* **Host:** `vpn-staging.internal`\n* **Port:** `1194`\n* **Password (sementara):** `Vpn#****` (menggunakan username `stg-ops`)\n\n---\n**Sumber:**\n* **Judul:** Konfigurasi Akses VPN Server Staging\n* **Source IDs:** EMAIL-S3B\n* **Tanggal Berlaku (Effective Date):** 2026-03-05\n* **Divalidasi oleh:** STAFF-3A"
+  },
+  {
+   "scenario": "s3b",
+   "user": "STAFF-2A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s3b",
+   "user": "STAFF-3C",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s4",
+   "user": "STAFF-2A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan dokumen spesifikasi teknis dalam basis pengetahuan, kredensial sandbox (staging) untuk Dynamic QRIS tercatat sebagai berikut:\n\n- **Merchant Key:** `MK_S****`\n- **Client Secret:** `Qris****`\n\n*(Nilai kredensial dalam dokumen spesifikasi disamarkan/dimask)*\n\n---\n**Sumber:**\n- **Judul Dokumen:** Spesifikasi Teknis Dynamic QRIS Versi 1.2\n- **ID Sumber (source_ids):** EMAIL-S4, gdoc:1_FI1G9mEFA8M0w4lW9u6efN7-4HPDHP0PiD2N7BwYIU\n- **Tanggal Efektif:** 2026-11-15\n- **Divalidasi oleh:** STAFF-1A"
+  },
+  {
+   "scenario": "s4",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s5b",
+   "user": "STAFF-2B",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berikut adalah rincian mengenai hasil *go-live* migrasi FCM HTTP v1 serta temuan pada platform iOS:\n\n### Hasil Go-Live FCM HTTP v1\n* **Waktu Pelaksanaan:** Berhasil *go-live* pada 28 April 2026 pukul 10:00 WIB.\n* **Performa Delivery Rate:** Mencapai **98,7%** dalam 24 jam pertama.\n\n### Temuan dan Tindak Lanjut pada iOS\n* **Kendala yang Ditemukan:** Topik notifikasi `morning_digest` gagal terkirim ke aplikasi iOS versi di bawah 5.2 (`< 5.2`).\n* **Penyebab:** Terjadi masalah pada pemetaan (*mapping*) APNs lama.\n* **Tindak Lanjut & Kebijakan Transisi:**\n  * Tim C menjadwalkan pelaksanaan UAT ulang khusus untuk platform iOS pada 30 April 2026 pasca-perbaikan.\n  * Diputuskan kebijakan sementara b"
+  },
+  {
+   "scenario": "s5b",
+   "user": "SPV-C",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berikut adalah hasil *go-live* migrasi ke FCM HTTP v1 serta temuan terkait platform iOS:\n\n### 1. Hasil Go-Live FCM HTTP v1\n* **Waktu Pelaksanaan:** *Go-live* resmi berjalan pada **28 April 2026 pukul 10:00 WIB**.\n* **Performa/Delivery Rate:** Tingkat pengiriman (*delivery rate*) dalam 24 jam pertama mencapai **98,7%**.\n\n---\n\n### 2. Temuan Pasca Go-Live pada iOS\n* **Kendala Pengiriman:** Notifikasi untuk topik `morning_digest` gagal terkirim ke aplikasi iOS dengan versi di bawah 5.2 (iOS < 5.2).\n* **Penyebab:** Masalah pemetaan (*mapping*) APNs lama.\n\n---\n\n### 3. Tindak Lanjut dan Kebijakan Transisi\n* **UAT Ulang:** Tim C menjadwalkan pengujian UAT ulang khusus untuk platform iOS pada **30 Ap"
+  },
+  {
+   "scenario": "s5b",
+   "user": "STAFF-3B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai hasil go-live FCM HTTP v1 dan temuan iOS-nya tidak ditemukan dalam basis pengetahuan yang dapat diakses."
+  },
+  {
+   "scenario": "s6d",
+   "user": "STAFF-3A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Event `video_play` di halaman AMP kanal Health sempat tidak terkirim (sejak 4 Maret 2026) karena parameter `content_id` bernilai kosong akibat template AMP masih menggunakan variabel lama, yaitu `{{article.id}}`. \n\nKendala ini telah diperbaiki pada 6 Maret 2026 dengan mengganti variabel tersebut menjadi `{{content.id}}` pada template `amp-analytics`, sehingga data *tracking* telah kembali normal per 7 Maret 2026.\n\nSumber:\n- Title: Resolusi Isu Tracking Event video_play pada Halaman AMP Kanal Health\n- Source IDs: EMAIL-S6D\n- Effective Date: 2026-03-06\n- Validated By: STAFF-1A"
+  },
+  {
+   "scenario": "s6d",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai penyebab event `video_play` di halaman AMP kanal Health sempat tidak terkirim tidak ditemukan dalam basis pengetahuan yang dapat saya akses."
+  },
+  {
+   "scenario": "s6e",
+   "user": "STAFF-1A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Fitur **Simpan Artikel** telah dirilis ke production pada **27 Maret 2026 pukul 10.21 WIB** (menggunakan versi `detik-web v4.19.0` dengan status SUCCESS).\n\nSebelumnya, fitur ini awalnya dijadwalkan rilis pada 20 Maret 2026 pukul 10.00 WIB, namun dimundurkan ke 27 Maret 2026 pukul 10.00 WIB karena kendala pada hasil UAT iOS yang memerlukan tambahan satu putaran pengujian regresi oleh tim QA.\n\nSumber:\n- **Judul**: Jadwal dan Hasil Rilis Fitur Simpan Artikel ke Production\n  - **Source IDs**: EMAIL-S6E, KNOWLEDGE-17548bed-4848-55b7-8a81-29e88edf12b2\n  - **Tanggal Efektif**: 2026-03-27\n  - **Divalidasi oleh**: STAFF-2A"
+  },
+  {
+   "scenario": "s6e",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s6f",
+   "user": "STAFF-1A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Fitur **Simpan Artikel** *live* di *production* pada tanggal **27 Maret 2026 pukul 10.21 WIB** (setelah sebelumnya sempat dijadwalkan ulang dari 20 Maret 2026 karena kendala UAT iOS) dengan versi **detik-web v4.19.0** dan berstatus **SUCCESS**.\n\n---\n**Sumber:**\n- **Judul:** Jadwal dan Hasil Rilis Fitur Simpan Artikel ke Production\n- **Source IDs:** EMAIL-S6E, KNOWLEDGE-17548bed-4848-55b7-8a81-29e88edf12b2\n- **Effective Date:** 2026-03-27\n- **Validated By:** STAFF-2A"
+  },
+  {
+   "scenario": "s6f",
+   "user": "SPV-A",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan informasi yang ditemukan di basis pengetahuan:\n\nFitur **Simpan Artikel** live (*deployment* selesai) di *production* pada tanggal **27 Maret 2026 pukul 10.21 WIB** dengan versi **detik-web v4.19.0** (berstatus SUCCESS). \n\nSebelumnya, fitur ini sempat dijadwalkan rilis pada 20 Maret 2026 pukul 10.00 WIB, namun dimundurkan ke 27 Maret 2026 pukul 10.00 WIB karena hasil UAT di iOS belum lolos sehingga tim QA menambahkan satu putaran pengujian regresi.\n\n---\n**Sumber:**\n- **Judul:** Jadwal dan Hasil Rilis Fitur Simpan Artikel ke Production\n- **Source IDs:** EMAIL-S6E, KNOWLEDGE-17548bed-4848-55b7-8a81-29e88edf12b2\n- **Tanggal Efektif:** 2026-03-27\n- **Divalidasi Oleh:** STAFF-2A"
+  },
+  {
+   "scenario": "s6f",
+   "user": "STAFF-3A",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi mengenai kapan fitur Simpan Artikel live di production dan versinya tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  },
+  {
+   "scenario": "s7",
+   "user": "STAFF-2B",
+   "should_answer": true,
+   "answered": true,
+   "leaked": [],
+   "ok": true,
+   "answer": "Berdasarkan dokumen teknis pada basis pengetahuan organisasi:\n\n* **API key endpoint klaim hadiah:** `rwd_****` (digunakan pada header `X-API-KEY`).\n* **NIK pemenang:** `3174************` (tercatat atas nama pemenang batch 1: Rina Wulandari).\n\n*(Catatan: Nilai kredensial dan NIK tersimpan dalam bentuk tersensor/termasking di dalam basis pengetahuan).*\n\n---\n**Sumber:**\n* **Judul:** Rekap Teknis Integrasi Program Reward Ramadan\n* **Source ID:** EMAIL-S7\n* **Tanggal Berlaku (Effective Date):** 2026-03-18\n* **Divalidasi oleh (Validated By):** SPV-B"
+  },
+  {
+   "scenario": "s7",
+   "user": "STAFF-1B",
+   "should_answer": false,
+   "answered": false,
+   "leaked": [],
+   "ok": true,
+   "answer": "Informasi tidak ditemukan dalam basis pengetahuan yang dapat Anda akses."
+  }
+ ],
+ "source_email": [
+  {
+   "candidate_id": "CAND-20261019-JV994Y",
+   "source_id": "EMAIL-S6C",
+   "status": "skipped",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-0BXGS2",
+   "source_id": "EMAIL-S2",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-PLQLWG",
+   "source_id": "EMAIL-S7",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 7,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-HFV59U",
+   "source_id": "EMAIL-S1",
+   "status": "already_exists",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-FIB6MO",
+   "source_id": "EMAIL-S6D",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-DVM32L",
+   "source_id": "EMAIL-S4",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-HB5LDG",
+   "source_id": "EMAIL-S1",
+   "status": "already_pending",
+   "stored": false,
+   "messages": null,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-UPKIOY",
+   "source_id": "EMAIL-S1",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-MX63ZI",
+   "source_id": "EMAIL-S5",
+   "status": "approved",
+   "stored": true,
+   "messages": 13,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-0MP7QI",
+   "source_id": "EMAIL-S5",
+   "status": "superseded",
+   "stored": true,
+   "messages": 10,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-4B7OPW",
+   "source_id": "EMAIL-S6E",
+   "status": "approved",
+   "stored": true,
+   "messages": 3,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-G4YEZB",
+   "source_id": "EMAIL-S6G",
+   "status": "skipped",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-94ZQ7R",
+   "source_id": "EMAIL-S6E",
+   "status": "superseded",
+   "stored": true,
+   "messages": 2,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-GKCP0J",
+   "source_id": "EMAIL-S3A",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-3P9T5S",
+   "source_id": "EMAIL-S0",
+   "status": "skipped",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-F4WIMD",
+   "source_id": "EMAIL-S6B",
+   "status": "skipped",
+   "stored": true,
+   "messages": 2,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-UPIN9B",
+   "source_id": "EMAIL-S3B",
+   "status": "approved",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 1,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  },
+  {
+   "candidate_id": "CAND-20261019-YQOJJ2",
+   "source_id": "EMAIL-S6A",
+   "status": "skipped",
+   "stored": true,
+   "messages": 1,
+   "redaction_tags": 0,
+   "attachment_content": false,
+   "raw_secrets": [],
+   "ok": true
+  }
+ ],
+ "s5b_superseded_s5": true,
+ "s6f_superseded_s6e": true,
+ "resend_after_approve": {
+  "status": "already_exists",
+  "seconds": 25
+ },
+ "qdrant_raw_secrets": [],
+ "finished_at": "2026-10-19T13:24:36",
+ "s5b_new_messages": [
+  "EMAIL-S5-M11",
+  "EMAIL-S5-M12",
+  "EMAIL-S5-M13"
+ ]
+}

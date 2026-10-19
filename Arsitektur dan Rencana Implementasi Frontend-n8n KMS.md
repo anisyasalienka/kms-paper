@@ -394,6 +394,8 @@ Diagnosis awal pada s4 (email berisi tautan folder Drive dengan 1 Google Doc, 1 
 
 **Perbaikan nilai tersamar (19 Oktober 2026):** uji terkontrol menunjukkan `document_extractor` melewati kredensial yang sudah disamarkan (0/5; nilai mentah 5/5), dan kurator berperilaku sama. Ditambahkan aturan "Masked values" di prompt `document_extractor` dan `spreadsheet_extractor` (5/5 pada uji) serta pengaman di `Build Candidate Update` yang menambahkan fakta bila nilai tersamar hanya tertinggal di `raw_structured_evidence`. s4 diuji ulang: chatbot menjawab `MK_S****` dan `Qris****` kepada STAFF-2A, STAFF-3A tetap ditolak. Rincian: `docs/evaluation/2026-10-19/masked-values/`.
 
+**Evaluasi end-to-end final (19 Oktober 2026, v2.9):** setelah reset, s0–s7, s5b, s6g, dan s6f dijalankan ulang pada versi terakhir. Status 15/16 sesuai ekspektasi, akses 7/7, approve 11/11, s5b dan s6f menggantikan versi lama, chatbot 26/26 (termasuk kredensial s4 tersamar dan hasil deploy s6f), email sumber tersimpan benar di 18/18 kandidat, dan 0 nilai rahasia mentah di jawaban, Qdrant, data yang dikirim ke model, maupun Data Table n8n. Satu hasil tidak sesuai: s6g di-skip dengan skor 0,6486 (ambang 0,65), padahal pada uji v2.8 skornya 0,73. Penyebabnya teks knowledge s6e hasil kurasi ulang setelah reset, bukan perubahan v2.9. Ambang tidak diubah dan dicatat sebagai batasan. Rincian: `docs/evaluation/2026-10-19-final/`.
+
 ---
 
 ## 9. Roadmap
