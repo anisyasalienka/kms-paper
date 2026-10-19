@@ -263,7 +263,7 @@ Keputusan 18 Oktober 2026 setelah pengecekan prototipe terhadap requirement. Bag
 
 **Keputusan (disetujui pemilik paper).** Notifikasi hasil deploy disimpan hanya sebagai **pembaruan** entri yang sudah ada, bila bisa dikaitkan lewat thread yang sama atau kemiripan isi ≥ 0,65 dengan entri yang dapat diakses pengirim. Selain itu di-skip. Notifikasi deploy tidak pernah menjadi entri baru. Teks FR1 di atas sudah disesuaikan.
 
-**Implementasi.** `inspect_email` memberi tanda `deployment_notice`. `Collect Evidence` (kode) men-skip notifikasi yang tidak dikaitkan `saved_knowledge`. Kurator hanya boleh membuat `updated_candidate` dan menambahkan hasil deploy (fitur, versi, environment, status, waktu selesai). `Build Candidate Update` mengubah kandidat baru dari notifikasi deploy menjadi `skipped`.
+**Implementasi.** `inspect_email` memberi tanda `deployment_notice`. Untuk email bertanda itu, orchestrator mencari knowledge lama memakai nama fitur atau rilis, bukan teks template CI/CD. `Collect Evidence` (kode) men-skip notifikasi yang tidak dikaitkan `saved_knowledge`. Kurator hanya boleh membuat `updated_candidate` dan menambahkan hasil deploy (fitur, versi, environment, status, waktu selesai). `Build Candidate Update` mengubah kandidat baru dari notifikasi deploy menjadi `skipped`.
 
 **Hasil uji.**
 
@@ -271,14 +271,14 @@ Keputusan 18 Oktober 2026 setelah pengecekan prototipe terhadap requirement. Bag
 | --- | --- | --- |
 | s6c | Notifikasi otomatis `detik-web v4.18.2`, tanpa nama fitur | `skipped` (tidak terkait) |
 | s6f | Notifikasi sebagai balasan di thread jadwal rilis s6e | Pembaruan s6e, di-approve. Chatbot menjawab "27 Maret 2026 pukul 10.21 WIB, detik-web v4.19.0" kepada STAFF-1A dan SPV-A; STAFF-3A ditolak |
-| s6g | Notifikasi otomatis di thread baru, menyebut "Fitur Simpan Artikel" | `skipped`: kemiripan dengan s6e 0,62, di bawah ambang 0,65 |
+| s6g | Notifikasi otomatis di thread baru, menyebut "Fitur Simpan Artikel" | Putaran 1: `skipped`, kemiripan dengan s6e 0,62 (di bawah 0,65). Setelah query diarahkan ke nama fitur: pembaruan s6e, kemiripan 0,73 |
 | s0, s6a, s6b | Izin sakit, laporan harian, balasan IT support | Tetap `skipped` |
 
-**Batasan.** Notifikasi yang terkait tetapi dikirim di thread baru dan singkat bisa tidak lolos ambang kemiripan (s6g). Ambang 0,65 dipasang untuk mencegah *false update*, jadi sistem memilih melewatkan pembaruan daripada menimpa entri yang salah.
+**Batasan.** Pengaitan lewat thread bersifat pasti. Pengaitan lewat isi bergantung pada ambang kemiripan 0,65, yang ditetapkan secara heuristik setelah kasus *false update* (skor 0,43), bukan hasil kalibrasi. Pada data uji, pasangan tak terkait tertinggi 0,59 dan notifikasi terkait 0,73, jadi celahnya sempit. Notifikasi yang tidak menyebut nama fitur (s6c, hanya service dan versi) tidak bisa dikaitkan dan tetap di-skip. Rincian skor: `docs/evaluation/2026-10-19/deployment-notice/README.md`.
 
 **Draf kalimat untuk paper (bahasa Inggris):**
 
-> Deployment notices are not knowledge on their own, but a notice for a project that is already stored closes its lifecycle. Following I4, the workflow keeps such a notice only as an update to the entry it can be linked to, either through the same thread or through a similarity of at least 0.65 with an entry the sender can access, and discards it otherwise. In our test, a notice sent as a reply in the release thread updated the entry and the chatbot then reported the go-live date and version. A notice sent in a new thread scored 0.62 and was discarded: the threshold that prevents false updates also drops some genuine ones.
+> Deployment notices are not knowledge on their own, but a notice for a project that is already stored closes its lifecycle. Following I4, the workflow keeps such a notice only as an update to the entry it can be linked to, either through the same thread or through a similarity of at least 0.65 with an entry the sender can access, and discards it otherwise. In our test, a notice sent as a reply in the release thread updated the entry and the chatbot then reported the go-live date and version. A notice sent in a new thread first scored 0.62 and was discarded, because the search query copied the CI/CD template. Querying by the feature name raised it to 0.73 and the notice became an update. The threshold was set heuristically after a false update at 0.43; in our test data unrelated pairs reached at most 0.59, so the margin is narrow, and a notice that names only the service and version still cannot be linked.
 
 ## Batasan lingkup
 

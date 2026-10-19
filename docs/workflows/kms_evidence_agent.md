@@ -73,6 +73,8 @@ Laporan rutin, notifikasi deploy, balasan IT support, dan bagian pengecualian di
 
 Pada 19 Oktober 2026 notifikasi deploy dipindah dari daftar eksklusi ke aturan tersendiri (FR1 direvisi bersama pemilik paper): notifikasi yang menutup siklus project yang sudah tersimpan menjadi pembaruan, sesuai I4 ("setiap stage dari email"). Undangan kalender deployment tetap dikecualikan (I2). Uji: `s6c`, `s6f`, `s6g`.
 
+Untuk email bertanda `deployment_notice`, prompt `Evidence Agent` meminta query `saved_knowledge` disusun dari nama fitur atau rilis (subjek seperti "Rilis fitur Simpan Artikel ke production", `project_name` = nama fitur, bukan nama service), tidak menyalin teks template CI/CD. Tanpa aturan ini s6g hanya mendapat skor 0,62; dengan aturan ini 0,73.
+
 ## Aturan extractor
 
 - Permintaan tanpa `attachment_id`/`source_id` ditolak (`missing_source`) tanpa memanggil reader.

@@ -1,0 +1,23 @@
+[
+ {
+  "email": "s6g-deploy-notice-linked",
+  "candidate_id": "CAND-20261019-3W2DIL",
+  "status": "pending_validation",
+  "seconds": 77,
+  "is_update": true,
+  "summary": "Fitur Simpan Artikel yang semula dijadwalkan rilis pada 20 Maret 2026 pukul 10.00 WIB dimundurkan ke 27 Maret 2026 pukul 10.00 WIB karena hasil UAT iOS belum lolos dan perlunya satu putaran pengujian regresi tambahan oleh Tim QA. Proses deployment service detik-web versi v4.19.0 untuk Fitur Simpan Artikel ke environment production berhasil diselesaikan secara otomatis oleh pipeline CI/CD pada 27 Maret 2026 pukul 10:21 WIB (dimulai pukul 10:00 WIB) dengan status SUCCESS.",
+  "deploy_facts": [
+   "Deploy fitur Simpan Artikel ke production selesai pada tanggal 27 Maret 2026 pukul 10.21 WIB dengan versi detik-web v4.19.0 dan status SUCCESS.",
+   "Proses deployment service detik-web versi v4.19.0 (Fitur Simpan Artikel) ke environment production dimulai pada 27 Maret 2026 pukul 10:00 WIB dan selesai pada 10:21 WIB melalui pipeline CI/CD dengan status SUCCESS."
+  ]
+ },
+ {
+  "email": "s6c-deploy-notice",
+  "candidate_id": "CAND-20261019-T91SPM",
+  "status": "skipped",
+  "seconds": 57,
+  "is_update": false,
+  "summary": "Notifikasi deploy yang tidak dapat dikaitkan dengan knowledge yang sudah ada, jadi tidak disimpan.",
+  "deploy_facts": []
+ }
+]
