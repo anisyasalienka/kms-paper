@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Alur Proses KMS</title>
+<style>
+@font-face { font-family: "Public Sans"; src: url("fonts/public-sans.woff2") format("woff2"); font-weight: 100 900; }
+@font-face { font-family: "Source Serif 4"; src: url("fonts/source-serif.woff2") format("woff2"); font-weight: 200 900; }
+@font-face { font-family: "IBM Plex Mono"; src: url("fonts/plex-400.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "IBM Plex Mono"; src: url("fonts/plex-500.woff2") format("woff2"); font-weight: 500; }
+
+:root {
+  --paper: #fbf8f2; --ink: #22201c; --muted: #6b655a; --line: #ddd5c6; --card: #ffffff;
+  --teal: #0f6e6a; --teal-soft: #e3f1ef;
+  --amber: #a5630c; --amber-soft: #fbf0dc;
+  --red: #a63d32; --red-soft: #f8e5e1;
+  --green: #3c7a3a; --green-soft: #e6f1e3;
+  --c-front: #7a6f5d; --c-ingest: #0f6e6a; --c-agent: #6a4c93; --c-curate: #b5651d;
+  --c-status: #5b7083; --c-validate: #2f6d3a; --c-writer: #8a3f62; --c-chat: #2d5f9a; --c-portal: #5b7083;
+}
+@page { size: A4; margin: 11mm 12mm 12mm; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #fff; color: var(--ink); }
+body { font: 9pt/1.36 "Public Sans", sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+code, .mono { font-family: "IBM Plex Mono", monospace; font-size: 0.92em; }
+h1, h2 { font-family: "Source Serif 4", serif; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+h1 { font-size: 22pt; line-height: 1.15; }
+h2 { font-size: 15pt; }
+p { margin: 0 0 6px; }
+.page { page-break-after: always; }
+.page:last-child { page-break-after: auto; }
+.eyebrow { font: 500 7.6pt "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); margin-bottom: 3px; }
+.lede { color: var(--muted); max-width: 165mm; margin: 6px 0 12px; }
+.sec-head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.5px solid var(--ink); padding-bottom: 4px; margin-bottom: 7px; }
+.sec-head .where { font: 7.6pt "IBM Plex Mono", monospace; color: var(--muted); text-align: right; }
+
+/* ---------- overview ---------- */
+.phases { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin: 10px 0 14px; }
+.phase { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 8px 9px 9px; margin-right: 14px; }
+.phase:last-child { margin-right: 0; }
+.phase:not(:last-child)::after { content: "→"; position: absolute; right: -13px; top: 38%; font-size: 12pt; color: var(--muted); }
+.phase .wf { font-size: 6.2pt; padding: 1px 4px; overflow-wrap: normal; }
+.phase { padding: 8px 7px 9px !important; }
+.phase .n { font: 500 7.5pt "IBM Plex Mono", monospace; color: var(--muted); }
+.phase .t { font-weight: 700; margin: 1px 0 4px; line-height: 1.25; }
+.phase .d { font-size: 8.2pt; color: var(--muted); margin-bottom: 6px; line-height: 1.35; }
+.wf { display: inline-block; overflow-wrap: anywhere; font: 500 7.4pt "IBM Plex Mono", monospace; color: #fff; background: var(--c); border-radius: 3px; padding: 1px 5px; margin: 0 3px 3px 0; }
+
+.twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; }
+.panel h3 { font: 700 9pt "Public Sans", sans-serif; margin: 0 0 6px; }
+.legend-row { display: grid; grid-template-columns: 92px 1fr; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 8.4pt; }
+.legend-row .sw { height: 22px; border-radius: 4px; background: var(--card); border: 1px solid var(--line); font-size: 7.4pt; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+
+.status-flow { font-size: 8.3pt; }
+.status-flow .row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 5px; }
+.st { font: 500 7.4pt "IBM Plex Mono", monospace; border-radius: 10px; padding: 1px 7px; border: 1px solid; white-space: nowrap; }
+.st.ok { color: var(--green); background: var(--green-soft); border-color: #bcd8b8; }
+.st.wait { color: var(--amber); background: var(--amber-soft); border-color: #ecd3a6; }
+.st.bad { color: var(--red); background: var(--red-soft); border-color: #e9c1b9; }
+.st.neu { color: var(--muted); background: #f1ece2; border-color: var(--line); }
+.status-flow .ar { color: var(--muted); }
+
+table.ref { width: 100%; border-collapse: collapse; font-size: 8.1pt; }
+table.ref th { text-align: left; font: 500 7.3pt "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--ink); padding: 3px 5px; }
+table.ref td { border-bottom: 1px solid var(--line); padding: 3.5px 5px; vertical-align: top; }
+table.ref td:first-child { white-space: nowrap; }
+table.ref .grp td { background: #f1ece2; font-weight: 700; font-size: 7.8pt; }
+
+/* ---------- flow ---------- */
+.lane { --c: var(--c-ingest); border-left: 4px solid var(--c); background: color-mix(in srgb, var(--c) 5%, var(--paper)); border-radius: 0 6px 6px 0; padding: 5px 8px 6px 10px; margin: 0 0 0 0; break-inside: avoid; }
+.lane-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.lane-head .lbl { font: 500 7.2pt "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.lane-head .name { font: 600 10.5pt "IBM Plex Mono", monospace; color: var(--c); }
+.lane-head .meta { font: 7.6pt "IBM Plex Mono", monospace; color: var(--muted); margin-left: auto; }
+
+.step { display: grid; grid-template-columns: 22px 1fr 58mm; gap: 8px; align-items: stretch; }
+.step .num { font: 500 8pt "IBM Plex Mono", monospace; color: var(--c); padding-top: 6px; text-align: right; }
+.box { background: var(--card); border: 1px solid var(--line); border-radius: 5px; padding: 3px 8px 4px; }
+.box .t { font-weight: 700; }
+.box .d { color: #3d3a34; font-size: 8.2pt; line-height: 1.32; }
+.box.decision { border: 1.2px dashed var(--amber); background: #fffaf1; }
+.box.decision .t::before { content: "◆ "; color: var(--amber); font-size: 8pt; }
+.box.call { border: 1.5px solid var(--c); box-shadow: 3px 3px 0 color-mix(in srgb, var(--c) 22%, transparent); }
+.box.call .t::before { content: "⇢ "; color: var(--c); }
+.box.ext { border-style: dotted; background: #f6f2ea; }
+.br { margin-top: 3px; font-size: 8.2pt; display: flex; gap: 5px; align-items: baseline; }
+.br .if { color: var(--amber); font-weight: 700; white-space: nowrap; }
+.note { border-left: 2px solid var(--c); padding: 3px 0 3px 7px; font-size: 7.6pt; color: var(--muted); align-self: center; }
+.note .k { font: 500 6.8pt "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .06em; color: var(--c); display: block; margin-bottom: 1px; }
+.node { display: inline-block; font: 500 7.5pt "IBM Plex Mono", monospace; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; margin: 1px 2px 1px 0; }
+.arrow { display: grid; grid-template-columns: 22px 1fr 58mm; gap: 8px; height: 7px; }
+.arrow div:nth-child(2) { position: relative; }
+.arrow div:nth-child(2)::before { content: ""; position: absolute; left: 22px; top: 0; bottom: 3px; border-left: 1.5px solid var(--muted); }
+.arrow div:nth-child(2)::after { content: ""; position: absolute; left: 18.5px; bottom: 0; border: 4px solid transparent; border-top: 5px solid var(--muted); border-bottom: 0; }
+
+.sub { margin: 4px 0 0 0; padding: 5px 7px 6px; border: 1px solid var(--line); border-radius: 4px; background: #fdfcf9; }
+.sub .st-title { font: 600 7.4pt "IBM Plex Mono", monospace; color: var(--c); margin-bottom: 2px; }
+.sub ol { margin: 0; padding-left: 15px; font-size: 8.2pt; }
+.sub li { margin-bottom: 1.5px; }
+
+.handoff { display: flex; align-items: center; gap: 8px; margin: 3px 0 3px 30px; font: 500 7.8pt "IBM Plex Mono", monospace; color: var(--ink); }
+.handoff .line { width: 1.5px; height: 12px; background: var(--ink); position: relative; }
+.handoff .line::after { content: ""; position: absolute; left: -3.5px; bottom: -3px; border: 4px solid transparent; border-top: 5px solid var(--ink); border-bottom: 0; }
+.handoff .tag { background: var(--ink); color: var(--paper); padding: 1px 6px; border-radius: 3px; }
+.handoff .txt { color: var(--muted); font-family: "Public Sans", sans-serif; font-size: 8pt; }
+
+.side { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.gist { display: grid; grid-template-columns: 1fr 62mm; gap: 10px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--gc); border-radius: 0 6px 6px 0; padding: 8px 11px; margin-bottom: 10px; font-size: 8.8pt; }
+.gist .k { font: 500 7pt "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .07em; color: var(--gc); margin-bottom: 3px; }
+.gist .sample { background: color-mix(in srgb, var(--gc) 7%, #fff); border-radius: 4px; padding: 6px 8px; }
+.gist ul { margin: 0; padding-left: 14px; font-size: 8.3pt; }
+.gist li { margin-bottom: 1px; }
+.tip { font-size: 8pt; color: var(--muted); border-top: 1px solid var(--line); margin-top: 10px; padding-top: 6px; }
+.tip b { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- =================== PAGE 1: OVERVIEW =================== -->
+<section class="page">
+  <div class="eyebrow">Prototipe KMS · n8n + React · 20 Oktober 2026 (v2.10)</div>
+  <h1>Alur proses KMS dari email masuk sampai dipakai chatbot</h1>
+  <p class="lede">Dokumen ini memetakan setiap langkah proses ke workflow dan nama node di n8n, supaya alurnya bisa dicek langsung di kanvas. Nama workflow dan nama node ditulis persis seperti di n8n. Halaman berikutnya membahas tiap tahap secara rinci.</p>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="n">TAHAP 1 · hal. 2</div>
+      <div class="t">Email masuk dan dicatat</div>
+      <div class="d">Validasi request, tentukan owner dan siapa yang boleh akses, cek duplikat, balas 202.</div>
+      <span class="wf" style="--c:var(--c-ingest)">kms_ingest</span>
+    </div>
+    <div class="phase">
+      <div class="n">TAHAP 2 · hal. 3</div>
+      <div class="t">AI mengumpulkan bahan dari email</div>
+      <div class="d">AI memilah email, mengecek arsip, lalu membaca lampiran, Docs, Sheets, Slides, dan folder Drive.</div>
+      <span class="wf" style="--c:var(--c-agent)">kms_evidence_agent</span>
+      <span class="wf" style="--c:var(--c-agent)">saved_knowledge</span>
+      <span class="wf" style="--c:var(--c-agent)">g*_reader</span>
+    </div>
+    <div class="phase">
+      <div class="n">TAHAP 3 · hal. 4</div>
+      <div class="t">Bahan dirangkum jadi draf knowledge</div>
+      <div class="d">AI kurator merangkum semua bahan jadi satu draf yang rapi, lalu draf disimpan untuk dicek owner.</div>
+      <span class="wf" style="--c:var(--c-curate)">kms_curate_stage</span>
+      <span class="wf" style="--c:var(--c-curate)">kms_curator_llm</span>
+      <span class="wf" style="--c:var(--c-status)">kms_candidate_status</span>
+    </div>
+    <div class="phase">
+      <div class="n">TAHAP 4 · hal. 5</div>
+      <div class="t">Owner mengecek draf, lalu disimpan</div>
+      <div class="d">Owner menyetujui, mengedit, menolak, atau menyerahkan draf. Yang disetujui baru disimpan.</div>
+      <span class="wf" style="--c:var(--c-validate)">kms_validate_knowledge</span>
+      <span class="wf" style="--c:var(--c-writer)">knowledge_writer_upsert</span>
+    </div>
+    <div class="phase">
+      <div class="n">TAHAP 5 · hal. 6</div>
+      <div class="t">Dipakai chatbot dan dipantau SPV</div>
+      <div class="d">Chatbot hanya menjawab dari knowledge yang boleh diakses penanya. SPV melihat ringkasan dan mengirim nudge.</div>
+      <span class="wf" style="--c:var(--c-chat)">Chat with Qdrant…</span>
+      <span class="wf" style="--c:var(--c-portal)">kms_portal_api</span>
+    </div>
+  </div>
+
+  <div class="twocol">
+    <div class="panel">
+      <h3>Cara membaca flowchart</h3>
+      <div class="legend-row"><div class="sw" style="border-left:4px solid var(--c-ingest)">Workflow</div><div>Pita berwarna di kiri = satu workflow n8n. Judulnya adalah nama workflow dan pemicunya.</div></div>
+      <div class="legend-row"><div class="sw">Langkah</div><div>Kotak biasa = satu langkah proses. Kolom kanan berisi nama node n8n yang menjalankannya.</div></div>
+      <div class="legend-row"><div class="sw" style="border:1.2px dashed var(--amber);background:#fffaf1;color:var(--amber)">◆ Cabang</div><div>Titik keputusan (node IF/Switch). Cabang selain jalur utama ditulis di dalam kotak.</div></div>
+      <div class="legend-row"><div class="sw" style="border:1.5px solid var(--teal);box-shadow:3px 3px 0 #c9e2df;color:var(--teal)">⇢ Panggil</div><div>Node Execute Workflow atau tool yang memanggil workflow lain.</div></div>
+      <div class="legend-row"><div class="sw" style="background:var(--ink);color:var(--paper);border:0">↓ pindah</div><div>Proses berpindah ke workflow lain (sub-workflow dipanggil, atau kembali ke pemanggil).</div></div>
+      <div class="legend-row"><div class="sw" style="border-style:dotted;background:#f6f2ea">Frontend</div><div>Aksi pengguna di aplikasi React, di luar n8n.</div></div>
+    </div>
+    <div class="panel status-flow">
+      <h3>Perjalanan status kandidat (kolom <code>status</code> di <code>kms_candidates</code>)</h3>
+      <div class="row"><span class="st wait">processing</span><span class="ar">→</span><span class="st wait">pending_validation</span><span class="ar">→</span><span class="st wait">approving</span><span class="ar">→</span><span class="st ok">approved</span><span class="ar">→</span><span class="st neu">superseded</span></div>
+      <p style="color:var(--muted);margin-bottom:8px">Jalur normal. <code>superseded</code> terjadi saat versi yang lebih baru dari knowledge yang sama disetujui.</p>
+      <div class="row"><span class="st wait">pending_validation</span><span class="ar">→</span><span class="st bad">rejected</span><span style="color:var(--muted)">owner menolak (wajib alasan)</span></div>
+      <div class="row"><span class="st wait">pending_validation</span><span class="ar">→</span><span class="st wait">pending_validation</span><span style="color:var(--muted)">handover, owner berganti</span></div>
+      <p style="color:var(--muted);margin:8px 0 4px">Status akhir tanpa validasi:</p>
+      <div class="row"><span class="st neu">skipped</span><span style="color:var(--muted)">email bukan knowledge</span></div>
+      <div class="row"><span class="st neu">already_exists</span><span style="color:var(--muted)">sumber yang sama sudah ada di Qdrant</span></div>
+      <div class="row"><span class="st neu">already_pending</span><span style="color:var(--muted)">email yang sama masih diproses atau menunggu validasi</span></div>
+      <div class="row"><span class="st bad">failed</span><span style="color:var(--muted)">error, retry habis, atau macet lebih dari 10 menit</span></div>
+    </div>
+  </div>
+
+  <div class="tip"><b>Penyimpanan.</b> Data Table <code>kms_candidates</code> (staging kandidat), <code>kms_validation_logs</code> (audit log dan nudge), <code>kms_directory</code> (12 user pseudonim). Qdrant <code>knowledge</code> (chunk ber-embedding) dan <code>knowledge_store</code> (dokumen master) hanya berisi knowledge yang sudah disetujui. Frontend memanggil <code>/api/&lt;path&gt;</code>; nginx meneruskannya ke <code>/webhook/&lt;path&gt;</code> sambil menyisipkan header <code>X-KMS-API-KEY</code>.</div>
+</section>
+
+<!-- =================== PAGE 2: INGEST =================== -->
+<section class="page">
+  <div class="sec-head">
+    <div><div class="eyebrow">Tahap 1</div><h2>Email masuk dan dicatat</h2></div>
+    <div class="where">Belum ada AI di tahap ini.<br>Semua ditentukan oleh aturan tetap.</div>
+  </div>
+
+  <div class="gist" style="--gc:var(--c-ingest)">
+    <div>
+      <div class="k">Intinya</div>
+      <p>Pengguna mengirim satu thread email ke sistem. Sistem mengecek kelengkapannya, mencatatnya sebagai <b>kandidat</b> baru, menentukan <b>siapa pemiliknya</b> dan <b>siapa saja yang boleh melihat</b> knowledge-nya nanti, lalu langsung membalas "diterima". Pekerjaan AI yang lama dikerjakan sesudahnya, di belakang layar.</p>
+      <p style="margin:0">Ibaratnya loket penerimaan berkas: berkas dicek, diberi nomor, dicatat pemiliknya, lalu pengirim boleh pergi sambil menunggu kabar.</p>
+    </div>
+    <div class="sample">
+      <div class="k">Aturan hak akses</div>
+      <ul>
+        <li><b>Owner</b> = pengirim email pertama di thread</li>
+        <li>Semua orang di <b>to/cc</b> boleh mengakses</li>
+        <li>Kalau yang di-cc alamat tim, <b>seluruh anggota tim</b> ikut</li>
+        <li><b>SPV</b> dari setiap tim yang terlibat selalu ikut</li>
+        <li>Daftar ini tetap dan tidak bisa diubah AI atau validator</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lane" style="--c:var(--c-front)">
+    <div class="lane-head"><span class="lbl">Frontend</span><span class="name">Halaman Ingest</span></div>
+    <div class="step"><div class="num">0</div>
+      <div class="box ext"><div class="t">Pengguna mengirim email lewat aplikasi</div><div class="d">Satu thread email: subjek, isi tiap pesan, pengirim, penerima, dan lampiran.</div></div>
+      <div class="note"><span class="k">Request</span><code>POST /api/ingest-email</code></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kms_ingest</span></div>
+
+  <div class="lane" style="--c:var(--c-ingest)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_ingest</span><span class="meta">POST /webhook/ingest-email</span></div>
+
+    <div class="step"><div class="num">1</div>
+      <div class="box decision"><div class="t">Terima email dan cek kelengkapannya</div>
+        <div class="br"><span class="if">data tidak lengkap →</span><span>ditolak, selesai</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Ingest Webhook</span><span class="node">Prepare Ingest</span><span class="node">Is Valid Request?</span><span class="node">Respond Invalid</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">2</div>
+      <div class="box"><div class="t">Tentukan owner dan siapa yang boleh akses</div><div class="d">Pakai aturan di kotak kanan atas. Data anggota tim diambil dari direktori pengguna.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Get Directory</span><span class="node">Resolve Access</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">3</div>
+      <div class="box decision"><div class="t">Apakah email ini sedang diproses?</div>
+        <div class="br"><span class="if">masih diproses / menunggu dicek →</span><span>tidak diproses ulang, status <span class="st neu">already_pending</span></span></div>
+        <div class="br"><span class="if">pengirim tidak dikenal →</span><span><span class="st bad">failed</span></span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Find Active Duplicate</span><span class="node">Check Duplicate</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">4</div>
+      <div class="box"><div class="t">Catat sebagai kandidat dan balas "diterima"</div><div class="d">Kandidat dicatat di tabel <code>kms_candidates</code> dengan status <span class="st wait">processing</span>. Aplikasi dapat balasan dalam ±1,5 detik, lalu mulai memantau statusnya.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Insert Candidate Row</span><span class="node">Respond Accepted</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">5</div>
+      <div class="box"><div class="t">Samarkan data sensitif sebelum diserahkan ke AI</div><div class="d">Hanya kandidat berstatus processing yang lanjut ke sini. Password, token, NIK, nomor HP, dan rekening diganti label seperti <code>[KREDENSIAL: Vpn#****]</code>, baik yang ditulis "password: …" maupun "password …" tanpa titik dua. Dikerjakan kode biasa, bukan AI, jadi AI di tahap berikutnya tidak pernah melihat nilai aslinya.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Should Process?</span><span class="node">Redact Sensitive Data</span><br>memanggil workflow <code>redact_sensitive_data</code></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">6</div>
+      <div class="box"><div class="t">Simpan salinan email yang sudah disamarkan</div><div class="d">Disimpan di kandidat supaya owner bisa membaca email aslinya saat mengecek draf (Tahap 4). Isi lampiran tidak ikut, dan email mentah tidak pernah disimpan. Kalau penyimpanan gagal, proses tetap lanjut.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Save Source Email</span><br>kolom <code>source_email</code> di <code>kms_candidates</code></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">7</div>
+      <div class="box call"><div class="t">Serahkan ke AI pengumpul bahan</div><div class="d">Email yang sudah disamarkan diteruskan ke Tahap 2.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Run Evidence Agent</span><br>memanggil workflow <code>kms_evidence_agent</code></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kms_evidence_agent</span><span class="txt">lanjut ke Tahap 2</span></div>
+
+  <div class="tip"><b>Kenapa langsung dibalas?</b> Proses AI bisa makan waktu beberapa menit. Kalau aplikasi harus menunggu sampai selesai, koneksinya bisa putus duluan.</div>
+</section>
+
+<!-- =================== PAGE 3: EVIDENCE AGENT =================== -->
+<section class="page">
+  <div class="sec-head">
+    <div><div class="eyebrow">Tahap 2</div><h2>AI mengumpulkan bahan dari email</h2></div>
+    <div class="where">AI hanya mengumpulkan bahan.<br>AI tidak menulis knowledge di tahap ini.</div>
+  </div>
+
+  <div class="gist" style="--gc:var(--c-agent)">
+    <div>
+      <div class="k">Intinya</div>
+      <p>Sebuah AI membaca email lalu memutuskan apa yang perlu dikerjakan: apakah email ini berisi <b>knowledge</b>, apakah <b>sudah pernah disimpan</b>, dan <b>lampiran atau dokumen mana</b> yang perlu dibuka. Semua yang dibacanya dikumpulkan sebagai bahan untuk Tahap 3.</p>
+      <p style="margin:0">Ibaratnya asisten yang menyortir surat masuk: membuang yang tidak penting, mengecek arsip, lalu membuka semua lampiran yang relevan.</p>
+    </div>
+    <div class="sample">
+      <div class="k">Yang bisa dibaca AI</div>
+      <ul>
+        <li>Lampiran di email (PDF, dokumen, Excel)</li>
+        <li>Tautan <b>Google Docs</b>, <b>Google Sheets</b>, dan <b>Google Slides</b> (termasuk catatan pembicara)</li>
+        <li><b>PDF</b> yang disimpan di Google Drive</li>
+        <li><b>Folder</b> Google Drive (maks. 5 file per folder)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lane" style="--c:var(--c-agent)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_evidence_agent</span><span class="meta">sub-workflow</span></div>
+
+    <div class="step"><div class="num">1</div>
+      <div class="box"><div class="t">Siapkan email dan data pengirim</div><div class="d">Data pengirim dipakai supaya pencarian knowledge lama hanya di knowledge yang boleh dilihat pengirim.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">When Called by Ingest</span><span class="node">Candidate Context</span><span class="node">Current Email</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">2</div>
+      <div class="box decision"><div class="t">Apakah email ini berisi knowledge?</div><div class="d">Sekalian dicari tautan Google Docs, Sheets, Slides, PDF, atau folder di dalam email.</div>
+        <div class="br"><span class="if">bukan (misalnya laporan harian, undangan kalender, balasan IT support) →</span><span>berhenti, nanti jadi <span class="st neu">skipped</span></span></div><div class="br"><span class="if">notifikasi deploy →</span><span>hanya disimpan sebagai pembaruan catatan project yang sudah ada; kalau tidak terkait, <span class="st neu">skipped</span></span></div></div>
+      <div class="note"><span class="k">Tool dari Evidence Agent</span><span class="node">inspect_email</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">3</div>
+      <div class="box decision"><div class="t">Apakah sudah pernah disimpan?</div><div class="d">Cari di basis pengetahuan (Qdrant) knowledge yang mirip atau berasal dari email yang sama.</div>
+        <div class="br"><span class="if">email yang sama persis →</span><span>berhenti, nanti jadi <span class="st neu">already_exists</span></span></div>
+        <div class="br"><span class="if">balasan baru di thread lama →</span><span>nanti jadi versi pembaruan</span></div></div>
+      <div class="note"><span class="k">Tool dari Evidence Agent</span><span class="node">saved_knowledge</span><br>dijalankan workflow <code>saved_knowledge</code></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">4</div>
+      <div class="box"><div class="t">Lihat daftar lampiran dan isi folder</div><div class="d">Supaya AI tahu dokumen apa saja yang tersedia sebelum membacanya.</div></div>
+      <div class="note"><span class="k">Tool dari Evidence Agent</span><span class="node">list_attachments</span><span class="node">gdrive_folder_lister</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">5</div>
+      <div class="box"><div class="t">Baca setiap dokumen yang relevan</div><div class="d">Satu dokumen sekali baca, lalu isi pentingnya diambil. Data sensitif di dokumen disamarkan dulu sebelum sampai ke AI. Dokumen yang ternyata tidak berhubungan hanya dicatat sebagai referensi.</div></div>
+      <div class="note"><span class="k">Tool dari Evidence Agent</span><span class="node">document_extractor</span><span class="node">spreadsheet_extractor</span><br>pembaca: <code>gdocs_reader</code>, <code>gslides_reader</code>, <code>gdrive_pdf_reader</code>, <code>gsheets_reader</code></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">6</div>
+      <div class="box"><div class="t">Kirim semua hasil bacaan kembali</div><div class="d">AI menyatakan "bahan siap". Semua hasil bacaan dikirim kembali apa adanya, tanpa diringkas AI.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Package Agent Result</span></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kembali ke kms_ingest</span><span class="txt">lanjut ke Tahap 3</span></div>
+
+  <div class="tip"><b>Di kanvas n8n,</b> langkah 2 sampai 5 dijalankan oleh satu node AI Agent bernama <code>Evidence Agent</code>. Node yang menempel di bawahnya adalah tool-tool yang dipanggil AI tersebut.</div>
+</section>
+
+<!-- =================== PAGE 4: CURATION =================== -->
+<section class="page">
+  <div class="sec-head">
+    <div><div class="eyebrow">Tahap 3</div><h2>Bahan dirangkum jadi draf knowledge</h2></div>
+    <div class="where">Draf ini belum masuk basis pengetahuan.<br>Owner harus mengeceknya dulu (Tahap 4).</div>
+  </div>
+
+  <div class="gist" style="--gc:var(--c-curate)">
+    <div>
+      <div class="k">Intinya</div>
+      <p>Di Tahap 2, AI sudah membaca email beserta lampiran dan dokumennya. Hasil bacaannya masih berupa banyak potongan terpisah. Di tahap ini semua potongan itu diserahkan ke satu AI lagi, yaitu <b>kurator</b>, yang tugasnya merangkum semuanya menjadi <b>satu draf knowledge yang rapi</b>.</p>
+      <p style="margin:0">Ibaratnya, Tahap 2 itu asisten yang mengumpulkan dan membaca semua berkas. Tahap 3 itu editor yang menulis ringkasannya.</p>
+    </div>
+    <div class="sample">
+      <div class="k">Isi draf yang dihasilkan</div>
+      <ul>
+        <li><b>Judul</b> dan <b>ringkasan</b> singkat</li>
+        <li><b>Fakta penting</b>, misalnya URL, nilai konfigurasi, langkah</li>
+        <li><b>Sumber</b>: email dan dokumen mana yang dipakai</li>
+        <li><b>Nama project</b>, ditebak dari isi email</li>
+        <li><b>Data sensitif</b> (misalnya password) ditandai untuk owner, nilainya tetap tersamar</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lane" style="--c:var(--c-ingest)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_ingest</span><span class="meta">lanjutan dari Tahap 2</span></div>
+    <div class="step"><div class="num">8</div>
+      <div class="box call"><div class="t">Serahkan hasil Tahap 2 ke bagian kurasi</div><div class="d">Yang dikirim: hasil kerja AI di Tahap 2, email aslinya, dan data kandidat (siapa owner-nya).</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Run Curation</span><br>memanggil workflow <code>kms_curate_stage</code></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kms_curate_stage</span></div>
+
+  <div class="lane" style="--c:var(--c-curate)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_curate_stage</span><span class="meta">sub-workflow</span></div>
+
+    <div class="step"><div class="num">1</div>
+      <div class="box"><div class="t">Kumpulkan semua bahan jadi satu paket</div><div class="d">Hasil bacaan dari Tahap 2 dan isi email aslinya disatukan. Teks yang terlalu panjang dipotong supaya AI fokus ke bagian yang penting.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Collect Evidence</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">2</div>
+      <div class="box decision"><div class="t">Perlu dirangkum atau tidak?</div>
+        <div class="br"><span class="if">bukan knowledge →</span><span>tidak dirangkum, status <span class="st neu">skipped</span></span></div>
+        <div class="br"><span class="if">sudah pernah disimpan →</span><span>tidak dirangkum, status <span class="st neu">already_exists</span></span></div>
+        <div class="br"><span class="if">AI Tahap 2 berhenti di tengah jalan →</span><span>Tahap 2 diulang (langkah 9)</span></div>
+        <div class="br"><span class="if">selain itu →</span><span>lanjut dirangkum</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Needs Curator?</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">3</div>
+      <div class="box call"><div class="t">AI kurator menulis draf knowledge</div><div class="d">Paket bahan dikirim ke AI bersama instruksi cara merangkum. AI menulis draf berisi judul, ringkasan, fakta, sumber, dan nama project, serta menandai data sensitif. Kalau email ini lanjutan dari thread yang sudah pernah disimpan, AI membuat <b>versi pembaruan</b> dari knowledge lama, bukan knowledge baru.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Curator Prompt</span><span class="node">Build Curator Request</span><span class="node">Run Curator LLM</span><br>Instruksi untuk AI bisa diubah di <code>Curator Prompt</code>. Pemanggilan AI-nya dijalankan workflow <code>kms_curator_llm</code>.</div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">4</div>
+      <div class="box"><div class="t">Periksa dan rapikan jawaban AI</div><div class="d">Jawaban AI dicek formatnya, lalu daftar sumbernya dilengkapi. Hasilnya draf dengan status <span class="st wait">pending_validation</span> (menunggu dicek owner).</div>
+        <div class="br"><span class="if">jawaban AI rusak / AI error →</span><span><span class="st bad">failed</span></span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Parse Curator Output</span><span class="node">Build Candidate Update</span><span class="node">Stage Failed</span></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kembali ke kms_ingest</span></div>
+
+  <div class="lane" style="--c:var(--c-ingest)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_ingest</span></div>
+    <div class="step"><div class="num">9</div>
+      <div class="box decision"><div class="t">Perlu diulang?</div>
+        <div class="br"><span class="if">AI Tahap 2 berhenti di tengah jalan →</span><span>ulang dari Tahap 2, maksimal 2 kali</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Retry Agent?</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+    <div class="step"><div class="num">10</div>
+      <div class="box"><div class="t">Simpan draf ke tabel kandidat</div><div class="d">Draf dan statusnya disimpan di tabel <code>kms_candidates</code>, menunggu dicek owner. Kalau ada error, statusnya <span class="st bad">failed</span>.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Update Candidate Row</span><span class="node">Mark Failed</span></div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="lane" style="--c:var(--c-status)">
+      <div class="lane-head"><span class="lbl">Berjalan bersamaan</span><span class="name" style="font-size:9.5pt">kms_candidate_status</span></div>
+      <p style="font-size:8.3pt">Selama Tahap 2 dan 3 berjalan, aplikasi menanyakan "sudah selesai belum?" setiap 4 detik. Kalau lebih dari 10 menit belum selesai, prosesnya dianggap <span class="st bad">failed</span>.</p>
+      <div><span class="node">GET candidate-status</span><span class="node">Get Candidate</span><span class="node">Is Stale?</span><span class="node">Respond Status</span></div>
+    </div>
+    <div class="lane" style="--c:var(--c-front)">
+      <div class="lane-head"><span class="lbl">Frontend</span><span class="name" style="font-size:9.5pt;color:var(--c-front)">hasil ke pengguna</span></div>
+      <p style="font-size:8.3pt">Setelah selesai, ringkasan draf tampil di layar. Draf juga masuk ke daftar "Kandidat Saya" milik owner untuk dicek di Tahap 4.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PAGE 5: VALIDATION =================== -->
+<section class="page">
+  <div class="sec-head">
+    <div><div class="eyebrow">Tahap 4</div><h2>Owner mengecek draf, lalu disimpan</h2></div>
+    <div class="where">Hanya owner yang boleh memutuskan.<br>Yang disetujui baru bisa dicari chatbot.</div>
+  </div>
+
+  <div class="gist" style="--gc:var(--c-validate)">
+    <div>
+      <div class="k">Intinya</div>
+      <p>Draf dari Tahap 3 tidak langsung dipakai. <b>Owner</b> (pengirim email) harus membacanya dan memutuskan dulu. Hanya draf yang <b>disetujui</b> yang disimpan ke basis pengetahuan (Qdrant) dan bisa ditemukan chatbot.</p>
+      <p style="margin:0">Ibaratnya redaktur yang harus menyetujui tulisan sebelum terbit.</p>
+    </div>
+    <div class="sample">
+      <div class="k">Pilihan owner</div>
+      <ul>
+        <li><b>Approve</b>: setujui apa adanya</li>
+        <li><b>Edit &amp; approve</b>: perbaiki judul, ringkasan, atau tanggal dulu</li>
+        <li><b>Approve as new</b>: simpan sebagai knowledge baru, bukan pembaruan</li>
+        <li><b>Reject</b>: tolak, wajib dengan alasan</li>
+        <li><b>Handover</b>: serahkan ke orang lain</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lane" style="--c:var(--c-portal)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_portal_api</span><span class="meta">GET /webhook/my-candidates</span></div>
+    <div class="step"><div class="num">1</div>
+      <div class="box"><div class="t">Owner membuka daftar "Kandidat Saya"</div><div class="d">Berisi semua draf milik owner, lengkap dengan sumber, data sensitif, daftar akses, dan pengingat dari SPV. Tombol "Lihat email asli" membuka email sumbernya (versi tersamar); pesan yang baru di thread lanjutan ditandai "Baru".</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">GET my-candidates</span><span class="node">Get My Candidates</span><span class="node">Get Nudges</span><span class="node">Shape My Candidates</span><span class="node">Respond My Candidates</span></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kms_validate_knowledge</span><span class="txt">owner menekan salah satu pilihan</span></div>
+
+  <div class="lane" style="--c:var(--c-validate)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_validate_knowledge</span><span class="meta">POST /webhook/validate-knowledge</span></div>
+
+    <div class="step"><div class="num">2</div>
+      <div class="box decision"><div class="t">Apakah orang ini berhak?</div><div class="d">Harus owner draf itu, dan drafnya masih menunggu dicek.</div>
+        <div class="br"><span class="if">tidak berhak →</span><span>ditolak, selesai</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">POST validate-knowledge</span><span class="node">Get Candidate</span><span class="node">Get Actor</span><span class="node">Get Handover Target</span><span class="node">Authorize &amp; Plan</span><span class="node">Allowed?</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">3</div>
+      <div class="box decision"><div class="t">Jalankan pilihan owner</div>
+        <div class="br"><span class="if">reject →</span><span>status <span class="st bad">rejected</span>, langsung ke langkah 5</span></div>
+        <div class="br"><span class="if">handover →</span><span>owner diganti, langsung ke langkah 5</span></div>
+        <div class="br"><span class="if">approve (ketiga jenis) →</span><span>lanjut</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Route Action</span><span class="node">Mark Rejected</span><span class="node">Change Owner</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+
+    <div class="step"><div class="num">4</div>
+      <div class="box call"><div class="t">Kunci draf, lalu simpan ke basis pengetahuan</div><div class="d">Status jadi <span class="st wait">approving</span> dulu, supaya draf tidak diproses dua kali kalau tombol ditekan bersamaan.</div>
+        <div class="br"><span class="if">sedang diproses permintaan lain →</span><span>ditolak</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Lock Candidate</span><span class="node">Lock Acquired?</span><span class="node">Conflict Result</span><span class="node">Run Writer</span><br>memanggil workflow <code>knowledge_writer_upsert</code></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">knowledge_writer_upsert</span><span class="txt">satu-satunya workflow yang menulis ke Qdrant</span></div>
+
+  <div class="lane" style="--c:var(--c-writer)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">knowledge_writer_upsert</span><span class="meta">sub-workflow</span></div>
+    <div class="step"><div class="num">a</div>
+      <div class="box"><div class="t">Pecah draf jadi bagian kecil dan beri label akses</div><div class="d">Setiap bagian diberi daftar siapa yang boleh mengakses, supaya chatbot nanti bisa menyaringnya.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Validate and Prepare</span><span class="node">Attach Governance Metadata</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+    <div class="step"><div class="num">b</div>
+      <div class="box"><div class="t">Simpan ke Qdrant</div><div class="d">Setiap bagian diubah jadi deretan angka (embedding) supaya bisa dicari berdasarkan makna, bukan cuma kata yang sama. Kalau ini pembaruan, versi lama diganti.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Save Master to Store</span><span class="node">Build Chunk Items</span><span class="node">Embedding</span><span class="node">Prepare Qdrant Point</span><span class="node">Aggregate Points</span><span class="node">Should Delete Existing Chunks?</span><span class="node">Delete Existing Chunks</span><span class="node">Qdrant Upsert</span></div>
+    </div>
+  </div>
+  <div class="handoff"><div class="line"></div><span class="tag">kembali ke kms_validate_knowledge</span></div>
+
+  <div class="lane" style="--c:var(--c-validate)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_validate_knowledge</span></div>
+    <div class="step"><div class="num">5</div>
+      <div class="box"><div class="t">Tandai disetujui dan catat di log</div><div class="d">Status jadi <span class="st ok">approved</span>, versi lama jadi <span class="st neu">superseded</span>. Semua pilihan owner, termasuk reject dan handover, dicatat di log.</div>
+        <div class="br"><span class="if">gagal menyimpan →</span><span>draf kembali menunggu dicek</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Supersede Previous</span><span class="node">Mark Approved</span><span class="node">Write Audit Log</span><span class="node">Respond</span><span class="node">Unlock Candidate</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PAGE 6: USE =================== -->
+<section class="page">
+  <div class="sec-head">
+    <div><div class="eyebrow">Tahap 5</div><h2>Dipakai chatbot dan dipantau SPV</h2></div>
+    <div class="where">Penyaringan akses dilakukan sistem,<br>bukan oleh AI.</div>
+  </div>
+
+  <div class="gist" style="--gc:var(--c-chat)">
+    <div>
+      <div class="k">Intinya</div>
+      <p>Knowledge yang sudah disetujui bisa ditanyakan lewat <b>chatbot</b>. Chatbot hanya menjawab dari knowledge yang <b>boleh dilihat si penanya</b>, dan selalu menyebut sumbernya. <b>SPV</b> juga punya halaman pemantauan untuk melihat draf yang belum dicek dan mengingatkan owner-nya.</p>
+      <p style="margin:0">Ibaratnya perpustakaan dengan rak terkunci: pustakawan hanya mengambilkan buku dari rak yang kuncinya kamu pegang.</p>
+    </div>
+    <div class="sample">
+      <div class="k">Contoh dari uji coba</div>
+      <ul>
+        <li>STAFF-2A tanya base URL staging → dapat jawaban + sumbernya, password tetap disamarkan</li>
+        <li>STAFF-3A tanya hal yang sama, tapi tidak punya akses → "tidak ditemukan"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lane" style="--c:var(--c-chat)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">Chat with Qdrant Knowledge</span><span class="meta">POST /webhook/chat-rag</span></div>
+    <div class="step"><div class="num">1</div>
+      <div class="box"><div class="t">Terima pertanyaan dan kenali penanya</div><div class="d">Identitas penanya ditetapkan sistem, bukan AI. Jadi AI tidak bisa mengintip knowledge milik orang lain.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Webhook Trigger</span><span class="node">When chat message received</span><span class="node">Request Context</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+    <div class="step"><div class="num">2</div>
+      <div class="box call"><div class="t">Cari knowledge yang relevan dan boleh diakses</div><div class="d">Pencarian berdasarkan makna pertanyaan. Kalau penanya minta nilai persis (misalnya test case), detail lengkapnya diambil juga.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">Qdrant Knowledge Agent</span><span class="node">AI MODEL</span><span class="node">Search Qdrant Knowledge</span><span class="node">Get Section Details</span><br>memanggil <code>saved_knowledge</code> dan <code>get_knowledge_detail</code></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+    <div class="step"><div class="num">3</div>
+      <div class="box"><div class="t">Jawab dan sebutkan sumbernya</div><div class="d">Di akhir jawaban ada bagian "Sumber:". Kalau tidak ada yang cocok, chatbot bilang tidak ditemukan dan tidak mengarang jawaban.</div></div>
+      <div class="note"><span class="k">Hasil</span>jawaban dikirim ke aplikasi</div>
+    </div>
+  </div>
+
+  <div class="handoff"><div class="line"></div><span class="tag">SPV</span><span class="txt">halaman Monitoring SPV</span></div>
+
+  <div class="lane" style="--c:var(--c-portal)">
+    <div class="lane-head"><span class="lbl">Workflow</span><span class="name">kms_portal_api</span><span class="meta">lead-summary, nudge</span></div>
+    <div class="step"><div class="num">1</div>
+      <div class="box"><div class="t">SPV melihat ringkasan timnya</div><div class="d">Berapa draf yang disetujui, menunggu, dan ditolak. Draf yang sudah 3 hari lebih belum dicek, dan siapa yang paling banyak tunggakan.</div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">GET lead-summary</span><span class="node">Get Lead Actor</span><span class="node">Get All Candidates</span><span class="node">Get All Logs</span><span class="node">Build Lead Summary</span><span class="node">Respond Lead Summary</span></div>
+    </div>
+    <div class="arrow"><div></div><div></div><div></div></div>
+    <div class="step"><div class="num">2</div>
+      <div class="box decision"><div class="t">SPV mengingatkan owner (nudge)</div><div class="d">Pesan pengingat muncul di daftar "Kandidat Saya" milik owner. Tidak ada email yang dikirim.</div>
+        <div class="br"><span class="if">bukan SPV tim tersebut →</span><span>ditolak</span></div></div>
+      <div class="note"><span class="k">Node n8n</span><span class="node">POST nudge</span><span class="node">Get Nudge Actor</span><span class="node">Get Nudge Candidate</span><span class="node">Authorize Nudge</span><span class="node">Nudge Allowed?</span><span class="node">Write Nudge Log</span><span class="node">Respond Nudge</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PAGE 7: REFERENCE =================== -->
+<section class="page">
+  <div class="sec-head">
+    <div><div class="eyebrow">Lampiran</div><h2>Daftar workflow untuk dicek di n8n</h2></div>
+    <div class="where">Cari dengan nama workflow<br>di halaman Workflows n8n.</div>
+  </div>
+  <div class="panel">
+    <table class="ref">
+      <tr><th>Workflow</th><th>Pemicu</th><th>Tahap</th></tr>
+      <tr><td><code>kms_ingest</code></td><td>POST /webhook/ingest-email</td><td>1, 3</td></tr>
+      <tr><td><code>redact_sensitive_data</code></td><td>Sub-workflow (dari kms_ingest dan keempat reader)</td><td>1, 2</td></tr>
+      <tr><td><code>kms_evidence_agent</code></td><td>Sub-workflow (Run Evidence Agent)</td><td>2</td></tr>
+      <tr><td><code>saved_knowledge</code></td><td>Tool (ingest dan chatbot)</td><td>2, 5</td></tr>
+      <tr><td><code>gdrive_folder_lister</code> · <code>gdocs_reader</code> · <code>gsheets_reader</code> · <code>gslides_reader</code> · <code>gdrive_pdf_reader</code></td><td>Tool agen</td><td>2</td></tr>
+      <tr><td><code>kms_curate_stage</code></td><td>Sub-workflow (Run Curation)</td><td>3</td></tr>
+      <tr><td><code>kms_curator_llm</code></td><td>Sub-workflow (Run Curator LLM)</td><td>3</td></tr>
+      <tr><td><code>kms_candidate_status</code></td><td>GET /webhook/candidate-status</td><td>3</td></tr>
+      <tr><td><code>kms_validate_knowledge</code></td><td>POST /webhook/validate-knowledge</td><td>4</td></tr>
+      <tr><td><code>knowledge_writer_upsert</code></td><td>Sub-workflow (Run Writer)</td><td>4</td></tr>
+      <tr><td><code>kms_portal_api</code></td><td>my-candidates, lead-summary, nudge</td><td>4, 5</td></tr>
+      <tr><td><code>Chat with Qdrant Knowledge</code></td><td>POST /webhook/chat-rag</td><td>5</td></tr>
+      <tr><td><code>get_knowledge_detail</code></td><td>Tool chatbot</td><td>5</td></tr>
+      <tr class="grp"><td colspan="3">Pendukung (di luar alur utama)</td></tr>
+      <tr><td><code>kms_directory</code></td><td>GET /webhook/directory</td><td>Daftar profil di frontend</td></tr>
+      <tr><td><code>kms_admin_reset</code></td><td>Manual</td><td>Hapus data uji, isi ulang direktori</td></tr>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>
