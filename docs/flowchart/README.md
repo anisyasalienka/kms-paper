@@ -10,4 +10,4 @@ Membuat ulang PDF:
 
 Chromium versi snap hanya bisa menulis di dalam folder home. Setelah mengubah alur, cek jumlah halaman tetap 7 (`pdfinfo out.pdf`), karena satu tahap harus muat satu halaman.
 
-Versi terakhir: 20 Oktober 2026 (v2.10). Isinya mencakup notifikasi deploy (v2.8), `Save Source Email` dan tombol "Lihat email asli" (v2.9), serta Google Slides dan aturan redaksi kata kunci + spasi (v2.10).
+Versi terakhir: 20 Oktober 2026 (v2.11). Isinya mencakup notifikasi deploy (v2.8), `Save Source Email` dan tombol "Lihat email asli" (v2.9), Google Slides dan aturan redaksi kata kunci + spasi (v2.10), serta pertanyaan lanjutan di chatbot (v2.11).

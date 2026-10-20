@@ -1,5 +1,6 @@
 import type {
   CandidateStatusResponse,
+  ChatHistoryItem,
   ChatResponse,
   DirectoryUser,
   EmailPayload,
@@ -74,8 +75,8 @@ export const api = {
   validate: (body: ValidateRequest) =>
     request<ValidateResponse>('/validate-knowledge', { method: 'POST', body: JSON.stringify(body) }),
 
-  chat: (user_id: string, chatInput: string) =>
-    request<ChatResponse>('/chat-rag', { method: 'POST', body: JSON.stringify({ user_id, chatInput }) }),
+  chat: (user_id: string, chatInput: string, history: ChatHistoryItem[]) =>
+    request<ChatResponse>('/chat-rag', { method: 'POST', body: JSON.stringify({ user_id, chatInput, history }) }),
 
   leadSummary: (user_id: string) => request<LeadSummary>('/lead-summary' + qs({ user_id })),
 

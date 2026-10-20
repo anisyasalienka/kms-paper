@@ -190,3 +190,9 @@ export interface LeadSummary {
 export interface ChatResponse {
   output: string
 }
+
+// Earlier turns sent with each question so the agent can resolve follow-ups; n8n keeps no memory.
+export interface ChatHistoryItem {
+  role: 'user' | 'assistant'
+  content: string
+}

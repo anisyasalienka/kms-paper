@@ -8,12 +8,26 @@ import { Textarea } from '@/components/ui/textarea'
 import { Callout, Eyebrow, PageHeader } from '@/components/common'
 import { api } from '@/lib/api'
 import { useCurrentUser } from '@/lib/profile'
+import type { ChatHistoryItem } from '@/lib/types'
 
 interface Message {
   role: 'user' | 'assistant' | 'error'
   text: string
   at: number
 }
+
+// Same limits as the n8n Request Context node: last 4 turns, 600 chars each, citations dropped.
+const HISTORY_TURNS = 4
+const HISTORY_CHARS = 600
+
+const toHistory = (messages: Message[]): ChatHistoryItem[] =>
+  messages
+    .filter((m): m is Message & { role: 'user' | 'assistant' } => m.role !== 'error')
+    .slice(-HISTORY_TURNS)
+    .map((m) => ({
+      role: m.role,
+      content: m.text.split(/\n[*_#\s]*Sumber\s*:/i)[0].trim().slice(0, HISTORY_CHARS),
+    }))
 
 const SUGGESTIONS = [
   'Apa nama event tracking untuk klik banner Ramadan?',
@@ -29,7 +43,7 @@ export default function ChatPage() {
   const endRef = useRef<HTMLDivElement>(null)
 
   const chat = useMutation({
-    mutationFn: (q: string) => api.chat(user.user_id, q),
+    mutationFn: ({ q, history }: { q: string; history: ChatHistoryItem[] }) => api.chat(user.user_id, q, history),
     onSuccess: (res) =>
       setMessages((m) => [...m, { role: 'assistant', text: res?.output || '(jawaban kosong)', at: Date.now() }]),
     onError: (err) => setMessages((m) => [...m, { role: 'error', text: err.message, at: Date.now() }]),
@@ -42,9 +56,10 @@ export default function ChatPage() {
   const ask = (q: string) => {
     const text = q.trim()
     if (!text || chat.isPending) return
+    const history = toHistory(messages)
     setMessages((m) => [...m, { role: 'user', text, at: Date.now() }])
     setInput('')
-    chat.mutate(text)
+    chat.mutate({ q: text, history })
   }
 
   return (
@@ -54,8 +69,8 @@ export default function ChatPage() {
         description={
           <>
             Jawaban hanya diambil dari pengetahuan yang sudah divalidasi dan yang boleh diakses oleh{' '}
-            <span className="font-mono font-medium text-foreground">{user.user_id}</span>. Setiap pertanyaan dijawab
-            mandiri, tanpa mengingat percakapan sebelumnya.
+            <span className="font-mono font-medium text-foreground">{user.user_id}</span>. Pertanyaan lanjutan
+            memakai 4 pesan terakhir sebagai konteks; klik Percakapan baru untuk mulai dari nol.
           </>
         }
         action={

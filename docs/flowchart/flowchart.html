@@ -119,7 +119,7 @@ table.ref .grp td { background: #f1ece2; font-weight: 700; font-size: 7.8pt; }
 
 <!-- =================== PAGE 1: OVERVIEW =================== -->
 <section class="page">
-  <div class="eyebrow">Prototipe KMS · n8n + React · 20 Oktober 2026 (v2.10)</div>
+  <div class="eyebrow">Prototipe KMS · n8n + React · 20 Oktober 2026 (v2.11)</div>
   <h1>Alur proses KMS dari email masuk sampai dipakai chatbot</h1>
   <p class="lede">Dokumen ini memetakan setiap langkah proses ke workflow dan nama node di n8n, supaya alurnya bisa dicek langsung di kanvas. Nama workflow dan nama node ditulis persis seperti di n8n. Halaman berikutnya membahas tiap tahap secara rinci.</p>
 
@@ -542,6 +542,7 @@ table.ref .grp td { background: #f1ece2; font-weight: 700; font-size: 7.8pt; }
       <ul>
         <li>STAFF-2A tanya base URL staging → dapat jawaban + sumbernya, password tetap disamarkan</li>
         <li>STAFF-3A tanya hal yang sama, tapi tidak punya akses → "tidak ditemukan"</li>
+        <li>Setelah tanya rilis Search Result Video, "siapa validatornya?" dicari sebagai "validator fitur Search Result Video"</li>
       </ul>
     </div>
   </div>
@@ -549,12 +550,12 @@ table.ref .grp td { background: #f1ece2; font-weight: 700; font-size: 7.8pt; }
   <div class="lane" style="--c:var(--c-chat)">
     <div class="lane-head"><span class="lbl">Workflow</span><span class="name">Chat with Qdrant Knowledge</span><span class="meta">POST /webhook/chat-rag</span></div>
     <div class="step"><div class="num">1</div>
-      <div class="box"><div class="t">Terima pertanyaan dan kenali penanya</div><div class="d">Identitas penanya ditetapkan sistem, bukan AI. Jadi AI tidak bisa mengintip knowledge milik orang lain.</div></div>
+      <div class="box"><div class="t">Terima pertanyaan dan kenali penanya</div><div class="d">Identitas penanya ditetapkan sistem, bukan AI. Jadi AI tidak bisa mengintip knowledge milik orang lain. Empat pesan terakhir di layar ikut dikirim supaya pertanyaan lanjutan tetap nyambung; obrolan tidak disimpan di server.</div></div>
       <div class="note"><span class="k">Node n8n</span><span class="node">Webhook Trigger</span><span class="node">When chat message received</span><span class="node">Request Context</span></div>
     </div>
     <div class="arrow"><div></div><div></div><div></div></div>
     <div class="step"><div class="num">2</div>
-      <div class="box call"><div class="t">Cari knowledge yang relevan dan boleh diakses</div><div class="d">Pencarian berdasarkan makna pertanyaan. Kalau penanya minta nilai persis (misalnya test case), detail lengkapnya diambil juga.</div></div>
+      <div class="box call"><div class="t">Cari knowledge yang relevan dan boleh diakses</div><div class="d">Pertanyaan lanjutan dilengkapi dulu dari obrolan sebelumnya, lalu dicari berdasarkan maknanya. Kalau penanya minta nilai persis (misalnya test case), detail lengkapnya diambil juga.</div></div>
       <div class="note"><span class="k">Node n8n</span><span class="node">Qdrant Knowledge Agent</span><span class="node">AI MODEL</span><span class="node">Search Qdrant Knowledge</span><span class="node">Get Section Details</span><br>memanggil <code>saved_knowledge</code> dan <code>get_knowledge_detail</code></div>
     </div>
     <div class="arrow"><div></div><div></div><div></div></div>
