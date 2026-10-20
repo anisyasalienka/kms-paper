@@ -30,6 +30,8 @@ const NOT_A_VALUE = new Set(['ada', 'sama', 'akan', 'belum', 'tidak', 'yang', 'd
 const KEYWORD = String.raw`(?:password|passwd|pwd|pass|kata\s?sandi|sandi|passcode|pin|otp|client[_\s-]?secret|secret[_\s-]?key|secret|api[_\s-]?key|apikey|(?:merchant|access|app|license|licence|encryption|signing|master|server|secret|private)[_\s-]?key|access[_\s-]?token|auth[_\s-]?token|token)`;
 const KEYWORD_VALUE_RE = new RegExp(
   String.raw`(?<![A-Za-z])(${KEYWORD})(?![A-Za-z])([^\n:=]{0,30}?)(\s*(?::|=|\badalah\b|\byaitu\b|\bis\b)\s*)(["'\x60]?)([^\s"'\x60]{4,128})`, 'gi');
+const KEYWORD_SPACE_RE = new RegExp(
+  String.raw`(?<![A-Za-z])(${KEYWORD})([ \t]+)(["'\x60]?)([^\s"'\x60:=]{6,128})`, 'gi');
 
 const RULES = [
   { type: 'private_key', category: 'credential',
@@ -50,6 +52,17 @@ const RULES = [
       const tail = val.slice(v.length);
       if (v.length < 4 || NOT_A_VALUE.has(v.toLowerCase()) || /^\*+$/.test(v) || v.startsWith('[')) return m;
       return kw + mid + sep + q + hit(v) + tail;
+    } },
+  // Keyword followed only by a space ("password Reko#Stg2026!"): masked only when the value looks like a secret
+  // (letters and digits, plus a symbol or mixed case), so "password reset sudah selesai" is left alone.
+  { type: 'keyword_secret', category: 'credential',
+    re: KEYWORD_SPACE_RE,
+    replace: (m, kw, sep, q, val, hit) => {
+      const v = val.replace(/[.,;:)\]]+$/, '');
+      const tail = val.slice(v.length);
+      const secretLike = /\d/.test(v) && /[A-Za-z]/.test(v) && (/[!@#$%^&*+=?~]/.test(v) || (/[a-z]/.test(v) && /[A-Z]/.test(v)));
+      if (v.length < 6 || !secretLike || v.startsWith('[')) return m;
+      return kw + sep + q + hit(v) + tail;
     } },
   { type: 'nik', category: 'personal_data',
     re: /(?<![\d])(\d{16})(?![\d])/g,
@@ -80,7 +93,7 @@ const RULES = [
 
 // Links are kept verbatim (the agent needs them to open documents); only a password inside a link is masked.
 const URL_RE = /\bhttps?:\/\/[^\s<>"')\]]+/g;
-const SOURCE_ID_RE = /\b(?:gdoc|gsheet|gpdf|gfolder):[A-Za-z0-9_-]{10,}/g;
+const SOURCE_ID_RE = /\b(?:gdoc|gsheet|gslide|gpdf|gfolder):[A-Za-z0-9_-]{10,}/g;
 
 function redactText(text, location, findings) {
   if (typeof text !== 'string' || text.length < 4) return text;

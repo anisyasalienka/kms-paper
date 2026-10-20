@@ -14,6 +14,7 @@ Semua workflow berjalan di n8n 2.27.3 (`https://n8n.cencendi.my.id`). Frontend m
 | Ingest | `kms_curator_llm` | `AoK0uKKmiK5peSVp` | Sub-workflow | [kms_curator_llm.md](kms_curator_llm.md) |
 | Tool baca sumber | `gdocs_reader` | `VO3XcHfsCmvZwLax` | Tool agen | [gdocs_reader.md](gdocs_reader.md) |
 | Tool baca sumber | `gsheets_reader` | `tYUmV5RKkwsiw6C8` | Tool agen | [gsheets_reader.md](gsheets_reader.md) |
+| Tool baca sumber | `gslides_reader` | `omMFETSvIK89bc83` | Tool agen | [gslides_reader.md](gslides_reader.md) |
 | Tool baca sumber | `gdrive_folder_lister` | `JITewMLouD0Lz1dT` | Tool agen | [gdrive_folder_lister.md](gdrive_folder_lister.md) |
 | Tool baca sumber | `gdrive_pdf_reader` | `ElNyCOiUqBdJJli0` | Tool agen | [gdrive_pdf_reader.md](gdrive_pdf_reader.md) |
 | Keamanan | `redact_sensitive_data` | `KmsRedaction2026` | Sub-workflow | [redact_sensitive_data.md](redact_sensitive_data.md) |
@@ -37,7 +38,7 @@ Frontend ──/api──> nginx ──> n8n webhooks
                                │   │     ├─ inspect_email, list_attachments      (agent tool + model sendiri)
                                │   │     ├─ saved_knowledge ─────────────────────> Qdrant knowledge
                                │   │     ├─ gdrive_folder_lister ───────────────> Google Drive API
-                               │   │     ├─ document_extractor ─ gdocs_reader, gdrive_pdf_reader
+                               │   │     ├─ document_extractor ─ gdocs_reader, gslides_reader, gdrive_pdf_reader
                                │   │     └─ spreadsheet_extractor ─ gsheets_reader
                                │   └─> kms_curate_stage
                                │         └─> kms_curator_llm ──────────────────> 9router (internal)
@@ -65,7 +66,7 @@ Frontend ──/api──> nginx ──> n8n webhooks
 | `KMS API Key (X-KMS-API-KEY)` (Header Auth) | Semua webhook KMS |
 | `9Router` (OpenAI API) | Model LLM di `kms_evidence_agent` dan chatbot |
 | `9router token` (Bearer) | `kms_curator_llm`, embedding di `saved_knowledge` dan `knowledge_writer_upsert` |
-| `Google SA - docs reader` (service account; scope Docs dan Sheets, ditambah `drive.readonly` untuk Drive) | Keempat tool baca sumber Google |
+| `Google SA - docs reader` (service account; scope Docs dan Sheets, ditambah `drive.readonly` untuk Drive dan Slides; Slides API harus aktif di project) | Kelima tool baca sumber Google |
 
 ## Konvensi
 
@@ -73,7 +74,7 @@ Frontend ──/api──> nginx ──> n8n webhooks
 - **Sticky note** (Bahasa Indonesia) ada di setiap kanvas KMS, satu per tahap, berisi fungsi tahap dan requirement yang dicakup (FR, GR). Nama node tetap berbahasa Inggris.
 - **Tool tidak pernah melempar error.** Tool baca sumber selalu mengembalikan `extraction_status` (`success`, `empty`, `failed`) dan `errors[]`, sehingga agen dapat melanjutkan.
 - **Aturan akses dan dedup ditegakkan oleh kode**, bukan oleh LLM.
-- **Model tidak pernah menerima data sensitif mentah.** Workflow `redact_sensitive_data`, dipanggil dari `kms_ingest` dan ketiga reader Google, menyamarkan kredensial dan data pribadi sebelum teks diserahkan ke model (NFR4). Lihat [redact_sensitive_data.md](redact_sensitive_data.md).
+- **Model tidak pernah menerima data sensitif mentah.** Workflow `redact_sensitive_data`, dipanggil dari `kms_ingest` dan keempat reader Google, menyamarkan kredensial dan data pribadi sebelum teks diserahkan ke model (NFR4). Lihat [redact_sensitive_data.md](redact_sensitive_data.md).
 
 ## Pengujian
 

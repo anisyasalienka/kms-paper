@@ -183,6 +183,8 @@ function resolveCandidateSources(c: MyCandidate): {
         finalUrl = `https://docs.google.com/document/d/${id.replace(/^gdoc:/, '')}`
       } else if (id.startsWith('gsheet:')) {
         finalUrl = `https://docs.google.com/spreadsheets/d/${id.replace(/^gsheet:/, '')}`
+      } else if (id.startsWith('gslide:')) {
+        finalUrl = `https://docs.google.com/presentation/d/${id.replace(/^gslide:/, '')}`
       } else if (id.startsWith('gpdf:')) {
         finalUrl = `https://drive.google.com/file/d/${id.replace(/^gpdf:/, '')}/view`
       } else if (id.startsWith('gfolder:')) {
@@ -439,6 +441,8 @@ function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandida
                     ? 'Folder Google Drive'
                     : ref.id.startsWith('gpdf:')
                       ? 'PDF (Google Drive)'
+                      : ref.id.startsWith('gslide:')
+                        ? 'Google Slides'
                       : ref.id.startsWith('gsheet:')
                         ? 'Google Sheets'
                         : ref.id.startsWith('gdoc:')

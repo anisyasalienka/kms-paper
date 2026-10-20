@@ -9,7 +9,7 @@
 
 ## Tujuan
 
-**Mendaftar** file PDF, Google Docs, dan Google Sheets di level teratas satu folder Google Drive. Tool ini tidak membaca isi file; orchestrator meneruskan setiap file ke reader yang sesuai.
+**Mendaftar** file PDF, Google Docs, Google Sheets, dan Google Slides di level teratas satu folder Google Drive. Tool ini tidak membaca isi file; orchestrator meneruskan setiap file ke reader yang sesuai.
 
 ## Input
 
@@ -26,7 +26,7 @@
 }
 ```
 
-`type`: `pdf` (`gpdf:`), `gdoc` (`gdoc:`), `gsheet` (`gsheet:`). Shortcut diklasifikasi menurut file tujuannya.
+`type`: `pdf` (`gpdf:`), `gdoc` (`gdoc:`), `gsheet` (`gsheet:`), `gslide` (`gslide:`, dibaca `gslides_reader`). File .pptx yang diunggah masuk `skipped`. Shortcut diklasifikasi menurut file tujuannya.
 
 ## Alur
 

@@ -23,6 +23,8 @@ const must = [
   ['Merchant Key: MK_STG_9982401', 'MK_STG_9982401'],
   ['Client Secret Sandbox: Qris#StgSecr3t2026!', 'Qris#StgSecr3t2026!'],
   ['ACCESS_KEY=AbCdEf123456', 'AbCdEf123456'],
+  ['Akses dashboard eksperimen staging: user reko_admin, password Reko#Stg2026!', 'Reko#Stg2026'],
+  ['kata sandi Wifi2026Kantor untuk tamu', 'Wifi2026Kantor'],
 ];
 const keep = [
   'Lihat https://docs.google.com/document/d/1AbCdEfGhIjKlMnOpQrStUvWxYz0123456789_-AbCd/edit?tab=t.0',
@@ -39,6 +41,10 @@ const keep = [
   'Nomor dokumen 2026031200000001 dan order id 9876543210123456',
   'C++ dan C# dipakai; skor A+ untuk tim; lihat section_3/overview',
   'Key: breaking_news adalah topic utama, key result Q1 tercapai',
+  'Password reset sudah selesai untuk STAFF-2C',
+  'Token FCM untuk topic breaking_news, versi token v4.18.2',
+  'Pass rate UAT2026 mencapai 98%, PIN 1234 tidak dipakai lagi',
+  'Sumber gslide:1YT8B16z0mPS5D9OANji_b6NaoNEO77PD36qf7R6pXYg sudah dibaca',
 ];
 let fail = 0;
 for (const [t, secret] of must) {

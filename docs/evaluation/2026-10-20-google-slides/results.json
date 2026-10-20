@@ -1,0 +1,104 @@
+{
+ "s8a": {
+  "success": true,
+  "candidate_id": "CAND-20261020-P5XMVX",
+  "status": "pending_validation",
+  "error_message": null,
+  "duplicate_of": null,
+  "created_at": "2026-10-20T04:52:39.626Z",
+  "curated_summary": {
+   "title": "Hasil Sprint Review 14 dan Rencana Go-Live Rekomendasi Artikel Personal v2",
+   "summary": "Hasil sprint review 14 menetapkan Varian B (model hybrid collaborative + konten) sebagai pemenang A/B test Rekomendasi Artikel Personal v2 dengan CTR 4,6% dan kenaikan durasi baca 12%. Jadwal go-live mencakup code freeze pada 27 Oktober 2026, UAT pada 28–30 Oktober 2026, rollout 10% pada 3 November 2026, dan rollout 100% pada 10 November 2026 dengan persetujuan SPV-C. Aturan rollback otomatis berlaku jika CTR turun di bawah 3,0% selama 2 jam berturut-turut.",
+   "owner_pic": "STAFF-1C",
+   "owner_team": "TEAM-C",
+   "knowledge_type": "Decision",
+   "product_or_channel": null,
+   "effective_date": "2026-10-20",
+   "has_sensitive_data": true,
+   "access_recipients": [
+    "STAFF-1C",
+    "STAFF-2C",
+    "STAFF-3C",
+    "SPV-C"
+   ],
+   "access_users": [
+    "SPV-C",
+    "STAFF-1C",
+    "STAFF-2C",
+    "STAFF-3C"
+   ]
+  },
+  "seconds": 100
+ },
+ "s8a_approve": {
+  "success": true,
+  "candidate_id": "CAND-20261020-P5XMVX",
+  "new_status": "approved",
+  "knowledge_id": "KNOWLEDGE-d6f130bb-2943-5571-b258-745e203cb718",
+  "qdrant_point_id": "c2c8f253-f257-5227-8dd0-5792e936e65b",
+  "chunks_written": 4,
+  "superseded_candidates": []
+ },
+ "s8b": {
+  "success": true,
+  "candidate_id": "CAND-20261020-ZTDFT8",
+  "status": "pending_validation",
+  "error_message": null,
+  "duplicate_of": null,
+  "created_at": "2026-10-20T04:54:54.647Z",
+  "curated_summary": {
+   "title": "Hasil Sprint Review 14 dan Rencana Go-Live Rekomendasi Artikel Personal v2",
+   "summary": "Pembaruan rencana go-live Rekomendasi Artikel Personal v2 pasca Sprint Review 14. Varian B (model hybrid collaborative + konten) ditetapkan sebagai pemenang A/B test. Berdasarkan arahan SPV-C pada 21 Oktober 2026, jadwal UAT diundur menjadi 29–31 Oktober 2026 karena tim QA menyelesaikan regression test Android, dan ambang batas latency untuk fallback otomatis ke artikel terpopuler diperketat menjadi 250 ms (sebelumnya 300 ms). Code freeze tetap pada 27 Oktober 2026, rollout 10% pada 3 November 2026, dan rollout 100% pada 10 November 2026.",
+   "owner_pic": "STAFF-1C",
+   "owner_team": "TEAM-C",
+   "knowledge_type": "Decision",
+   "product_or_channel": null,
+   "effective_date": "2026-10-21",
+   "has_sensitive_data": true,
+   "access_recipients": [
+    "STAFF-1C",
+    "STAFF-2C",
+    "STAFF-3C",
+    "SPV-C"
+   ],
+   "access_users": [
+    "SPV-C",
+    "STAFF-1C",
+    "STAFF-2C",
+    "STAFF-3C"
+   ]
+  },
+  "seconds": 113
+ },
+ "s8b_approve": {
+  "success": true,
+  "candidate_id": "CAND-20261020-ZTDFT8",
+  "new_status": "approved",
+  "knowledge_id": "KNOWLEDGE-d6f130bb-2943-5571-b258-745e203cb718",
+  "qdrant_point_id": "c2c8f253-f257-5227-8dd0-5792e936e65b",
+  "chunks_written": 5,
+  "superseded_candidates": [
+   "CAND-20261020-P5XMVX"
+  ]
+ },
+ "chat": [
+  {
+   "user": "STAFF-3C",
+   "should_answer": true,
+   "answer": "Berdasarkan data pengetahuan organisasi, berikut adalah jadwal UAT dan aturan rollback untuk **Rekomendasi Artikel Personal v2**:\n\n1. **Jadwal UAT:**\n   * UAT dijadwalkan pada **29–31 Oktober 2026**.\n   * *(Catatan: Jadwal ini diundur satu hari dari rencana awal 28–30 Oktober 2026 berdasarkan arahan SPV-C pada 21 Oktober 2026 karena tim QA menyelesaikan regression test aplikasi Android).*\n\n2. **Aturan Rollback:**\n   * **Rollback otomatis** akan dilakukan apabila **CTR (Click-Through Rate) rekomendasi turun di bawah 3,0% selama 2 jam berturut-turut** (disepakati dengan SPV-C pada 17 Oktober 2026).\n\n---\n\n**Sumber:**\n* **Judul:** Hasil Sprint Review 14 dan Rencana Go-Live Rekomendasi Artikel Personal v2\n* **Source IDs:** EMAIL-S8, gslide:1YT8B16z0mPS5D9OANji_b6NaoNEO77PD36qf7R6pXYg, KNOWLEDGE-d6f130bb-2943-5571-b258-745e203cb718\n* **Tanggal Berlaku (Effective Date):** 2026-10-21\n* **Divalid",
+   "leaked": false
+  },
+  {
+   "user": "SPV-C",
+   "should_answer": true,
+   "answer": "Berdasarkan data pada basis pengetahuan:\n\n* **Jadwal UAT:**\n  Jadwal pelaksanaan UAT Rekomendasi Artikel Personal v2 diundur menjadi **29–31 Oktober 2026** (sebelumnya tercatat 28–30 Oktober 2026 pada slide presentasi) berdasarkan arahan SPV-C pada 21 Oktober 2026 karena tim QA menyelesaikan *regression test* aplikasi Android.\n\n* **Aturan Rollback:**\n  *Rollback* dilakukan secara otomatis apabila CTR (*Click-Through Rate*) rekomendasi turun di bawah **3,0% selama 2 jam berturut-turut** (disepakati dengan SPV-C pada 17 Oktober 2026).\n\n---\n**Sumber:**\n* **Judul:** Hasil Sprint Review 14 dan Rencana Go-Live Rekomendasi Artikel Personal v2\n* **Source IDs:** `EMAIL-S8`, `gslide:1YT8B16z0mPS5D9OANji_b6NaoNEO77PD36qf7R6pXYg`, `KNOWLEDGE-d6f130bb-2943-5571-b258-745e203cb718`\n* **Effective Date:** 2026-10-21\n* **Validated By:** STAFF-1C",
+   "leaked": false
+  },
+  {
+   "user": "STAFF-1A",
+   "should_answer": false,
+   "answer": "Informasi mengenai jadwal UAT dan aturan rollback untuk Rekomendasi Artikel Personal v2 tidak ditemukan dalam basis pengetahuan yang dapat Anda akses.",
+   "leaked": false
+  }
+ ]
+}

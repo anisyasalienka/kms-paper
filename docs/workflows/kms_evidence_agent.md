@@ -5,7 +5,7 @@
 | **ID** | `KmsEvidAgent2026` |
 | **Pemicu** | Sub-workflow (`When Called by Ingest`) |
 | **Dipanggil oleh** | `kms_ingest` (node `Run Evidence Agent`) |
-| **Memanggil** | `saved_knowledge`, `gdrive_folder_lister`, `gdocs_reader`, `gsheets_reader`, `gdrive_pdf_reader`; LLM lewat kredensial `9Router` |
+| **Memanggil** | `saved_knowledge`, `gdrive_folder_lister`, `gdocs_reader`, `gsheets_reader`, `gslides_reader`, `gdrive_pdf_reader`; LLM lewat kredensial `9Router` |
 | **Requirement** | FR1/FR2 (saring non-knowledge), FR3 (ekstraksi lampiran dan tautan), dedup ingest |
 
 ## Tujuan
@@ -34,7 +34,7 @@ When Called by Ingest ─> Candidate Context ─> Current Email ─> Evidence Ag
                                                                    │
         tools: inspect_email, saved_knowledge, list_attachments, document_extractor,
                spreadsheet_extractor, gdrive_folder_lister
-        readers (di bawah extractor): gdocs_reader, gdrive_pdf_reader, gsheets_reader
+        readers (di bawah extractor): gdocs_reader, gslides_reader, gdrive_pdf_reader, gsheets_reader
 ```
 
 | Node | Jenis | Fungsi |
@@ -42,10 +42,10 @@ When Called by Ingest ─> Candidate Context ─> Current Email ─> Evidence Ag
 | `Candidate Context` | Set | Menyimpan pengirim dan sumber; `saved_knowledge` membatasi pencarian ke dokumen yang dapat diakses `owner_pic`. |
 | `Current Email` | Set | JSON email yang dibaca setiap tool sebagai input otoritatif. |
 | `Evidence Agent` | AI Agent v3.1 | Orchestrator (`Model: orchestrator`, `ag/gemini-3.8-flash-high`), `returnIntermediateSteps: true`, maks. 25 iterasi. |
-| `inspect_email` | Agent tool (`Model: inspect_email`, `ollama/gpt-oss:120b`) | Mengklasifikasi email (kriteria inklusi/eksklusi) dan mendeteksi `linked_sources`: `gdoc:`, `gsheet:`, `gfolder:`, `gpdf:`. |
+| `inspect_email` | Agent tool (`Model: inspect_email`, `ollama/gpt-oss:120b`) | Mengklasifikasi email (kriteria inklusi/eksklusi) dan mendeteksi `linked_sources`: `gdoc:`, `gsheet:`, `gslide:`, `gfolder:`, `gpdf:`. |
 | `saved_knowledge` | Tool workflow | Pencarian Qdrant: `exact_source`, `related_existing_knowledge` (skor ≥ 0,65, atau `thread_continuation` bila thread yang sama punya pesan baru), atau `no_match`. Ekspresi input menambahkan `source_context.message_ids` dari email secara deterministik; model hanya mengisi query. |
 | `list_attachments` | Agent tool (`ollama/gpt-oss:120b`) | Inventaris lampiran yang tertanam di JSON email. |
-| `document_extractor` | Agent tool (`ag/gemini-3.8-flash`) | Satu dokumen per panggilan: lampiran PDF/dokumen, tautan Google Docs (via `gdocs_reader`), atau PDF di Drive (via `gdrive_pdf_reader`). |
+| `document_extractor` | Agent tool (`ag/gemini-3.8-flash`) | Satu dokumen per panggilan: lampiran PDF/dokumen, tautan Google Docs (via `gdocs_reader`), tautan Google Slides (via `gslides_reader`), atau PDF di Drive (via `gdrive_pdf_reader`). |
 | `spreadsheet_extractor` | Agent tool (`ag/gemini-3.8-flash`) | Satu spreadsheet per panggilan: lampiran XLS/XLSX atau tautan Google Sheets (via `gsheets_reader`). |
 | `gdrive_folder_lister` | Tool workflow | Mendaftar file di folder Drive (tanpa membaca isi). |
 | `Package Agent Result` | Code | Mengembalikan `output`, `intermediateSteps`, dan `error`. Output error agen juga diarahkan ke sini. |

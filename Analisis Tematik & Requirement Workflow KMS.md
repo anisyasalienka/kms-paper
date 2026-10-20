@@ -236,7 +236,7 @@ Keputusan 18 Oktober 2026 setelah pengecekan prototipe terhadap requirement. Bag
 
 **Keputusan (18 Oktober 2026).** Dari empat opsi yang dibahas (A redaksi sebelum LLM, B model lokal penuh, C hibrida, D hanya batasan), dipilih **opsi A dengan aturan berbasis kode (regex), tanpa model NER**. Hal yang sulit dideteksi dijadikan batasan.
 
-**Implementasi.** Workflow `redact_sensitive_data`, dipanggil dari `kms_ingest` (sebelum email diserahkan ke agen dan kurator) dan dari ketiga reader Google (sebelum isi dokumen dikembalikan ke extractor). Aturannya ada di satu tempat. Nilai sensitif diganti label yang membawa bentuk tersamarnya, misalnya `[KREDENSIAL: Vpn#****]`. Di akhir, `kms_curate_stage` mengubah label menjadi teks tersamar dan mencatatnya di `sensitive_audit`, sehingga validator tetap melihat peringatan GR7. Rincian aturan: `docs/workflows/redact_sensitive_data.md`.
+**Implementasi.** Workflow `redact_sensitive_data`, dipanggil dari `kms_ingest` (sebelum email diserahkan ke agen dan kurator) dan dari keempat reader Google (sebelum isi dokumen dikembalikan ke extractor). Aturannya ada di satu tempat. Nilai sensitif diganti label yang membawa bentuk tersamarnya, misalnya `[KREDENSIAL: Vpn#****]`. Di akhir, `kms_curate_stage` mengubah label menjadi teks tersamar dan mencatatnya di `sensitive_audit`, sehingga validator tetap melihat peringatan GR7. Rincian aturan: `docs/workflows/redact_sensitive_data.md`.
 
 | Terdeteksi | Tidak terdeteksi (batasan) |
 | --- | --- |

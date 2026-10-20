@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **ID** | `KmsRedaction2026` |
 | **Pemicu** | Sub-workflow (`When Called by Workflow`), input `value` (objek JSON apa pun) |
-| **Dipanggil oleh** | Node `Redact Sensitive Data` di `kms_ingest` (sebelum `Run Evidence Agent`) dan di `gdocs_reader`, `gsheets_reader`, `gdrive_pdf_reader` (node terakhir) |
+| **Dipanggil oleh** | Node `Redact Sensitive Data` di `kms_ingest` (sebelum `Run Evidence Agent`) dan di `gdocs_reader`, `gsheets_reader`, `gslides_reader`, `gdrive_pdf_reader` (node terakhir) |
 | **Output** | Objek yang sama dengan nilai sensitif diganti label, ditambah `redactions[]` (`category`, `type`, `location`, `masked_value`) |
 | **Sumber kode** | [redact/redact.js](redact/redact.js), uji di [redact/redact.test.js](redact/redact.test.js) |
 | **Requirement** | NFR4 (tidak ada data sensitif mentah yang keluar ke penyedia model), GR7 (data sensitif ditandai untuk validator) |
@@ -20,6 +20,7 @@ Nilai yang ditemukan diganti label yang membawa bentuk tersamarnya sendiri. Nila
 | Kategori | Label | Jenis dan cara deteksi | Contoh hasil |
 | :--- | :--- | :--- | :--- |
 | Kredensial | `KREDENSIAL` | Kata kunci + nilai: *password, pass, kata sandi, PIN, OTP, secret, client secret, API key, token, merchant/access/app/secret/private key* diikuti `:`, `=`, "adalah", atau "yaitu" | `password sementara: [KREDENSIAL: Vpn#****]` |
+| | | Kata kunci yang sama diikuti spasi saja, bila nilainya berbentuk rahasia (huruf dan angka, ditambah simbol atau huruf besar-kecil). "password reset sudah selesai" tidak tersentuh | `password [KREDENSIAL: Reko****]` |
 | | | Password di dalam URL (`skema://user:password@host`) | `postgres://app:[KREDENSIAL: Rw#****]@db…` |
 | | | Format token yang dikenal: JWT, `sk-…`, `AKIA…`, `ghp_…`, `xox…-`, `AIza…`, `Bearer …`, blok private key | `[KREDENSIAL: ghp_****]` |
 | | | String acak 10–64 karakter yang memuat simbol (`!@#$%^&*+=?~`) dan minimal tiga jenis karakter | `[KREDENSIAL: MK_S****]` |
@@ -46,7 +47,7 @@ Yang **tidak** diubah: tautan (supaya agen tetap bisa membuka dokumen, kecuali p
 
 ## Mengubah aturan
 
-Kode hanya ada di satu tempat, node `Redact Sensitive Data` di workflow ini. Perubahan langsung berlaku untuk email dan ketiga reader. Bila aturan diubah:
+Kode hanya ada di satu tempat, node `Redact Sensitive Data` di workflow ini. Perubahan langsung berlaku untuk email dan keempat reader. Bila aturan diubah:
 
 1. Ubah [redact/redact.js](redact/redact.js) lalu jalankan `node redact/redact.test.js` sampai `failures: 0`. Tambahkan kasus uji untuk setiap aturan baru, baik yang harus disamarkan maupun yang tidak boleh tersentuh.
 2. Salin isi fungsi (tanpa baris `module.exports`) ke node `Redact Sensitive Data` di workflow ini, bagian atas sebelum baris `const findings`, lalu publish.
@@ -55,6 +56,8 @@ Kode hanya ada di satu tempat, node `Redact Sensitive Data` di workflow ini. Per
 ## Riwayat
 
 Versi pertama (18 Oktober 2026) menempelkan kode yang sama di empat node Code terpisah. Pada 19 Oktober 2026 kode dipindah ke workflow ini supaya perubahan aturan tidak bisa tertinggal di salah satu jalur. Keempat node lama diganti node Execute Workflow dengan nama yang sama.
+
+Pada 20 Oktober 2026 uji Google Slides (s8a) menemukan `password Reko#Stg2026!` di catatan pembicara lolos: aturan kata kunci butuh `:` atau `=`, dan lapis string acak menolak nilai yang diakhiri simbol. Ditambahkan aturan kata kunci + spasi yang hanya menyamarkan nilai berbentuk rahasia, beserta 2 kasus uji yang harus disamarkan dan 4 yang tidak boleh tersentuh (42 kasus, semua lulus). Dijalankan ke semua email dummy: hanya s3b dan s7 yang kena, sama seperti sebelumnya. Cek kebocoran s8a/s8b: 0 dari 11 nilai.
 
 ## Bukti uji
 
