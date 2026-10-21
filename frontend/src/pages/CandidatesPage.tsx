@@ -546,13 +546,22 @@ function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandida
   )
 }
 
+// Bands follow the confidence rubric in the curator prompt (kms_curate_stage > Curator Prompt).
+const CONFIDENCE_BANDS = [
+  { min: 90, color: 'bg-ok', label: 'Didukung langsung oleh beberapa sumber, tanpa konflik' },
+  { min: 75, color: 'bg-warn', label: 'Didukung kuat, ada celah kecil atau field belum lengkap' },
+  { min: 50, color: 'bg-caution', label: 'Didukung sebagian, satu sumber, atau masih ada ketidakpastian' },
+  { min: 0, color: 'bg-destructive', label: 'Lemah, ambigu, atau bergantung pada knowledge lama' },
+]
+
 function ConfidenceMeter({ value }: { value: number }) {
   const pct = Math.round(value * 100)
+  const band = CONFIDENCE_BANDS.find((b) => pct >= b.min) ?? CONFIDENCE_BANDS[CONFIDENCE_BANDS.length - 1]
   return (
-    <span className="flex items-center gap-2">
+    <span className="flex items-center gap-2" title={`Penilaian model kurator: ${band.label}`}>
       <span className="font-mono tabular-nums">{pct}%</span>
       <span className="h-1 w-14 overflow-hidden rounded-full bg-muted">
-        <span className={cn('block h-full', pct >= 70 ? 'bg-ok' : pct >= 40 ? 'bg-warn' : 'bg-destructive')} style={{ width: `${pct}%` }} />
+        <span className={cn('block h-full', band.color)} style={{ width: `${pct}%` }} />
       </span>
     </span>
   )
