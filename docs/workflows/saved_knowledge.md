@@ -26,7 +26,7 @@ Pencarian semantik di koleksi Qdrant `knowledge`, dipakai untuk dua keperluan: d
 
 ## Output
 
-`match_type` (`exact_source` / `related_existing_knowledge` / `no_match`), `same_source`, `score`, `thread_continuation`, `new_message_ids`, `knowledge_id`, `content`, `source_ids`, `source_emails` (v2.12; titik lama tanpa field ini diisi dari `email_ids`), `existing_knowledge` (payload lengkap kecocokan teratas), `related_chunks[]`, `reason`.
+`match_type` (`exact_source` / `related_existing_knowledge` / `no_match`), `same_source`, `score`, `thread_continuation`, `new_message_ids`, `knowledge_id`, `content`, `source_ids`, `source_emails` dan `source_files` (v2.12; titik lama tanpa field ini diisi dari `email_ids`/`source_ids`), `existing_knowledge` (payload lengkap kecocokan teratas), `related_chunks[]`, `reason`.
 
 ## Alur
 

@@ -2,7 +2,7 @@
 
 ## Pemicu
 
-Peneliti meminta agar sumber di Kandidat Saya dan di jawaban chatbot selalu berupa email, bukan ID knowledge (`KNOWLEDGE-…`).
+Peneliti meminta agar sumber di Kandidat Saya dan di jawaban chatbot selalu berupa email, bukan ID knowledge (`KNOWLEDGE-…`). Setelah versi pertama, peneliti mencatat file sumber hilang dari jawaban chatbot; file dikembalikan (lihat bagian Revisi).
 
 ## Temuan sebelum perbaikan
 
@@ -32,6 +32,15 @@ Dua knowledge yang sudah ada di-backfill langsung di Qdrant (`set_payload`) deng
 | Chatbot STAFF-3A: "Kenapa verifikasi onboarding premium tidak pakai OTP SMS?" | Sumber: EMAIL-D1 dan EMAIL-D5 dengan subjeknya, tanpa ID knowledge (`chat-STAFF-3A.json`) |
 | `Add Source History` (uji lokal, baris tiruan) | Baris rejected diabaikan; satu entri per thread; `message_ids` tergabung; riwayat kosong hanya berisi thread sendiri |
 | Writer `Validate and Prepare` (uji lokal) | `source_ids` = [EMAIL-D1, gpdf, EMAIL-D5], `KNOWLEDGE-…` terbuang |
+
+## Revisi: file sumber di chatbot
+
+Versi pertama aturan 6 melarang ID dokumen untuk menyingkirkan `KNOWLEDGE-…`, sehingga file ikut hilang dari jawaban (sebelum v2.12 file tercantum lewat `source_ids`). Perbaikan: `Add Source History` juga mengumpulkan file yang dibaca dari semua versi (`source_files`, tanpa folder dan `reference_only`), writer menyimpannya, `saved_knowledge` mengembalikannya, dan aturan 6 mengutip "File: nama (tautan)". Dua knowledge di-backfill.
+
+| Pertanyaan (STAFF-3A) | Sumber di jawaban |
+| :--- | :--- |
+| Kenapa verifikasi onboarding premium tidak pakai OTP SMS? | Email EMAIL-D1, Email EMAIL-D5, File PRD_onboarding_premium_v1.pdf (tautan Drive) |
+| Apa saja event tracking onboarding premium? | Email EMAIL-D2, File tracking_plan_onboarding (tautan Sheets) |
 
 ## Belum diuji
 

@@ -17,6 +17,14 @@
         "subject": "Tracking plan onboarding premium",
         "date": "2026-10-05"
       }
+    ],
+    "source_files": [
+      {
+        "source_id": "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8",
+        "name": "tracking_plan_onboarding",
+        "source_type": "spreadsheet",
+        "url": "https://docs.google.com/spreadsheets/d/1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8/edit?usp=sharing"
+      }
     ]
   },
   {
@@ -45,6 +53,14 @@
         "source_id": "EMAIL-D5",
         "subject": "Keputusan metode verifikasi pengguna baru",
         "date": "2026-10-07"
+      }
+    ],
+    "source_files": [
+      {
+        "source_id": "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+        "name": "PRD_onboarding_premium_v1.pdf",
+        "source_type": "document",
+        "url": "https://drive.google.com/file/d/1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl/view?usp=drivesdk"
       }
     ]
   }
