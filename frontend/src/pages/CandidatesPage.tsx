@@ -15,7 +15,7 @@ import { SourceEmailDialog } from '@/components/SourceEmailDialog'
 import { api, ApiError } from '@/lib/api'
 import { formatDate, formatDateTime } from '@/lib/format'
 import { useCurrentUser, useProfile } from '@/lib/profile'
-import type { MyCandidate, ValidateAction, ValidateRequest } from '@/lib/types'
+import type { EmailPayload, MyCandidate, ValidateAction, ValidateRequest } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
 type Filter = 'pending' | 'all'
@@ -163,6 +163,8 @@ interface NormalizedSource {
   name: string
   sourceType: string
   url?: string
+  email?: EmailPayload | null
+  viaKnowledge?: string
 }
 
 function resolveCandidateSources(c: MyCandidate): {
@@ -172,7 +174,7 @@ function resolveCandidateSources(c: MyCandidate): {
   const map = new Map<string, number>()
   const list: NormalizedSource[] = []
 
-  const register = (id: string, name?: string, sourceType?: string, url?: string) => {
+  const register = (id: string, name?: string, sourceType?: string, url?: string, email?: EmailPayload | null, viaKnowledge?: string) => {
     if (!id || map.has(id)) return
     const num = list.length + 1
     map.set(id, num)
@@ -210,11 +212,13 @@ function resolveCandidateSources(c: MyCandidate): {
                 ? 'folder'
                 : 'document'),
       url: finalUrl,
+      email,
+      viaKnowledge,
     })
   }
 
   for (const s of c.sources || []) {
-    register(s.source_id, s.name, s.source_type, s.url)
+    register(s.source_id, s.name, s.source_type, s.url, s.email, s.via_knowledge)
   }
 
   if (c.source_id && !map.has(c.source_id)) {
@@ -240,7 +244,8 @@ function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandida
   const user = useCurrentUser()
   const queryClient = useQueryClient()
   const [dialog, setDialog] = useState<ValidateAction | null>(null)
-  const [emailOpen, setEmailOpen] = useState(false)
+  // Source ID of the email shown in the dialog: this candidate's own thread or an earlier one (v2.12).
+  const [openEmailId, setOpenEmailId] = useState<string | null>(null)
   const pending = c.status === 'pending_validation'
 
   const validate = useMutation({
@@ -305,7 +310,7 @@ function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandida
           <p className="font-mono text-[11px] text-muted-foreground">
             {c.candidate_id} · sumber {c.source_id}
           </p>
-          <Button variant="outline" size="xs" onClick={() => setEmailOpen(true)}>
+          <Button variant="outline" size="xs" onClick={() => setOpenEmailId(c.source_id)}>
             <Mail /> Lihat email asli
           </Button>
         </div>
@@ -464,11 +469,12 @@ function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandida
                       <span className="text-sm text-foreground">{ref.name}</span>
                       <span className="text-muted-foreground">
                         {' '}· {typeLabel}
+                        {ref.viaKnowledge && ' · dari knowledge yang diperbarui'}
                       </span>
                       <div className="mt-0.5 flex flex-wrap items-center gap-x-3 font-mono text-[11px] text-muted-foreground">
                         <span className="break-all">{ref.id}</span>
-                        {ref.id === c.source_id && (
-                          <button type="button" onClick={() => setEmailOpen(true)} className="inline-flex items-center gap-1 text-primary hover:underline">
+                        {(ref.id === c.source_id || ref.email) && (
+                          <button type="button" onClick={() => setOpenEmailId(ref.id)} className="inline-flex items-center gap-1 text-primary hover:underline">
                             lihat email <Mail className="size-3" />
                           </button>
                         )}
@@ -536,11 +542,11 @@ function CandidateDetail({ candidate: c, newMessageIds }: { candidate: MyCandida
         onSubmit={(handover_to, notes) => validate.mutate({ action: 'handover', handover_to, notes })}
       />
       <SourceEmailDialog
-        open={emailOpen}
-        onClose={() => setEmailOpen(false)}
-        sourceId={c.source_id}
-        email={c.source_email}
-        newMessageIds={newMessageIds}
+        open={openEmailId !== null}
+        onClose={() => setOpenEmailId(null)}
+        sourceId={openEmailId ?? c.source_id}
+        email={openEmailId === c.source_id ? c.source_email : references.find((r) => r.id === openEmailId)?.email}
+        newMessageIds={openEmailId === c.source_id ? newMessageIds : undefined}
       />
     </article>
   )

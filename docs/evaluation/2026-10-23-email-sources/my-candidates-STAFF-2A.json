@@ -1,0 +1,64 @@
+{
+  "user_id": "STAFF-2A",
+  "candidates": [
+    {
+      "candidate_id": "CAND-20261022-98RJ6S",
+      "status": "superseded",
+      "source_id": "EMAIL-D5",
+      "sources": [
+        {
+          "source_id": "EMAIL-D5",
+          "source_type": "email",
+          "name": "Keputusan metode verifikasi pengguna baru",
+          "email_included": false
+        },
+        {
+          "source_id": "EMAIL-D1",
+          "source_type": "email_thread",
+          "name": "Draf PRD Onboarding Langganan Premium v1",
+          "email_included": true
+        },
+        {
+          "source_id": "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+          "source_type": "document",
+          "name": "Draf PRD Onboarding Langganan Premium v1",
+          "email_included": false
+        }
+      ],
+      "fact_sources": [
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "EMAIL-D5"
+        ],
+        [
+          "EMAIL-D5"
+        ],
+        [
+          "EMAIL-D5"
+        ],
+        [
+          "EMAIL-D5"
+        ],
+        [
+          "EMAIL-D5"
+        ]
+      ]
+    }
+  ]
+}

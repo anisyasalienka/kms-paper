@@ -33,11 +33,13 @@ Webhook Trigger / When chat message received ─> Request Context ─> Qdrant Kn
 ## Aturan
 
 - **Filter deterministik.** `Request Context` menetapkan `user_id`; kedua tool mengambilnya dari node itu, bukan dari `$fromAI`. LLM hanya mengisi query, sehingga tidak dapat melewati filter akses.
-- Agen selalu mencari dulu, mengambil detail bagian bila diminta nilai persis, dan menutup jawaban dengan "Sumber:" (judul, `source_ids`, tanggal efektif, `validated_by`).
+- Agen selalu mencari dulu, mengambil detail bagian bila diminta nilai persis, dan menutup jawaban dengan "Sumber:" (judul, tanggal efektif, `validated_by`, lalu setiap email di `source_emails` sebagai "subjek (ID)"). Sejak v2.12 aturan 6 melarang mengutip `KNOWLEDGE-…`, ID chunk, atau ID dokumen; sumber selalu email.
 - Bila tidak ada hasil, agen menjawab bahwa informasi tidak ditemukan di basis pengetahuan yang dapat diakses, tanpa berspekulasi.
 - **Pertanyaan lanjutan (v2.11).** Bila ada riwayat, prompt agen berisi "Riwayat percakapan sebelumnya" lalu "Pertanyaan baru". Aturan 7 meminta agen melengkapi rujukan singkat ("siapa validatornya?") dengan subjek dari riwayat sebelum mencari, dan melarang menjawab dari riwayat. Workflow tidak memakai node Memory; percakapan tidak disimpan di n8n.
 
 ## Bukti uji
+
+Sumber email (23 Okt 2026, v2.12): STAFF-3A bertanya "Kenapa verifikasi onboarding premium tidak pakai OTP SMS?"; bagian Sumber berisi "Draf PRD Onboarding Langganan Premium v1 (EMAIL-D1)" dan "Keputusan metode verifikasi pengguna baru (EMAIL-D5)", tanpa ID knowledge. Rincian: `docs/evaluation/2026-10-23-email-sources/`.
 
 Setelah knowledge s4 di-approve: STAFF-2A mendapat base URL staging dan client secret termasking (`Qris#****`) beserta sumber; STAFF-3A mendapat jawaban "tidak ditemukan". Hasil uji akses skenario 1–3b ada di bagian 8 plan doc.
 

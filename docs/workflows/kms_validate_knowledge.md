@@ -28,8 +28,8 @@ Tindakan *human-in-the-loop* atas satu kandidat: approve, edit & approve, approv
 ```text
 POST validate-knowledge ─> Get Candidate ─> Get Actor ─> Get Handover Target ─> Authorize & Plan ─> Allowed? ─┬─> Route Action
                                                                                                                └─> Respond (error)
-Route Action ─┬─ approve / approve_as_new / edit_approve ─> Lock Candidate ─> Lock Acquired? ─┬─> Run Writer ─┬─> Supersede Previous ─> Mark Approved ─> Write Audit Log ─> Build Result ─> Respond
-              │                                                                              │              └─> Unlock Candidate ─> Writer Failed Result ─> Respond (502)
+Route Action ─┬─ approve / approve_as_new / edit_approve ─> Lock Candidate ─> Lock Acquired? ─┬─> Get Knowledge History ─> Add Source History ─> Run Writer ─┬─> Supersede Previous ─> Mark Approved ─> Write Audit Log ─> Build Result ─> Respond
+              │                                                                              │                                                             └─> Unlock Candidate ─> Writer Failed Result ─> Respond (502)
               │                                                                              └─> Conflict Result ─> Respond (409)
               ├─ reject ─> Mark Rejected ─> Write Audit Log ─> ...
               └─ handover ─> Change Owner ─> Write Audit Log ─> ...
@@ -41,6 +41,7 @@ Route Action ─┬─ approve / approve_as_new / edit_approve ─> Lock Candida
 - **Lock:** `pending_validation → approving` dengan filter status, sehingga request paralel kedua mendapat 409.
 - **Edit & Approve:** judul, ringkasan, dan tanggal efektif di-patch ke `curated_payload` sebelum embedding; perubahan "dari → ke" dicatat.
 - **Approve as New:** tautan `existing_knowledge_id` dihapus; knowledge lama tidak di-supersede.
+- **Riwayat email (v2.12):** `Get Knowledge History` membaca baris `kms_candidates` dengan `knowledge_id` = `existing_knowledge_id` (kosong untuk knowledge baru dan `approve_as_new`). `Add Source History` menambahkan ke input writer `source_emails` (`{ source_id, subject, date }`, satu per thread dari baris `approved`/`superseded` ditambah thread kandidat ini) dan `message_ids` gabungan semua versi. Writer memakainya agar Qdrant menyimpan semua email di balik knowledge, dan thread lama yang dikirim ulang tetap terdeteksi `already_exists`.
 - **Supersede:** setelah pembaruan, baris `approved` lain dengan `knowledge_id` sama menjadi `superseded`.
 - **Writer gagal:** status dikembalikan ke `pending_validation` dengan pesan error.
 - **Reject** wajib memakai alasan. **Handover** langsung mencabut hak owner lama.

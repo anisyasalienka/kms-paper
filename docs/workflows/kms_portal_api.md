@@ -10,10 +10,12 @@
 ## 1. `GET /my-candidates?user_id=`
 
 ```text
-GET my-candidates ─> Get My Candidates ─> Get Nudges ─> Shape My Candidates ─> Respond My Candidates
+GET my-candidates ─> Get My Candidates ─> Get Nudges ─> Get Approved History ─> Shape My Candidates ─> Respond My Candidates
 ```
 
 Antrean "Kandidat Saya": semua kandidat dengan `owner_pic` = user aktif (pending di atas), lengkap dengan data review (fakta, sumber, detail teknis, item sensitif, `access_users`), email sumber versi tersamar (`source_email`, `null` untuk kandidat lama), dan nudge dari SPV. Email hanya ikut di endpoint ini, sehingga yang dapat membacanya hanya owner kandidat.
+
+**Sumber selalu email (v2.12).** `Get Approved History` mengambil semua baris `approved`/`superseded`. Untuk setiap sumber `KNOWLEDGE-…` (tipe `saved_knowledge`), `Shape My Candidates` mencari baris dengan `knowledge_id` itu yang dibuat sebelum kandidat ini, mengambil satu baris per thread (yang terbaru, karena pesannya paling banyak), lalu menggantinya dengan entri `{ source_id, source_type: 'email_thread', name: subjek, via_knowledge, email }`. Thread milik kandidat itu sendiri tidak diulang. Sitasi `KNOWLEDGE-…` di fakta dan konflik dipetakan ke ID email yang sama. Sumber `EMAIL-…` lain yang dikutip langsung juga diberi `email` bila threadnya ada di riwayat. `email` diisi hanya bila user aktif adalah owner baris itu atau ada di `access_users`-nya; selain itu `null` (frontend menampilkan ID dan subjek saja). Knowledge tanpa baris riwayat tetap tampil sebagai `saved_knowledge`.
 
 ## 2. `GET /lead-summary?user_id=`
 

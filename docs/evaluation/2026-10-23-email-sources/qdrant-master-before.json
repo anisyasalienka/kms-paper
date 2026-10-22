@@ -1,0 +1,30 @@
+[
+  {
+    "knowledge_id": "KNOWLEDGE-3e0db954-2df7-56fb-b4c9-ba36c899d0cc",
+    "source_ids": [
+      "EMAIL-D2",
+      "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+    ],
+    "email_ids": [
+      "EMAIL-D2"
+    ],
+    "message_ids": [
+      "EMAIL-D2-M01"
+    ]
+  },
+  {
+    "knowledge_id": "KNOWLEDGE-47c9dcf6-fdbd-572b-ab3f-f53c71e17e94",
+    "source_ids": [
+      "EMAIL-D1",
+      "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+      "KNOWLEDGE-47c9dcf6-fdbd-572b-ab3f-f53c71e17e94"
+    ],
+    "email_ids": [
+      "EMAIL-D1"
+    ],
+    "message_ids": [
+      "EMAIL-D1-M01",
+      "EMAIL-D1-M02"
+    ]
+  }
+]

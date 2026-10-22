@@ -14,7 +14,7 @@ Menulis knowledge yang **sudah divalidasi** ke Qdrant: dokumen master ke `knowle
 
 ## Input
 
-`input.knowledge`: `curated_payload` kandidat (sudah di-patch validator) ditambah `access_users`, `owner_pic`, `owner_team`, `candidate_id`, `validated_by`. Status harus `candidate` atau `updated_candidate`.
+`input.knowledge`: `curated_payload` kandidat (sudah di-patch validator) ditambah `access_users`, `owner_pic`, `owner_team`, `candidate_id`, `validated_by`, serta (v2.12) `source_emails` dan `message_ids` gabungan dari `kms_validate_knowledge`. Status harus `candidate` atau `updated_candidate`.
 
 ## Output
 
@@ -40,4 +40,5 @@ When Executed by Another Workflow ─> Validate and Prepare ─> Attach Governan
 - **ID titik deterministik** (hash dari `knowledge_id#bagian#urutan`), sehingga upsert berulang tidak menggandakan data.
 - **Kunci dedup (`source_ids`, `email_ids`) hanya dari sumber yang benar-benar dibaca.** Sumber `reference_only` dan folder Drive tetap tercantum di `sources` (untuk sitasi) tetapi tidak menjadi kunci dedup, agar email berikutnya yang membagikan folder sama dengan dokumen baru tidak dianggap duplikat (perbaikan 16 Oktober 2026).
 - **`message_ids` disimpan bersama `source_ids`.** Dipakai `saved_knowledge` untuk membedakan duplikat persis dari thread yang bertambah balasan (thread lanjutan menjadi pembaruan, bukan `already_exists`).
+- **Sumber selalu email (v2.12).** `source_ids` = sumber kandidat (tanpa `reference_only`/folder) digabung dengan `source_emails`, lalu ID `KNOWLEDGE-…` dibuang. Sebelumnya pembaruan menimpa `source_ids`/`email_ids` dengan sumber kandidat terbaru saja, sehingga email versi lama hilang dari Qdrant (contoh: EMAIL-D5 pada knowledge PRD Onboarding Premium). `source_emails` (`{ source_id, subject, date }`) disimpan di master dan setiap chunk untuk sitasi chatbot.
 - `raw_structured_evidence` hanya disimpan di `knowledge_store`, tidak di-chunk.

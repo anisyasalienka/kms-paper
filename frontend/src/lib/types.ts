@@ -90,6 +90,10 @@ export interface CandidateSource {
   source_type: 'email' | 'email_thread' | 'spreadsheet' | 'document' | 'saved_knowledge' | string
   name: string
   url?: string
+  // v2.12: an email that reached this candidate through saved knowledge (KNOWLEDGE- source resolved by
+  // my-candidates). `email` is null when the viewer may not read that thread.
+  via_knowledge?: string
+  email?: EmailPayload | null
 }
 
 export interface Nudge {

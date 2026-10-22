@@ -1,0 +1,51 @@
+[
+  {
+    "knowledge_id": "KNOWLEDGE-3e0db954-2df7-56fb-b4c9-ba36c899d0cc",
+    "source_ids": [
+      "EMAIL-D2",
+      "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+    ],
+    "email_ids": [
+      "EMAIL-D2"
+    ],
+    "message_ids": [
+      "EMAIL-D2-M01"
+    ],
+    "source_emails": [
+      {
+        "source_id": "EMAIL-D2",
+        "subject": "Tracking plan onboarding premium",
+        "date": "2026-10-05"
+      }
+    ]
+  },
+  {
+    "knowledge_id": "KNOWLEDGE-47c9dcf6-fdbd-572b-ab3f-f53c71e17e94",
+    "source_ids": [
+      "EMAIL-D1",
+      "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+      "EMAIL-D5"
+    ],
+    "email_ids": [
+      "EMAIL-D1",
+      "EMAIL-D5"
+    ],
+    "message_ids": [
+      "EMAIL-D1-M01",
+      "EMAIL-D5-M01",
+      "EMAIL-D1-M02"
+    ],
+    "source_emails": [
+      {
+        "source_id": "EMAIL-D1",
+        "subject": "Draf PRD Onboarding Langganan Premium v1",
+        "date": "2026-10-19"
+      },
+      {
+        "source_id": "EMAIL-D5",
+        "subject": "Keputusan metode verifikasi pengguna baru",
+        "date": "2026-10-07"
+      }
+    ]
+  }
+]

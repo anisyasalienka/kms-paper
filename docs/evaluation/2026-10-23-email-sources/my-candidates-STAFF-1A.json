@@ -1,0 +1,150 @@
+{
+  "user_id": "STAFF-1A",
+  "candidates": [
+    {
+      "candidate_id": "CAND-20261022-9FTM8E",
+      "status": "approved",
+      "source_id": "EMAIL-D1",
+      "sources": [
+        {
+          "source_id": "EMAIL-D1",
+          "source_type": "email_thread",
+          "name": "Draf PRD Onboarding Langganan Premium v1",
+          "email_included": false
+        },
+        {
+          "source_id": "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+          "source_type": "document",
+          "name": "PRD_onboarding_premium_v1.pdf",
+          "url": "https://drive.google.com/file/d/1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl/view?usp=drivesdk",
+          "email_included": false
+        },
+        {
+          "source_id": "EMAIL-D5",
+          "source_type": "email_thread",
+          "name": "Keputusan metode verifikasi pengguna baru",
+          "via_knowledge": "KNOWLEDGE-47c9dcf6-fdbd-572b-ab3f-f53c71e17e94",
+          "email_included": true
+        }
+      ],
+      "fact_sources": [
+        [
+          "EMAIL-D1"
+        ],
+        [
+          "EMAIL-D1"
+        ],
+        [
+          "EMAIL-D1"
+        ],
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+          "EMAIL-D5"
+        ]
+      ]
+    },
+    {
+      "candidate_id": "CAND-20261022-VI4WTO",
+      "status": "approved",
+      "source_id": "EMAIL-D2",
+      "sources": [
+        {
+          "source_id": "EMAIL-D2",
+          "source_type": "email",
+          "name": "Tracking plan onboarding premium",
+          "email_included": false
+        },
+        {
+          "source_id": "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8",
+          "source_type": "spreadsheet",
+          "name": "tracking_plan_onboarding",
+          "url": "https://docs.google.com/spreadsheets/d/1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8/edit?usp=sharing",
+          "email_included": false
+        }
+      ],
+      "fact_sources": [
+        [
+          "EMAIL-D2"
+        ],
+        [
+          "EMAIL-D2"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ],
+        [
+          "gsheet:1FsMMJP2qjquxS21qCz914uJjUy8X1vagbv6kMMcDUe8"
+        ]
+      ]
+    },
+    {
+      "candidate_id": "CAND-20261022-9PNV81",
+      "status": "superseded",
+      "source_id": "EMAIL-D1",
+      "sources": [
+        {
+          "source_id": "EMAIL-D1",
+          "source_type": "email",
+          "name": "Draf PRD Onboarding Langganan Premium v1",
+          "email_included": false
+        },
+        {
+          "source_id": "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl",
+          "source_type": "document",
+          "name": "PRD_onboarding_premium_v1.pdf",
+          "url": "https://drive.google.com/file/d/1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl/view?usp=drivesdk",
+          "email_included": false
+        }
+      ],
+      "fact_sources": [
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ],
+        [
+          "EMAIL-D1",
+          "gpdf:1u4vxHqxjVoIgeSgnZj57_4hvOM4F9iZl"
+        ]
+      ]
+    }
+  ]
+}
